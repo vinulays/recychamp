@@ -181,9 +181,10 @@ class _WelcomeState extends State<Welcome> {
                     const Size(160, 52),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   "Login",
-                  style: TextStyle(fontSize: 20),
+                  style: GoogleFonts.almarai(
+                      fontSize: 20, fontWeight: FontWeight.w700),
                 ),
               ),
               const SizedBox(
@@ -210,9 +211,10 @@ class _WelcomeState extends State<Welcome> {
                     const Size(160, 52),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   "Register",
-                  style: TextStyle(fontSize: 20),
+                  style: GoogleFonts.almarai(
+                      fontSize: 20, fontWeight: FontWeight.w700),
                 ),
               ),
             ],

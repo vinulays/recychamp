@@ -68,8 +68,10 @@ class _WelcomeState extends State<Welcome> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 40,
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.05,
                                     ),
                                     Column(
                                       crossAxisAlignment:
@@ -87,7 +89,6 @@ class _WelcomeState extends State<Welcome> {
                                                     color:
                                                         const Color(0xFF1E1E1E),
                                                     fontSize: 27.35,
-                                                    // fontFamily: 'Almarai',
                                                     fontWeight: FontWeight.w700,
                                                   ),
                                                 ),

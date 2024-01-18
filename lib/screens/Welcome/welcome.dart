@@ -11,6 +11,7 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
+  // * Index for current carousel position
   int _currentIndex = 0;
 
   @override
@@ -38,109 +39,11 @@ class _WelcomeState extends State<Welcome> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CarouselSlider(
-                      options: CarouselOptions(
-                          enableInfiniteScroll: false,
-                          height: MediaQuery.of(context).size.height * 0.77,
-                          viewportFraction: 1,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _currentIndex = index;
-                            });
-                          }),
-                      items: [1, 2, 3, 4].map((i) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: Column(
-                                  children: [
-                                    Flexible(
-                                      child: SizedBox(
-                                        width: double.infinity,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.55,
-                                        child: FittedBox(
-                                          fit: BoxFit.fill,
-                                          child: Image.asset(
-                                              "assets/images/welcome_girl.png"),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.05,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: 343,
-                                          child: Text.rich(
-                                            TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text:
-                                                      'Little Start, Grows into ',
-                                                  style: GoogleFonts.almarai(
-                                                    color:
-                                                        const Color(0xFF1E1E1E),
-                                                    fontSize: 27.35,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: 'Something',
-                                                  style: GoogleFonts.almarai(
-                                                    color:
-                                                        const Color(0xFF75A488),
-                                                    fontSize: 27.35,
-                                                    // fontFamily: 'Almarai',
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: ' Big',
-                                                  style: GoogleFonts.almarai(
-                                                    color:
-                                                        const Color(0xFF1E1E1E),
-                                                    fontSize: 27.35,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        SizedBox(
-                                          width: 323,
-                                          height: 47,
-                                          child: Text(
-                                            'Where Fun Meets Conservation in Every Challenge!',
-                                            style: GoogleFonts.almarai(
-                                              color: const Color(0xFF747474),
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w300,
-                                              letterSpacing: 0.50,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ));
-                          },
-                        );
-                      }).toList(),
-                    ),
+                    // * Image carousel
+                    carouselSlider(context),
                     Container(
                       margin: const EdgeInsets.only(left: 40, top: 10),
+                      // * Dots indicator for carousel position
                       child: DotsIndicator(
                         dotsCount: 4,
                         position: _currentIndex,
@@ -157,6 +60,7 @@ class _WelcomeState extends State<Welcome> {
               ),
             ),
           ),
+          // * Buttons row
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -222,6 +126,101 @@ class _WelcomeState extends State<Welcome> {
           const SizedBox()
         ],
       ),
+    );
+  }
+
+// * Image carousel
+  CarouselSlider carouselSlider(BuildContext context) {
+    return CarouselSlider(
+      options: CarouselOptions(
+          enableInfiniteScroll: false,
+          height: MediaQuery.of(context).size.height * 0.77,
+          viewportFraction: 1,
+          onPageChanged: (index, reason) {
+            setState(() {
+              _currentIndex = index;
+            });
+          }),
+      items: [1, 2, 3, 4].map((i) {
+        return Builder(
+          builder: (BuildContext context) {
+            return SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  children: [
+                    Flexible(
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.55,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Image.asset("assets/images/welcome_girl.png"),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.05,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 343,
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Little Start, Grows into ',
+                                  style: GoogleFonts.almarai(
+                                    color: const Color(0xFF1E1E1E),
+                                    fontSize: 27.35,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Something',
+                                  style: GoogleFonts.almarai(
+                                    color: const Color(0xFF75A488),
+                                    fontSize: 27.35,
+                                    // fontFamily: 'Almarai',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: ' Big',
+                                  style: GoogleFonts.almarai(
+                                    color: const Color(0xFF1E1E1E),
+                                    fontSize: 27.35,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: 323,
+                          height: 47,
+                          child: Text(
+                            'Where Fun Meets Conservation in Every Challenge!',
+                            style: GoogleFonts.almarai(
+                              color: const Color(0xFF747474),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                              letterSpacing: 0.50,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ));
+          },
+        );
+      }).toList(),
     );
   }
 }

@@ -38,6 +38,7 @@ dependencies:
   carousel_slider: ^4.2.1
   google_fonts: ^6.1.0
   dots_indicator: ^3.0.0
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/welcome_girl.png
+    - assets/icons/Settings.svg
+    - assets/icons/gold-medal.svg
+    - assets/icons/search.svg
+    - assets/icons/filter.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -12,6 +12,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    // * Client device data (screen height & width) for responsiveness
     var deviceData = MediaQuery.of(context);
 
     return Scaffold(
@@ -23,9 +24,11 @@ class _HomeState extends State<Home> {
           Container(
             margin:
                 EdgeInsets.symmetric(horizontal: deviceData.size.width * 0.07),
+            // * Headline row with settings button
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // * Headline left column
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -47,6 +50,7 @@ class _HomeState extends State<Home> {
                     )
                   ],
                 ),
+                // todo Settings button (must link to settings page)
                 SvgPicture.asset(
                   "assets/icons/Settings.svg",
                   height: 24,
@@ -56,6 +60,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           Flexible(
+            // * Curved section
             child: FractionallySizedBox(
               heightFactor: 0.85,
               child: Container(
@@ -71,6 +76,7 @@ class _HomeState extends State<Home> {
                   clipBehavior: Clip.none,
                   alignment: Alignment.center,
                   children: [
+                    // * Profile picture frame
                     Positioned(
                       top: -84.15 / 2,
                       child: Container(
@@ -99,6 +105,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                     ),
+                    // * remaining content
                     Container(
                       margin: const EdgeInsets.only(top: 50),
                       child: Column(
@@ -140,6 +147,7 @@ class _HomeState extends State<Home> {
                               Container(
                                 margin: EdgeInsets.symmetric(
                                     horizontal: deviceData.size.width * 0.07),
+                                // * Search bar row with filter button (yet to add functions)
                                 child: Row(
                                   children: [
                                     Expanded(
@@ -178,6 +186,7 @@ class _HomeState extends State<Home> {
                                     const SizedBox(
                                       width: 20,
                                     ),
+                                    // * Inkwell to make button clickable
                                     InkWell(
                                       onTap: () {},
                                       child: Container(
@@ -195,7 +204,7 @@ class _HomeState extends State<Home> {
                                         child: SvgPicture.asset(
                                             "assets/icons/filter.svg"),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               )

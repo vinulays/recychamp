@@ -148,6 +148,9 @@ class _HomeState extends State<Home> {
                                           fontSize: 17,
                                         ),
                                         decoration: InputDecoration(
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                                    vertical: 15),
                                             prefixIconConstraints:
                                                 const BoxConstraints(
                                                     maxHeight: 26,
@@ -164,7 +167,7 @@ class _HomeState extends State<Home> {
                                             border: OutlineInputBorder(
                                               borderSide: BorderSide.none,
                                               borderRadius:
-                                                  BorderRadius.circular(16.83),
+                                                  BorderRadius.circular(12.62),
                                             ),
                                             hintStyle: GoogleFonts.almarai(
                                                 fontSize: 17,
@@ -175,7 +178,24 @@ class _HomeState extends State<Home> {
                                     const SizedBox(
                                       width: 20,
                                     ),
-                                    Text("Filter")
+                                    InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                        padding: const EdgeInsets.all(15),
+                                        decoration: const ShapeDecoration(
+                                          // color: Colors.black,
+                                          shape: RoundedRectangleBorder(
+                                            side: BorderSide(
+                                                color: Color(0xff75A488)),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(12.62),
+                                            ),
+                                          ),
+                                        ),
+                                        child: SvgPicture.asset(
+                                            "assets/icons/filter.svg"),
+                                      ),
+                                    )
                                   ],
                                 ),
                               )

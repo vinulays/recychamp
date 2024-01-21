@@ -67,7 +67,15 @@ flutter:
     - assets/icons/Settings.svg
     - assets/icons/gold-medal.svg
     - assets/icons/search.svg
+    - assets/icons/search-low-opacity.svg
     - assets/icons/filter.svg
+    - assets/icons/home-article.svg
+    - assets/icons/home-cart.svg
+    - assets/icons/home-calendar.svg
+    - assets/icons/notifications.svg
+    - assets/icons/community.svg
+    - assets/icons/challenges.svg
+    - assets/icons/home.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

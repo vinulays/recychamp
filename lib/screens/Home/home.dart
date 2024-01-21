@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:recychamp/ui/bottom_app_bar.dart";
+import "package:recychamp/ui/home_three_row_button.dart";
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,6 +18,8 @@ class _HomeState extends State<Home> {
     var deviceData = MediaQuery.of(context);
 
     return Scaffold(
+      bottomNavigationBar: const CustomBottomAppBar(),
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xff75A488),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,6 +36,7 @@ class _HomeState extends State<Home> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // todo greeting must change according to the time of the day
                     Text(
                       "Good Morning",
                       style: GoogleFonts.almarai(
@@ -67,11 +72,14 @@ class _HomeState extends State<Home> {
                 width: double.infinity,
                 height: double.infinity,
                 decoration: const ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(42.07),
-                            topRight: Radius.circular(42.07)))),
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(42.07),
+                      topRight: Radius.circular(42.07),
+                    ),
+                  ),
+                ),
                 child: Stack(
                   clipBehavior: Clip.none,
                   alignment: Alignment.center,
@@ -178,8 +186,9 @@ class _HomeState extends State<Home> {
                                                   BorderRadius.circular(12.62),
                                             ),
                                             hintStyle: GoogleFonts.almarai(
-                                                fontSize: 17,
-                                                color: const Color(0xff75A488)),
+                                              fontSize: 17,
+                                              color: const Color(0xff75A488),
+                                            ),
                                             hintText: "Search Challenges"),
                                       ),
                                     ),
@@ -195,7 +204,8 @@ class _HomeState extends State<Home> {
                                           // color: Colors.black,
                                           shape: RoundedRectangleBorder(
                                             side: BorderSide(
-                                                color: Color(0xff75A488)),
+                                              color: Color(0xff75A488),
+                                            ),
                                             borderRadius: BorderRadius.all(
                                               Radius.circular(12.62),
                                             ),
@@ -207,7 +217,55 @@ class _HomeState extends State<Home> {
                                     ),
                                   ],
                                 ),
-                              )
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              // * 3 button row
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: deviceData.size.width * 0.05),
+                                child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    HomeThreeRowButton(
+                                        iconURL:
+                                            "assets/icons/home-article.svg",
+                                        description: "Articles"),
+                                    HomeThreeRowButton(
+                                        iconURL: "assets/icons/home-cart.svg",
+                                        description: "Visit Shop"),
+                                    HomeThreeRowButton(
+                                        iconURL:
+                                            "assets/icons/home-calendar.svg",
+                                        description: "Calendar"),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: deviceData.size.width * 0.05),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Latest Challenges",
+                                      style: GoogleFonts.almarai(
+                                        color: const Color(0xFF1E1E1E),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              // * Latest Challenges
                             ],
                           )
                         ],

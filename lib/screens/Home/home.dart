@@ -18,6 +18,7 @@ class _HomeState extends State<Home> {
     // * Client device data (screen height & width) for responsiveness
     var deviceData = MediaQuery.of(context);
 
+    print(deviceData.size.height);
     return Scaffold(
       bottomNavigationBar: const CustomBottomAppBar(),
       resizeToAvoidBottomInset: false,
@@ -25,7 +26,9 @@ class _HomeState extends State<Home> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(),
+          const SizedBox(
+            height: 50,
+          ),
           Container(
             margin:
                 EdgeInsets.symmetric(horizontal: deviceData.size.width * 0.07),
@@ -65,13 +68,16 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
-          Flexible(
+          const SizedBox(
+            height: 58,
+          ),
+          Expanded(
             // * Curved section
             child: FractionallySizedBox(
-              heightFactor: 0.85,
+              // heightFactor: 0.85,
               child: Container(
                 width: double.infinity,
-                height: double.infinity,
+                // height: double.infinity,
                 decoration: const ShapeDecoration(
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
@@ -87,6 +93,7 @@ class _HomeState extends State<Home> {
                   children: [
                     // * Profile picture frame
                     Positioned(
+                      height: 84.15,
                       top: -84.15 / 2,
                       child: Container(
                         width: 84.15,
@@ -115,176 +122,127 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     // * remaining content
-                    Container(
-                      margin: const EdgeInsets.only(top: 50),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            SvgPicture.asset(
-                              "assets/icons/gold-medal.svg",
-                              height: 32.08,
-                              width: 32.08,
-                            ),
-                            Column(
+                    Column(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 50),
+                            child: Column(
                               children: [
-                                SizedBox(
-                                  child: Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              "Your fresh and green comfortable ",
-                                          style: GoogleFonts.almarai(
-                                              color: const Color(0xFF1E1E1E),
-                                              fontSize: 27,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        TextSpan(
-                                          text: "place",
-                                          style: GoogleFonts.almarai(
-                                              color: const Color(0xFF75A488),
-                                              fontSize: 27,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                      ],
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
+                                SvgPicture.asset(
+                                  "assets/icons/gold-medal.svg",
+                                  height: 32.08,
+                                  width: 32.08,
                                 ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: deviceData.size.width * 0.07),
-                                  // * Search bar row with filter button (yet to add functions)
-                                  child: Row(
+                                Expanded(
+                                  child: Column(
                                     children: [
-                                      Expanded(
-                                        child: TextField(
-                                          style: GoogleFonts.almarai(
-                                            fontSize: 17,
+                                      SizedBox(
+                                        height: 75,
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    "Your fresh and green comfortable ",
+                                                style: GoogleFonts.almarai(
+                                                    color:
+                                                        const Color(0xFF1E1E1E),
+                                                    fontSize: 27,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                              TextSpan(
+                                                text: "place",
+                                                style: GoogleFonts.almarai(
+                                                    color:
+                                                        const Color(0xFF75A488),
+                                                    fontSize: 27,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                            ],
                                           ),
-                                          decoration: InputDecoration(
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 15),
-                                              prefixIconConstraints:
-                                                  const BoxConstraints(
-                                                      maxHeight: 26,
-                                                      minWidth: 26),
-                                              prefixIcon: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 13, right: 10),
-                                                child: SvgPicture.asset(
-                                                  "assets/icons/search.svg",
-                                                ),
-                                              ),
-                                              filled: true,
-                                              fillColor:
-                                                  const Color(0xffE6EEEA),
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide.none,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        12.62),
-                                              ),
-                                              hintStyle: GoogleFonts.almarai(
-                                                fontSize: 17,
-                                                color: const Color(0xff75A488),
-                                              ),
-                                              hintText: "Search Challenges"),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
                                       const SizedBox(
-                                        width: 20,
+                                        height: 20,
                                       ),
-                                      // * Inkwell to make button clickable
-                                      InkWell(
-                                        onTap: () {},
-                                        child: Container(
-                                          padding: const EdgeInsets.all(15),
-                                          decoration: const ShapeDecoration(
-                                            // color: Colors.black,
-                                            shape: RoundedRectangleBorder(
-                                              side: BorderSide(
-                                                color: Color(0xff75A488),
-                                              ),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(12.62),
-                                              ),
-                                            ),
-                                          ),
-                                          child: SvgPicture.asset(
-                                              "assets/icons/filter.svg"),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                // * 3 button row
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: deviceData.size.width * 0.05),
-                                  child: const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      HomeThreeRowButton(
-                                          iconURL:
-                                              "assets/icons/home-article.svg",
-                                          description: "Articles"),
-                                      HomeThreeRowButton(
-                                          iconURL: "assets/icons/home-cart.svg",
-                                          description: "Visit Shop"),
-                                      HomeThreeRowButton(
-                                          iconURL:
-                                              "assets/icons/home-calendar.svg",
-                                          description: "Calendar"),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      left: deviceData.size.width * 0.05),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Latest Challenges",
-                                        style: GoogleFonts.almarai(
-                                          color: const Color(0xFF1E1E1E),
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                // * Latest Challenges
 
-                                const Column(
-                                  children: [
-                                    LatestChallengeCard(),
-                                    LatestChallengeCard(),
-                                    LatestChallengeCard(),
-                                    LatestChallengeCard(),
-                                    LatestChallengeCard(),
-                                  ],
-                                ),
+                                      // * 3 button row
+                                      SizedBox(
+                                        height: 113.60,
+                                        child: Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  deviceData.size.width * 0.05),
+                                          child: const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              HomeThreeRowButton(
+                                                  iconURL:
+                                                      "assets/icons/home-article.svg",
+                                                  description: "Articles"),
+                                              HomeThreeRowButton(
+                                                  iconURL:
+                                                      "assets/icons/home-cart.svg",
+                                                  description: "Visit Shop"),
+                                              HomeThreeRowButton(
+                                                  iconURL:
+                                                      "assets/icons/home-calendar.svg",
+                                                  description: "Calendar"),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      SizedBox(
+                                        height: 25,
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              left:
+                                                  deviceData.size.width * 0.05),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                "Latest Challenges",
+                                                style: GoogleFonts.almarai(
+                                                  color:
+                                                      const Color(0xFF1E1E1E),
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      // * Latest Challenges
+
+                                      Expanded(
+                                        child: ListView.builder(
+                                          itemCount: 10,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return const LatestChallengeCard();
+                                          },
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
                               ],
-                            )
-                          ],
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),

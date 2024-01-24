@@ -17,6 +17,7 @@ class _ChallengesState extends State<Challenges> {
     var deviceData = MediaQuery.of(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           const SizedBox(

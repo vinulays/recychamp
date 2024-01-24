@@ -39,6 +39,7 @@ dependencies:
   google_fonts: ^6.1.0
   dots_indicator: ^3.0.0
   flutter_svg: ^2.0.9
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,8 @@ flutter:
     - assets/icons/challenges.svg
     - assets/icons/home.svg
     - assets/images/home_latest_challenges_dummy.png
+    - assets/images/challenge_thumbnail_dummy.png
+    - assets/icons/challenge_users.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

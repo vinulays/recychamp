@@ -10,6 +10,14 @@ class Challenges extends StatefulWidget {
 class _ChallengesState extends State<Challenges> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(child: Text("Challenges")),
+        ],
+      ),
+    );
   }
 }

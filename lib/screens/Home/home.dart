@@ -1,10 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
-import "package:google_fonts/google_fonts.dart";
+
 import "package:recychamp/screens/Challenges/challenges.dart";
 import "package:recychamp/screens/Dashboard/dashboard.dart";
-import "package:recychamp/ui/home_three_row_button.dart";
-import "package:recychamp/ui/latest_challenges_card.dart";
 
 class Home extends StatefulWidget {
   const Home({super.key});

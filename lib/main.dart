@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recychamp/models/chip_label_color.dart';
 import 'package:recychamp/screens/Home/home.dart';
 // import 'package:recychamp/screens/Welcome/welcome.dart';
 
@@ -16,9 +17,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'RecyChamp',
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF75A488)),
           useMaterial3: true,
-          splashColor: Colors.transparent),
+          splashColor: Colors.transparent,
+          chipTheme: const ChipThemeData(
+              labelStyle: TextStyle(color: ChipLabelColor()))),
       // * Welcome screen (if not logged in)
       home: const Home(),
     );

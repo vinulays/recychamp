@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
 import "package:google_fonts/google_fonts.dart";
-import "package:percent_indicator/circular_percent_indicator.dart";
 import "package:recychamp/ui/challenge_card.dart";
+import "package:recychamp/ui/challenge_filters_bottom_sheet.dart";
 
 class Challenges extends StatefulWidget {
   const Challenges({super.key});
@@ -82,8 +82,24 @@ class _ChallengesState extends State<Challenges> {
                   // todo filter icon must open filter menu
                   suffixIcon: Padding(
                     padding: const EdgeInsets.only(right: 20),
-                    child: SvgPicture.asset(
-                      "assets/icons/filter.svg",
+                    child: InkWell(
+                      onTap: () {
+                        // * filter bottom drawer
+                        showModalBottomSheet(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
+                            ),
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const ChallengeFiltersBottomSheet();
+                            });
+                      },
+                      child: SvgPicture.asset(
+                        "assets/icons/filter.svg",
+                      ),
                     ),
                   ),
                   filled: true,

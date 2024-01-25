@@ -15,7 +15,6 @@ class _ChallengesState extends State<Challenges> {
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
-    bool isSelected = true;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

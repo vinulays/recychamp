@@ -80,6 +80,7 @@ flutter:
     - assets/images/home_latest_challenges_dummy.png
     - assets/images/challenge_thumbnail_dummy.png
     - assets/icons/challenge_users.svg
+    - assets/icons/close.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

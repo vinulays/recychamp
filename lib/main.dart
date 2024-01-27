@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recychamp/screens/Community/community.dart';
 import 'package:recychamp/screens/Home/home.dart';
 // import 'package:recychamp/screens/Welcome/welcome.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // * Welcome screen (if not logged in)
-      home: const Home(),
+      home: const Community(),
     );
   }
 }

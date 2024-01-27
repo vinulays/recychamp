@@ -77,6 +77,7 @@ flutter:
     - assets/icons/challenges.svg
     - assets/icons/home.svg
     - assets/images/home_latest_challenges_dummy.png
+    - assets\images\Rectangle.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

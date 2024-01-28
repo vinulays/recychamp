@@ -81,6 +81,8 @@ flutter:
     - assets/images/challenge_thumbnail_dummy.png
     - assets/icons/challenge_users.svg
     - assets/icons/close.svg
+    - assets/icons/go_back.svg
+    - assets/icons/add.svg
     - assets/images/challenge_details_thumbnail_dummy.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

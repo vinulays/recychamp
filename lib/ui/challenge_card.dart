@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:recychamp/models/challenge.dart';
 
 class ChallengeCard extends StatefulWidget {
-  const ChallengeCard({super.key});
+  final Challenge challenge;
+  const ChallengeCard({super.key, required this.challenge});
 
   @override
   State<ChallengeCard> createState() => _ChallengeCardState();
@@ -14,6 +16,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
+
     return Container(
       margin: EdgeInsets.only(
           left: deviceData.size.width * 0.05,
@@ -40,9 +43,8 @@ class _ChallengeCardState extends State<ChallengeCard> {
             margin: const EdgeInsets.all(9),
             height: 170,
             decoration: ShapeDecoration(
-              image: const DecorationImage(
-                image:
-                    AssetImage("assets/images/challenge_thumbnail_dummy.png"),
+              image: DecorationImage(
+                image: AssetImage(widget.challenge.imageURL),
                 fit: BoxFit.fill,
               ),
               shape: RoundedRectangleBorder(
@@ -61,7 +63,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Eco-Warrior Challenge ',
+                      widget.challenge.title,
                       style: GoogleFonts.almarai(
                         color: Colors.black,
                         fontSize: 18,
@@ -69,7 +71,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                       ),
                     ),
                     Text(
-                      'Colombo, Sri Lanka',
+                      "${widget.challenge.location}, ${widget.challenge.country}",
                       style: GoogleFonts.almarai(
                         color: const Color(0xA53D3D3D),
                         fontSize: 14,
@@ -84,9 +86,9 @@ class _ChallengeCardState extends State<ChallengeCard> {
                     radius: 35.0,
                     lineWidth: 9.0,
                     circularStrokeCap: CircularStrokeCap.round,
-                    percent: 0.7,
+                    percent: widget.challenge.completedPercentage / 100,
                     center: Text(
-                      "70%",
+                      "${widget.challenge.completedPercentage.toString()}%",
                       style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
                     ),
                     progressColor: const Color(0xFF75A488),
@@ -124,9 +126,13 @@ class _ChallengeCardState extends State<ChallengeCard> {
                           ),
                         ),
                         TextSpan(
-                          text: 'High',
+                          text: widget.challenge.difficulty,
                           style: GoogleFonts.almarai(
-                            color: const Color(0xFFB53131),
+                            color: (widget.challenge.difficulty == "High")
+                                ? const Color(0xFFB53131)
+                                : (widget.challenge.difficulty == "Low")
+                                    ? const Color.fromARGB(255, 62, 200, 62)
+                                    : const Color.fromARGB(255, 233, 233, 73),
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                           ),
@@ -142,7 +148,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                       width: 5,
                     ),
                     Text(
-                      "20/30",
+                      "${widget.challenge.registeredParticipants}/${widget.challenge.maximumParticipants}",
                       style: GoogleFonts.poppins(
                           fontSize: 14,
                           color: Colors.black.withOpacity(0.4000000059604645),

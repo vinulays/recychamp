@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
 
 import "package:recychamp/screens/Challenges/challenges.dart";
+import "package:recychamp/screens/Community/community.dart";
 import "package:recychamp/screens/Dashboard/dashboard.dart";
 
 class Home extends StatefulWidget {
@@ -20,7 +21,7 @@ class _HomeState extends State<Home> {
     Challenges(), // * Challenges
     Challenges(), // * Search
     Dashboard(), // * Dashboard
-    Challenges(), // * Community
+    Community(), // * Community
     Challenges(), // * Notifications
   ];
 

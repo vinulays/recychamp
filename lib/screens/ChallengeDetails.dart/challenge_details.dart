@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:readmore/readmore.dart';
 import 'package:recychamp/models/challenge.dart';
 
 class ChallengeDetails extends StatefulWidget {
@@ -97,87 +98,184 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
           ),
 
           Expanded(
-              child: Container(
-            margin: EdgeInsets.all(deviceSize.width * 0.05),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 10,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: deviceSize.width * 0.05),
+              child: ScrollbarTheme(
+                data: const ScrollbarThemeData(
+                  crossAxisMargin: -13,
+                  mainAxisMargin: 30,
                 ),
-                Text(
-                  "Details",
-                  style: GoogleFonts.almarai(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w700,
+                child: Scrollbar(
+                  radius: const Radius.circular(16.83),
+                  thickness: 10,
+                  child: ListView(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Details",
+                        style: GoogleFonts.almarai(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                              "assets/icons/challenge_details_calendar.svg"),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Monday, 17 January 2024",
+                            style: GoogleFonts.almarai(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xA53D3D3D),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 13,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                              "assets/icons/challenge_details_clock.svg"),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "10.00 a.m - 04.00 p.m",
+                            style: GoogleFonts.almarai(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xA53D3D3D),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 13,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                              "assets/icons/challenge_details_location.svg"),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Viharamahadevi Park, Colombo 07, Sri Lanka",
+                            style: GoogleFonts.almarai(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xA53D3D3D),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 13,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                              "assets/icons/challenge_details_users.svg"),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "10 out of 100 Participants Joined",
+                            style: GoogleFonts.almarai(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xA53D3D3D),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'About Challenge',
+                        style: GoogleFonts.almarai(
+                          color: const Color(0xFF1E1E1E),
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante",
+                        style: GoogleFonts.almarai(
+                            fontSize: 14, fontWeight: FontWeight.w300),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Challenge Rules',
+                        style: GoogleFonts.almarai(
+                          color: const Color(0xFF1E1E1E),
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "1. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. \n\n2. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante.Lorem ipsum dolor sit amet\n\n3. consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante",
+                        style: GoogleFonts.almarai(
+                            fontSize: 14, fontWeight: FontWeight.w300),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                        "assets/icons/challenge_details_calendar.svg"),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Monday, 17 January 2024",
-                      style: GoogleFonts.almarai(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: const Color(0xA53D3D3D),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 13,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                        "assets/icons/challenge_details_clock.svg"),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "10.00 a.m - 04.00 p.m",
-                      style: GoogleFonts.almarai(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: const Color(0xA53D3D3D),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 13,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                        "assets/icons/challenge_details_location.svg"),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Viharamahadevi Park, Colombo 07, Sri Lanka",
-                      style: GoogleFonts.almarai(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: const Color(0xA53D3D3D),
-                      ),
-                    )
-                  ],
-                ),
-              ],
+              ),
             ),
-          ))
+          ),
+          Container(
+            margin: EdgeInsets.all(deviceSize.width * 0.05),
+            child: SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () {},
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.8),
+                    ),
+                  ),
+                  padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
+                      horizontal: 93.61, vertical: 17.88)),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.black),
+                ),
+                child: Text(
+                  "Join the Challenge",
+                  style: GoogleFonts.almarai(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

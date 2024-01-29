@@ -111,9 +111,6 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                   child: ListView(
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
                       Text(
                         "Details",
                         style: GoogleFonts.almarai(

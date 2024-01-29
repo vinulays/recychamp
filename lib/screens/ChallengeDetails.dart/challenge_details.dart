@@ -16,6 +16,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           // * challenge thumbnail
@@ -93,7 +94,90 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                 ),
               )
             ],
-          )
+          ),
+
+          Expanded(
+              child: Container(
+            margin: EdgeInsets.all(deviceSize.width * 0.05),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Details",
+                  style: GoogleFonts.almarai(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                        "assets/icons/challenge_details_calendar.svg"),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Monday, 17 January 2024",
+                      style: GoogleFonts.almarai(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xA53D3D3D),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 13,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                        "assets/icons/challenge_details_clock.svg"),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "10.00 a.m - 04.00 p.m",
+                      style: GoogleFonts.almarai(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xA53D3D3D),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 13,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                        "assets/icons/challenge_details_location.svg"),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Viharamahadevi Park, Colombo 07, Sri Lanka",
+                      style: GoogleFonts.almarai(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xA53D3D3D),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ))
         ],
       ),
     );

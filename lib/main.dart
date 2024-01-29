@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:recychamp/screens/Community/community.dart';
-import 'package:recychamp/screens/Home/home.dart';
 // import 'package:recychamp/screens/Welcome/welcome.dart';
 
 void main() {

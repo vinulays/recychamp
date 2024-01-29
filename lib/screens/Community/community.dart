@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:recychamp/ui/bottom_app_bar.dart';
 
 class Community extends StatefulWidget {
   const Community({super.key});
@@ -15,7 +14,6 @@ class _CommunityState extends State<Community> {
     var deviceData = MediaQuery.of(context);
     print(deviceData.size.height);
     return Scaffold(
-      bottomNavigationBar: const CustomBottomAppBar(),
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: Stack(
@@ -39,7 +37,7 @@ class _CommunityState extends State<Community> {
                   margin: const EdgeInsets.only(
                       top: 173, left: 30, right: 163, bottom: 0),
                   child: const Text(
-                    'Welcome To The',
+                    'Welcome to my',
                     style: TextStyle(
                       fontSize: 32,
                       color: Colors.white,

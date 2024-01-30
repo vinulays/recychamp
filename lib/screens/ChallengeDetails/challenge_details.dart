@@ -3,7 +3,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
 import 'package:recychamp/models/challenge.dart';
+import 'package:recychamp/screens/ParentAgreement/parent_agreement.dart';
 import 'package:recychamp/ui/challenge_details_row.dart';
+import 'package:recychamp/ui/parent_agreement_section.dart';
 
 class ChallengeDetails extends StatefulWidget {
   final Challenge challenge;
@@ -198,7 +200,15 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
             child: SizedBox(
               width: double.infinity,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  // * Parent agreement form (open in a fullscreen dialog)
+                  showGeneralDialog(
+                      context: context,
+                      barrierColor: Colors.white,
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const ParentAgreement();
+                      });
+                },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(

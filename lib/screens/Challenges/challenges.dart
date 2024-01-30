@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:recychamp/models/challenge.dart";
-import "package:recychamp/screens/ChallengeDetails.dart/challenge_details.dart";
+import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import "package:recychamp/ui/challenge_card.dart";
 import "package:recychamp/ui/challenge_filters_bottom_sheet.dart";
 import "package:recychamp/utils/challenges.dart";

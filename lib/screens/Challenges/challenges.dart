@@ -1,8 +1,11 @@
 import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:recychamp/models/challenge.dart";
+import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import "package:recychamp/ui/challenge_card.dart";
 import "package:recychamp/ui/challenge_filters_bottom_sheet.dart";
+import "package:recychamp/utils/challenges.dart";
 
 class Challenges extends StatefulWidget {
   const Challenges({super.key});
@@ -12,6 +15,7 @@ class Challenges extends StatefulWidget {
 }
 
 class _ChallengesState extends State<Challenges> {
+  List<Challenge> challenges = challengeList;
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
@@ -115,11 +119,26 @@ class _ChallengesState extends State<Challenges> {
           ),
           Expanded(
             child: ListView.builder(
-                itemCount: 3,
+                itemCount: challenges.length,
                 itemBuilder: (BuildContext context, index) {
-                  return const ChallengeCard();
+                  // * Gesture detector to navigate to details page when clicked on a challenge card
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChallengeDetails(
+                            challenge: challenges[index],
+                          ),
+                        ),
+                      );
+                    },
+                    child: ChallengeCard(
+                      challenge: challenges[index],
+                    ),
+                  );
                 }),
-          )
+          ),
         ],
       ),
     );

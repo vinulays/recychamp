@@ -65,6 +65,9 @@ dependencies:
   # play videos
   video_player: ^2.0.4
 
+  readmore: ^2.2.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -103,6 +106,15 @@ flutter:
     - assets/icons/home.svg
     - assets/images/home_latest_challenges_dummy.png
     - assets/images/challenge_thumbnail_dummy.png
+    - assets/icons/challenge_users.svg
+    - assets/icons/challenge_details_calendar.svg
+    - assets/icons/challenge_details_clock.svg
+    - assets/icons/challenge_details_location.svg
+    - assets/icons/challenge_details_users.svg
+    - assets/icons/close.svg
+    - assets/icons/go_back.svg
+    - assets/icons/add.svg
+    - assets/images/challenge_details_thumbnail_dummy.png
     - assets/images/Rectangle.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

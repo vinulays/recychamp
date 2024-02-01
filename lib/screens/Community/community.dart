@@ -37,7 +37,7 @@ class _CommunityState extends State<Community> {
                   margin: const EdgeInsets.only(
                       top: 173, left: 30, right: 163, bottom: 0),
                   child: const Text(
-                    'Hello to my',
+                    'Welcome To The',
                     style: TextStyle(
                       fontSize: 32,
                       color: Colors.white,

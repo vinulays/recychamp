@@ -1,9 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:recychamp/firebase_options.dart';
 import 'package:recychamp/models/chip_label_color.dart';
 import 'package:recychamp/screens/Home/home.dart';
 // import 'package:recychamp/screens/Welcome/welcome.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

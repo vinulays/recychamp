@@ -41,7 +41,32 @@ dependencies:
   flutter_svg: ^2.0.9
   percent_indicator: ^4.2.3
   firebase_core: ^2.24.2
+  cloud_firestore: ^4.8.4
+  firebase_auth: ^4.7.2
+  firebase_storage: ^11.2.5
+  # for providing icons
+  font_awesome_flutter: ^10.5.0
+
+  # formatting dates and timeago
+  jiffy: ^6.2.1
+
+  # generating ids for users
+  uuid: ^4.3.3
+
+  # state management
+  flutter_riverpod: ^2.3.7
+
+  # show toast message
+  fluttertoast: ^8.2.2
+
+  # pick images
+  image_picker: ^1.0.2
+
+  # play videos
+  video_player: ^2.0.4
+
   readmore: ^2.2.0
+
 
 dev_dependencies:
   flutter_test:
@@ -52,7 +77,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

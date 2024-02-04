@@ -151,6 +151,5 @@ class _ParentAgreementState extends State<ParentAgreement> {
         ),
       ),
     );
-    ;
   }
 }

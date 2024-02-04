@@ -66,6 +66,7 @@ dependencies:
   video_player: ^2.0.4
 
   readmore: ^2.2.0
+  avatar_glow: ^3.0.1
 
 
 dev_dependencies:

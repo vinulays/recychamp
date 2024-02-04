@@ -11,6 +11,7 @@ class Challenge {
   int registeredParticipants;
   String difficulty;
   String imageURL;
+  String? type;
 
   Challenge(
     this.title,
@@ -24,6 +25,7 @@ class Challenge {
     this.maximumParticipants,
     this.registeredParticipants,
     this.difficulty,
-    this.imageURL,
-  );
+    this.imageURL, [
+    this.type,
+  ]);
 }

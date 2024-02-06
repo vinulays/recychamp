@@ -9,6 +9,7 @@ class ChallengeDetailsBloc
     extends Bloc<ChallengeDetailsEvent, ChallengeDetailsState> {
   ChallengeDetailsBloc()
       : super(const ChallengeDetailsInitial(isAccepted: false)) {
+    // * Challenge accept event
     on<AcceptChallengeEvent>((event, emit) {
       emit(const ChallengeDetailsInitial(isAccepted: true));
     });

@@ -2,40 +2,16 @@
 // ignore_for_file: lines_longer_than_80_chars, avoid_classes_with_only_static_members
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
-    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+    show defaultTargetPlatform, TargetPlatform;
 
-/// Default [FirebaseOptions] for use with your Firebase apps.
-///
-/// Example:
-/// ```dart
-/// import 'firebase_options.dart';
-/// // ...
-/// await Firebase.initializeApp(
-///   options: DefaultFirebaseOptions.currentPlatform,
-/// );
-/// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
-    if (kIsWeb) {
-      return web;
-    }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
         return ios;
-      case TargetPlatform.macOS:
-        return macos;
-      case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
-      case TargetPlatform.linux:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+
       default:
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
@@ -43,39 +19,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC-sATH6v82fP29TOMRBbwYEOyFOUMZ8sA',
-    appId: '1:179644305592:web:23778c1fcb0eb441d0a44d',
-    messagingSenderId: '179644305592',
-    projectId: 'my-recycling-project',
-    authDomain: 'my-recycling-project.firebaseapp.com',
-    storageBucket: 'my-recycling-project.appspot.com',
-    measurementId: 'G-VEXQ0RLV1X',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCPUAqeuttS3xPNOrDFvY3G5dYgVnIXjxs',
-    appId: '1:179644305592:android:32549d65ba3ef306d0a44d',
-    messagingSenderId: '179644305592',
-    projectId: 'my-recycling-project',
-    storageBucket: 'my-recycling-project.appspot.com',
+    apiKey: 'AIzaSyAO9fmymtVVZ2xr3l6c3OZKTPTgpSuRphU',
+    appId: '1:956355807440:android:f7901b2a10a6935f5676d5',
+    messagingSenderId: '956355807440',
+    projectId: 'recychamp',
+    storageBucket: 'recychamp.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAY51YbSifuMDxIqi5zvYYM2IqSzqmQxeQ',
-    appId: '1:179644305592:ios:32163818fddccfe1d0a44d',
-    messagingSenderId: '179644305592',
-    projectId: 'my-recycling-project',
-    storageBucket: 'my-recycling-project.appspot.com',
-    iosBundleId: 'com.example.recychamp',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAY51YbSifuMDxIqi5zvYYM2IqSzqmQxeQ',
-    appId: '1:179644305592:ios:014cf3b0124165b9d0a44d',
-    messagingSenderId: '179644305592',
-    projectId: 'my-recycling-project',
-    storageBucket: 'my-recycling-project.appspot.com',
-    iosBundleId: 'com.example.recychamp.RunnerTests',
+    apiKey: '1:956355807440:ios:80594df4a7d0cea05676d5',
+    appId: '1:956355807440:ios:6d8b0255efdc01485676d5',
+    messagingSenderId: '956355807440',
+    projectId: 'recychamp',
+    storageBucket: 'recychamp.appspot.com',
+    iosBundleId: 'com.y311.recychamp',
   );
 }

@@ -166,7 +166,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
               ),
 
               // * If challenge is accepted, display the progress bar
-              if (state.isAccepted)
+              if (state.isAccepted && challengeType == "challenge")
                 Column(
                   children: [
                     const SizedBox(
@@ -366,20 +366,23 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                   width: double.infinity,
                   child: TextButton(
                     onPressed: () {
-                      // * Parent agreement form (open in a fullscreen dialog)
-                      showGeneralDialog(
-                          context: context,
-                          barrierColor: Colors.white,
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
-                            return ParentAgreement(
-                              onAccept: () {
-                                context
-                                    .read<ChallengeDetailsBloc>()
-                                    .add(const AcceptChallengeEvent());
-                              },
-                            );
-                          });
+                      // * If not accepteed, Parent agreement form (open in a fullscreen dialog). Otherwise submit form
+                      if (!state.isAccepted) {
+                        showGeneralDialog(
+                            context: context,
+                            barrierColor: Colors.white,
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return ParentAgreement(
+                                onAccept: () {
+                                  context
+                                      .read<ChallengeDetailsBloc>()
+                                      .add(const AcceptChallengeEvent());
+                                },
+                              );
+                            });
+                      }
+                      // todo add challenge submit form
                     },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -388,15 +391,18 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                         ),
                       ),
                       padding: MaterialStateProperty.all(
-                          const EdgeInsets.symmetric(
-                              horizontal: 93.61, vertical: 17.88)),
+                          const EdgeInsets.symmetric(vertical: 17.88)),
                       backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.black),
                     ),
                     child: Text(
-                      challengeType == "challenge"
+                      (challengeType == "challenge" && !state.isAccepted)
                           ? "Join the Challenge"
-                          : "Join the Event",
+                          : (challengeType == "challenge" && state.isAccepted)
+                              ? "Submit the Challenge"
+                              : (challengeType == "event" && !state.isAccepted)
+                                  ? "Join the Event"
+                                  : "Joined the Event",
                       style: GoogleFonts.almarai(
                           fontSize: 19,
                           fontWeight: FontWeight.w700,

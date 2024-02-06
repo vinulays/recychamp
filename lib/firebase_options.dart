@@ -3,8 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
-
-import 'secrets.env';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
@@ -21,16 +20,16 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: androidApiKey,
+  static FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.env['ANDRIOD_API_KEY']!,
     appId: '1:956355807440:android:f7901b2a10a6935f5676d5',
     messagingSenderId: '956355807440',
     projectId: 'recychamp',
     storageBucket: 'recychamp.appspot.com',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: iosApiKey,
+  static FirebaseOptions ios = FirebaseOptions(
+    apiKey: dotenv.env['IOS_API_KEY']!,
     appId: '1:956355807440:ios:6d8b0255efdc01485676d5',
     messagingSenderId: '956355807440',
     projectId: 'recychamp',

@@ -66,6 +66,10 @@ dependencies:
   video_player: ^2.0.4
 
   readmore: ^2.2.0
+  avatar_glow: ^3.0.1
+  bloc: ^8.1.2
+  meta: ^1.11.0
+  equatable: ^2.0.5
 
 
 dev_dependencies:

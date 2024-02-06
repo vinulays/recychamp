@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recychamp/firebase_options.dart';
 import 'package:recychamp/models/chip_label_color.dart';
+import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/Home/home.dart';
 // import 'package:recychamp/screens/Welcome/welcome.dart';
 
@@ -19,17 +21,25 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'RecyChamp',
-      theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF75A488)),
-          useMaterial3: true,
-          splashColor: Colors.transparent,
-          chipTheme: const ChipThemeData(
-              labelStyle: TextStyle(color: ChipLabelColor()))),
-      // * Welcome screen (if not logged in)
-      home: const Home(),
+    // * Add bloc providers for each states
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ChallengeDetailsBloc>(
+            create: (context) => ChallengeDetailsBloc())
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'RecyChamp',
+        theme: ThemeData(
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: const Color(0xFF75A488)),
+            useMaterial3: true,
+            splashColor: Colors.transparent,
+            chipTheme: const ChipThemeData(
+                labelStyle: TextStyle(color: ChipLabelColor()))),
+        // * Welcome screen (if not logged in)
+        home: const Home(),
+      ),
     );
   }
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/ui/parent_agreement_section.dart';
 
 class ParentAgreement extends StatefulWidget {
-  const ParentAgreement({super.key});
+  final VoidCallback onAccept;
+  const ParentAgreement({super.key, required this.onAccept});
 
   @override
   State<ParentAgreement> createState() => _ParentAgreementState();
@@ -117,7 +120,10 @@ class _ParentAgreementState extends State<ParentAgreement> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      widget.onAccept();
+                      Navigator.of(context).pop();
+                    },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(

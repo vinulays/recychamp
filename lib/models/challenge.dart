@@ -1,4 +1,5 @@
 class Challenge {
+  String? id;
   String title;
   String description;
   String location;
@@ -13,19 +14,20 @@ class Challenge {
   String imageURL;
   String? type;
 
-  Challenge(
-    this.title,
-    this.description,
-    this.location,
-    this.country,
-    this.rules,
-    this.startDateTime,
-    this.endDateTime,
-    this.completedPercentage,
-    this.maximumParticipants,
-    this.registeredParticipants,
-    this.difficulty,
-    this.imageURL, [
+  Challenge({
+    this.id,
+    required this.title,
+    required this.description,
+    required this.location,
+    required this.country,
+    required this.rules,
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.completedPercentage,
+    required this.maximumParticipants,
+    required this.registeredParticipants,
+    required this.difficulty,
+    required this.imageURL,
     this.type,
-  ]);
+  });
 }

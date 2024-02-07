@@ -121,6 +121,8 @@ class _ChallengesState extends State<Challenges> {
                       hintText: "Search Challenges"),
                 ),
               ),
+
+              // * if challenges are loading, displays a loading circle
               if (state is ChallengesLoading)
                 const Expanded(
                   child: Center(
@@ -149,7 +151,7 @@ class _ChallengesState extends State<Challenges> {
                             );
                           },
                           child: ChallengeCard(
-                            challenge: challenges[index],
+                            challenge: state.challenges[index],
                           ),
                         );
                       }),

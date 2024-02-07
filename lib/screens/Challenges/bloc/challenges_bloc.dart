@@ -14,6 +14,7 @@ class ChallengesBloc extends Bloc<ChallengesEvent, ChallengesState> {
   ChallengesBloc({required ChallengeRepository repository})
       : _challengeRepository = repository,
         super(ChallengesInitial()) {
+    // * get challenges event from firebase
     on<FetchChallengesEvent>((event, emit) async {
       emit(ChallengesLoading());
       try {

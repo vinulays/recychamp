@@ -44,7 +44,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
             height: 170,
             decoration: ShapeDecoration(
               image: DecorationImage(
-                image: AssetImage(widget.challenge.imageURL),
+                image: NetworkImage(widget.challenge.imageURL),
                 fit: BoxFit.fill,
               ),
               shape: RoundedRectangleBorder(
@@ -100,7 +100,9 @@ class _ChallengeCardState extends State<ChallengeCard> {
           Container(
             margin: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
             child: Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante",
+              widget.challenge.description,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 4,
               style: GoogleFonts.almarai(
                 fontSize: 14,
                 fontWeight: FontWeight.w300,

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/ui/parent_agreement_section.dart';
 
 class ParentAgreement extends StatefulWidget {

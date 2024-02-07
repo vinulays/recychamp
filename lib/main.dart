@@ -28,12 +28,15 @@ class MyApp extends StatelessWidget {
     // * Add bloc providers for each states
     return MultiBlocProvider(
       providers: [
+        // * challenge details state provider
         BlocProvider<ChallengeDetailsBloc>(
             create: (context) => ChallengeDetailsBloc()),
+        // * challenges state provider
         BlocProvider<ChallengesBloc>(
           create: (context) => ChallengesBloc(
             repository: ChallengeRepository(
               challengeService:
+                  // * adding current firebase instance to the challenge service
                   ChallengeService(firestore: FirebaseFirestore.instance),
             ),
           )..add(

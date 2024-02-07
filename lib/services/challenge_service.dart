@@ -7,12 +7,15 @@ class ChallengeService {
   ChallengeService({required FirebaseFirestore firestore})
       : _firestore = firestore;
 
+  // * getting challenges from firebase
   Future<List<Challenge>> getChallenges() async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await _firestore.collection('challenges').get();
 
       List<Challenge> challenges = querySnapshot.docs.map((doc) {
+        // * mapping each result with the challenge model
+        // * convert firebase timestamp to dateTime in flutter using toDate()
         Map<String, dynamic> data = doc.data();
         return Challenge(
             id: doc.id,

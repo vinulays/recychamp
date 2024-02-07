@@ -31,7 +31,8 @@ class ChallengeService {
             registeredParticipants: data['registeredParticipants'],
             difficulty: data['difficulty'],
             imageURL: data['imageURL'],
-            type: data['type']);
+            type: data['type'],
+            rating: data['rating']);
       }).toList();
 
       return challenges;

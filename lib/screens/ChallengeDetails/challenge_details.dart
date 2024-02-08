@@ -351,9 +351,11 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           const SizedBox(
                             height: 20,
                           ),
-                          if (challengeType == "challenge")
+                          if (ruleList.isNotEmpty)
                             Text(
-                              'Challenge Rules',
+                              challengeType == "challenge"
+                                  ? 'Challenge Rules'
+                                  : "Event Rules",
                               style: GoogleFonts.almarai(
                                 color: const Color(0xFF1E1E1E),
                                 fontSize: 25,

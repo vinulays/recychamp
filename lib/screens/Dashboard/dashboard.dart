@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/ui/home_three_row_button.dart';
 import 'package:recychamp/ui/latest_challenges_card.dart';
@@ -205,10 +206,14 @@ class _DashboardState extends State<Dashboard> {
                                           SizedBox(
                                             height: 25,
                                             child: Container(
-                                              margin: EdgeInsets.only(
-                                                  left: deviceData.size.width *
-                                                      0.05),
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal:
+                                                      deviceData.size.width *
+                                                          0.05),
                                               child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   Text(
                                                     "Latest Challenges",
@@ -237,9 +242,24 @@ class _DashboardState extends State<Dashboard> {
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         int index) {
-                                                  return LatestChallengeCard(
-                                                      challenge: state
-                                                          .challenges[index]);
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ChallengeDetails(
+                                                            challenge: state
+                                                                    .challenges[
+                                                                index],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: LatestChallengeCard(
+                                                        challenge: state
+                                                            .challenges[index]),
+                                                  );
                                                 },
                                               ),
                                             )

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
@@ -23,6 +24,8 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
     var deviceSize = MediaQuery.of(context).size;
 
     String? challengeType = widget.challenge.type;
+    String startDateTime = widget.challenge.startDateTime.toString();
+    String endDateTime = widget.challenge.endDateTime.toString();
     DateTime currentDateTime = DateTime.now();
 
     // * Wrapping the widget with the bloc builder
@@ -48,10 +51,9 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                     child: Container(
                       width: double.infinity,
                       height: 292,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(
-                              "assets/images/challenge_details_thumbnail_dummy.png"),
+                          image: NetworkImage(widget.challenge.imageURL),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -129,7 +131,6 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                     top: 192,
                     left: 25.58,
                     child: Container(
-                      width: 101,
                       height: 25,
                       decoration: ShapeDecoration(
                         color: Colors.white,
@@ -137,16 +138,19 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           borderRadius: BorderRadius.circular(16.83),
                         ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Tree Planting",
-                            style: GoogleFonts.almarai(
-                                fontSize: 12, fontWeight: FontWeight.w400),
-                          ),
-                        ],
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.challenge.category.name,
+                              style: GoogleFonts.almarai(
+                                  fontSize: 13, fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -286,32 +290,40 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                             height: 20,
                           ),
                           //  * Challenge details row to display challenge details
-                          const ChallengeDetailsRow(
-                              iconURL:
-                                  "assets/icons/challenge_details_calendar.svg",
-                              description: "Monday, 17 January 2024"),
+                          ChallengeDetailsRow(
+                            iconURL:
+                                "assets/icons/challenge_details_calendar.svg",
+                            description: challengeType == "event"
+                                ? Jiffy.parse(startDateTime)
+                                    .format(pattern: "do MMMM yyyy")
+                                : "${Jiffy.parse(startDateTime).format(pattern: "do MMMM yyyy")} - ${Jiffy.parse(endDateTime).format(pattern: "do MMMM yyyy")}",
+                          ),
+
                           const SizedBox(
                             height: 13,
                           ),
-                          const ChallengeDetailsRow(
+                          ChallengeDetailsRow(
                               iconURL:
                                   "assets/icons/challenge_details_clock.svg",
-                              description: "10.00 a.m - 04.00 p.m"),
+                              description: challengeType == "event"
+                                  ? "${Jiffy.parse(startDateTime).format(pattern: "hh:mm a").toLowerCase()} - ${Jiffy.parse(endDateTime).format(pattern: "hh:mm a").toLowerCase()}"
+                                  : "${Jiffy.parse(endDateTime).diff(Jiffy.parse(startDateTime), unit: Unit.day).toString()} days duration"),
                           const SizedBox(
                             height: 13,
                           ),
-                          const ChallengeDetailsRow(
+                          ChallengeDetailsRow(
                               iconURL:
                                   "assets/icons/challenge_details_location.svg",
                               description:
-                                  "Viharamahadevi Park, Colombo 07, Sri Lanka"),
+                                  "${widget.challenge.location}, ${widget.challenge.country}"),
                           const SizedBox(
                             height: 13,
                           ),
-                          const ChallengeDetailsRow(
+                          ChallengeDetailsRow(
                               iconURL:
                                   "assets/icons/challenge_details_users.svg",
-                              description: "10 out of 100 Participants Joined"),
+                              description:
+                                  "${widget.challenge.registeredParticipants} out of ${widget.challenge.maximumParticipants} Participants Joined"),
                           const SizedBox(
                             height: 20,
                           ),

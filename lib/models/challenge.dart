@@ -1,3 +1,5 @@
+import 'package:recychamp/models/challenge_category.dart';
+
 class Challenge {
   String? id;
   String title;
@@ -14,6 +16,7 @@ class Challenge {
   String imageURL;
   String? type;
   double rating;
+  ChallengeCategory category;
 
   Challenge(
       {this.id,
@@ -30,5 +33,6 @@ class Challenge {
       required this.difficulty,
       required this.imageURL,
       this.type,
-      required this.rating});
+      required this.rating,
+      required this.category});
 }

@@ -6,7 +6,7 @@ class Challenge {
   String description;
   String location;
   String country;
-  String rules;
+  String? rules;
   DateTime startDateTime;
   DateTime endDateTime;
   int completedPercentage;
@@ -24,7 +24,7 @@ class Challenge {
       required this.description,
       required this.location,
       required this.country,
-      required this.rules,
+      this.rules,
       required this.startDateTime,
       required this.endDateTime,
       required this.completedPercentage,

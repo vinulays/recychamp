@@ -28,7 +28,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
     String endDateTime = widget.challenge.endDateTime.toString();
     DateTime currentDateTime = DateTime.now();
 
-    List<String> ruleList = widget.challenge.rules.split(";");
+    List<String> ruleList = widget.challenge.rules!.split(";");
 
     // * Wrapping the widget with the bloc builder
     return BlocBuilder<ChallengeDetailsBloc, ChallengeDetailsState>(

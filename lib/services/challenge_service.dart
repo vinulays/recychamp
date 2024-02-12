@@ -11,8 +11,10 @@ class ChallengeService {
   // * getting challenges from firebase
   Future<List<Challenge>> getChallenges() async {
     try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await _firestore.collection('challenges').get();
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection('challenges')
+          .orderBy("createdAt", descending: true)
+          .get();
       List<Challenge> challenges = [];
 
       for (var doc in querySnapshot.docs) {

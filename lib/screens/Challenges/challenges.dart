@@ -3,6 +3,7 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_svg/svg.dart";
 import "package:google_fonts/google_fonts.dart";
 import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
+import "package:recychamp/screens/ChallengeForm/challenge_form.dart";
 import "package:recychamp/screens/Challenges/bloc/challenges_bloc.dart";
 import "package:recychamp/ui/challenge_card.dart";
 import "package:recychamp/ui/challenge_filters_bottom_sheet.dart";
@@ -23,6 +24,36 @@ class _ChallengesState extends State<Challenges> {
       builder: (context, state) {
         final challengesBloc = BlocProvider.of<ChallengesBloc>(context);
         return Scaffold(
+          // * challenge add button (if logged user is an admin/organizer)
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 15.0, right: 12.0),
+            child: SizedBox(
+              height: 63,
+              width: 63,
+              child: FittedBox(
+                child: FloatingActionButton(
+                  onPressed: () {
+                    // * challenge form (add form)
+                    showGeneralDialog(
+                        context: context,
+                        barrierColor: Colors.white,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return const ChallengeForm();
+                        });
+                  },
+                  backgroundColor: const Color(0xFF75A488),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 40.0,
+                  ),
+                ),
+              ),
+            ),
+          ),
           resizeToAvoidBottomInset: false,
           body: RefreshIndicator(
             onRefresh: () async {

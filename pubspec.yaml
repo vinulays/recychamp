@@ -60,7 +60,7 @@ dependencies:
   fluttertoast: ^8.2.2
 
   # pick images
-  image_picker: ^1.0.2
+  image_picker: ^1.0.7
 
   # play videos
   video_player: ^2.0.4
@@ -68,8 +68,9 @@ dependencies:
   readmore: ^2.2.0
   avatar_glow: ^3.0.1
   bloc: ^8.1.2
-  meta: ^1.11.0
+  meta: 1.10.0
   equatable: ^2.0.5
+  flutter_form_builder: ^9.2.0
 
 dev_dependencies:
   flutter_test:
@@ -119,6 +120,7 @@ flutter:
     - assets/icons/add.svg
     - assets/images/challenge_details_thumbnail_dummy.png
     - assets/images/Rectangle.png
+    - assets/icons/calendar.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

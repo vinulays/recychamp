@@ -279,7 +279,6 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                       radius: const Radius.circular(16.83),
                       thickness: 10,
                       child: ListView(
-                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "Details",
@@ -367,21 +366,23 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           ),
 
                           Column(
-                              children: List.generate(ruleList.length, (index) {
-                            return Column(
-                              children: [
-                                Text(
-                                  "${index + 1}. ${ruleList[index]}",
-                                  style: GoogleFonts.almarai(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                )
-                              ],
-                            );
-                          }))
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: List.generate(ruleList.length, (index) {
+                              return Column(
+                                children: [
+                                  Text(
+                                    "${index + 1}. ${ruleList[index]}",
+                                    style: GoogleFonts.almarai(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  const SizedBox(
+                                    height: 12,
+                                  )
+                                ],
+                              );
+                            }),
+                          )
                         ],
                       ),
                     ),

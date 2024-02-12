@@ -1,7 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recychamp/models/challenge_category.dart';
+import 'package:recychamp/repositories/challenge_category_repository.dart';
+import 'package:recychamp/services/challenge_category_service.dart';
+import 'package:recychamp/ui/form_date_time_picker.dart';
+import 'package:recychamp/ui/form_drop_down.dart';
+import 'package:recychamp/ui/form_input_field.dart';
+import 'package:recychamp/ui/form_text_area.dart';
 
 class ChallengeForm extends StatefulWidget {
   const ChallengeForm({super.key});
@@ -11,6 +19,33 @@ class ChallengeForm extends StatefulWidget {
 }
 
 class _ChallengeFormState extends State<ChallengeForm> {
+  final ChallengeCategoryRepository _categoryRepository =
+      ChallengeCategoryRepository(
+    challengeCategoryService:
+        ChallengeCategoryService(firestore: FirebaseFirestore.instance),
+  );
+
+  List<ChallengeCategory> _categories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    try {
+      List<ChallengeCategory> categories =
+          await _categoryRepository.getChallengeCategories();
+      setState(() {
+        _categories = categories;
+      });
+    } catch (e) {
+      // Handle error
+      throw Exception('Failed to load categories: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
@@ -55,561 +90,142 @@ class _ChallengeFormState extends State<ChallengeForm> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // * Challenge title
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Title',
-                                    style: GoogleFonts.almarai(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '*',
-                                    style: GoogleFonts.almarai(
-                                      color: const Color(0xFFFF0000),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            FormBuilderTextField(
-                              name: 'title',
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(left: 15),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xFF75A488), width: 2.0),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xFF75A488), width: 2.0),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      const FormInputField(
+                          title: "Title",
+                          isRequired: true,
+                          formBuilderName: "title"),
                       // * Challenge description
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Description',
-                                    style: GoogleFonts.almarai(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '*',
-                                    style: GoogleFonts.almarai(
-                                      color: const Color(0xFFFF0000),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            FormBuilderTextField(
-                              keyboardType: TextInputType.multiline,
-                              maxLines: 7,
-                              name: 'description',
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    const EdgeInsets.only(left: 15, top: 30),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xFF75A488), width: 2.0),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xFF75A488), width: 2.0),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      const FormTextArea(
+                          title: "Description",
+                          isRequired: true,
+                          formBuilderName: "description",
+                          maxLines: 7),
                       // * Challenge type
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Type',
-                                    style: GoogleFonts.almarai(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '*',
-                                    style: GoogleFonts.almarai(
-                                      color: const Color(0xFFFF0000),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              textAlign: TextAlign.center,
+                      FormDropDown(
+                        title: "Type",
+                        isRequired: true,
+                        formBuilderName: "type",
+                        items: [
+                          DropdownMenuItem(
+                            value: "challenge",
+                            child: Text(
+                              "Challenge",
+                              style: GoogleFonts.almarai(
+                                  fontWeight: FontWeight.w400, fontSize: 16),
                             ),
-                            const SizedBox(
-                              height: 10,
+                          ),
+                          DropdownMenuItem(
+                            value: "event",
+                            child: Text(
+                              "Event",
+                              style: GoogleFonts.almarai(
+                                  fontWeight: FontWeight.w400, fontSize: 16),
                             ),
-                            FormBuilderDropdown(
-                              enableFeedback: true,
-                              items: [
-                                DropdownMenuItem(
-                                  value: "challenge",
-                                  child: Text(
-                                    "Challenge",
-                                    style: GoogleFonts.almarai(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16),
-                                  ),
-                                ),
-                                DropdownMenuItem(
-                                  value: "event",
-                                  child: Text(
-                                    "Event",
-                                    style: GoogleFonts.almarai(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16),
-                                  ),
-                                ),
-                              ],
-                              name: 'type',
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(left: 15),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xFF75A488), width: 2.0),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xFF75A488), width: 2.0),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       // * Challenge location
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Location',
-                                    style: GoogleFonts.almarai(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '*',
-                                    style: GoogleFonts.almarai(
-                                      color: const Color(0xFFFF0000),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            FormBuilderTextField(
-                              name: 'location',
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(left: 15),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xFF75A488), width: 2.0),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xFF75A488), width: 2.0),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      const FormInputField(
+                          title: "Location",
+                          isRequired: true,
+                          formBuilderName: "location"),
                       // * Challenge country
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Country',
-                                    style: GoogleFonts.almarai(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '*',
-                                    style: GoogleFonts.almarai(
-                                      color: const Color(0xFFFF0000),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            FormBuilderTextField(
-                              name: 'country',
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(left: 15),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xFF75A488), width: 2.0),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      color: Color(0xFF75A488), width: 2.0),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      const FormInputField(
+                          title: "Country",
+                          isRequired: true,
+                          formBuilderName: "country"),
                       // * Challenge start date & time
-                      Wrap(
+                      const Wrap(
                         spacing: 50,
                         children: [
-                          Container(
-                            width: 150,
-                            margin: const EdgeInsets.only(bottom: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: 'Start Date',
-                                        style: GoogleFonts.almarai(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: '*',
-                                        style: GoogleFonts.almarai(
-                                          color: const Color(0xFFFF0000),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                FormBuilderDateTimePicker(
-                                  name: "startDate",
-                                  inputType: InputType.date,
-                                  decoration: InputDecoration(
-                                    prefixIconConstraints: const BoxConstraints(
-                                        maxHeight: 26, minWidth: 26),
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 13, right: 10),
-                                      child: SvgPicture.asset(
-                                        "assets/icons/calendar.svg",
-                                      ),
-                                    ),
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 15),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xFF75A488), width: 2.0),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xFF75A488), width: 2.0),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: 150,
-                            margin: const EdgeInsets.only(bottom: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: 'Start Time',
-                                        style: GoogleFonts.almarai(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: '*',
-                                        style: GoogleFonts.almarai(
-                                          color: const Color(0xFFFF0000),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                FormBuilderDateTimePicker(
-                                  name: "startTime",
-                                  inputType: InputType.time,
-                                  decoration: InputDecoration(
-                                    prefixIconConstraints: const BoxConstraints(
-                                        maxHeight: 20, minWidth: 20),
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 13, right: 10),
-                                      child: SvgPicture.asset(
-                                        "assets/icons/challenge_details_clock.svg",
-                                      ),
-                                    ),
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 15),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xFF75A488), width: 2.0),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xFF75A488), width: 2.0),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                          FormDateTimePicker(
+                              title: "Start Date",
+                              isRequired: true,
+                              formBuilderName: "startDate",
+                              iconURL: "assets/icons/calendar.svg",
+                              inputType: InputType.date),
+                          FormDateTimePicker(
+                              title: "Start Time",
+                              isRequired: true,
+                              formBuilderName: "startTime",
+                              iconURL:
+                                  "assets/icons/challenge_details_clock.svg",
+                              inputType: InputType.time)
                         ],
                       ),
-                      Wrap(
+                      const Wrap(
                         spacing: 50,
                         children: [
-                          Container(
-                            width: 150,
-                            margin: const EdgeInsets.only(bottom: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: 'End Date',
-                                        style: GoogleFonts.almarai(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: '*',
-                                        style: GoogleFonts.almarai(
-                                          color: const Color(0xFFFF0000),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                FormBuilderDateTimePicker(
-                                  name: "endDate",
-                                  inputType: InputType.date,
-                                  decoration: InputDecoration(
-                                    prefixIconConstraints: const BoxConstraints(
-                                        maxHeight: 26, minWidth: 26),
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 13, right: 10),
-                                      child: SvgPicture.asset(
-                                        "assets/icons/calendar.svg",
-                                      ),
-                                    ),
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 15),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xFF75A488), width: 2.0),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xFF75A488), width: 2.0),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: 150,
-                            margin: const EdgeInsets.only(bottom: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: 'End Time',
-                                        style: GoogleFonts.almarai(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: '*',
-                                        style: GoogleFonts.almarai(
-                                          color: const Color(0xFFFF0000),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                FormBuilderDateTimePicker(
-                                  name: "endTime",
-                                  inputType: InputType.time,
-                                  decoration: InputDecoration(
-                                    prefixIconConstraints: const BoxConstraints(
-                                        maxHeight: 20, minWidth: 20),
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 13, right: 10),
-                                      child: SvgPicture.asset(
-                                        "assets/icons/challenge_details_clock.svg",
-                                      ),
-                                    ),
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 15),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xFF75A488), width: 2.0),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color(0xFF75A488), width: 2.0),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                          FormDateTimePicker(
+                              title: "End Date",
+                              isRequired: true,
+                              formBuilderName: "endDate",
+                              iconURL: "assets/icons/calendar.svg",
+                              inputType: InputType.date),
+                          FormDateTimePicker(
+                              title: "End Time",
+                              isRequired: true,
+                              formBuilderName: "endTime",
+                              iconURL:
+                                  "assets/icons/challenge_details_clock.svg",
+                              inputType: InputType.time),
                         ],
                       ),
+                      // * Challenge maximum participants
+                      const FormInputField(
+                          title: "Maximum Participants",
+                          isRequired: true,
+                          formBuilderName: "maximumParticipants"),
+                      //  * Challenge difficulty
+                      FormDropDown(
+                          title: "Difficulty",
+                          isRequired: true,
+                          formBuilderName: "difficulty",
+                          items: [
+                            DropdownMenuItem(
+                              value: "low",
+                              child: Text(
+                                "Low",
+                                style: GoogleFonts.almarai(
+                                    fontWeight: FontWeight.w400, fontSize: 16),
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: "medium",
+                              child: Text(
+                                "Medium",
+                                style: GoogleFonts.almarai(
+                                    fontWeight: FontWeight.w400, fontSize: 16),
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: "high",
+                              child: Text(
+                                "High",
+                                style: GoogleFonts.almarai(
+                                    fontWeight: FontWeight.w400, fontSize: 16),
+                              ),
+                            ),
+                          ]),
+                      //  * Challenge / Event Category
+                      FormDropDown(
+                        title: "Category",
+                        isRequired: true,
+                        formBuilderName: "category",
+                        items: _categories
+                            .map(
+                              (category) => DropdownMenuItem(
+                                value: category.id,
+                                child: Text(
+                                  category.name,
+                                  style: GoogleFonts.almarai(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      )
                     ],
                   ),
                 ),

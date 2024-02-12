@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:recychamp/models/challenge_category.dart';
 import 'package:recychamp/repositories/challenge_category_repository.dart';
 import 'package:recychamp/services/challenge_category_service.dart';
@@ -19,6 +22,8 @@ class ChallengeForm extends StatefulWidget {
 }
 
 class _ChallengeFormState extends State<ChallengeForm> {
+  File? _image;
+
   final ChallengeCategoryRepository _categoryRepository =
       ChallengeCategoryRepository(
     challengeCategoryService:
@@ -27,6 +32,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
 
   List<ChallengeCategory> _categories = [];
 
+// * loading categories from firebase when initiating the widget
   @override
   void initState() {
     super.initState();
@@ -44,6 +50,18 @@ class _ChallengeFormState extends State<ChallengeForm> {
       // Handle error
       throw Exception('Failed to load categories: $e');
     }
+  }
+
+  Future<void> _getImage() async {
+    final imagePicker = ImagePicker();
+    final pickedImage =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedImage != null) {
+        _image = File(pickedImage.path);
+      }
+    });
   }
 
   @override
@@ -225,6 +243,100 @@ class _ChallengeFormState extends State<ChallengeForm> {
                               ),
                             )
                             .toList(),
+                      ),
+                      // * Image
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Pick an Image",
+                                  style: GoogleFonts.almarai(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '*',
+                                  style: GoogleFonts.almarai(
+                                    color: const Color(0xFFFF0000),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            height: 200,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: const Color(0xFF75A488), width: 2),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.upload),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "Upload a cover photo",
+                                  style: GoogleFonts.almarai(fontSize: 16),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "JPG, PNG, SVG",
+                                  style: GoogleFonts.almarai(
+                                    fontSize: 14,
+                                    color: Colors.black
+                                        .withOpacity(0.6000000238418579),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextButton(
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    padding: MaterialStateProperty.all(
+                                        const EdgeInsets.symmetric(
+                                            vertical: 10.88, horizontal: 20)),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            const Color(0xFF75A488).withOpacity(
+                                                0.6000000238418579)),
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    "Choose file",
+                                    style: GoogleFonts.almarai(
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   ),

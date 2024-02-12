@@ -60,7 +60,7 @@ dependencies:
   fluttertoast: ^8.2.2
 
   # pick images
-  image_picker: ^1.0.2
+  image_picker: ^1.0.7
 
   # play videos
   video_player: ^2.0.4

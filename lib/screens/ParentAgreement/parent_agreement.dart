@@ -39,7 +39,7 @@ class _ParentAgreementState extends State<ParentAgreement> {
                 const SizedBox(width: 10),
                 Text(
                   "Parent Agreement",
-                  style: GoogleFonts.almarai(
+                  style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontSize: 25,
                       fontWeight: FontWeight.w700),
@@ -113,7 +113,7 @@ class _ParentAgreementState extends State<ParentAgreement> {
                     ),
                     child: Text(
                       "Decline",
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                           fontSize: 20, fontWeight: FontWeight.w700),
                     ),
                   ),
@@ -144,7 +144,7 @@ class _ParentAgreementState extends State<ParentAgreement> {
                     ),
                     child: Text(
                       "Accept",
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                           fontSize: 20, fontWeight: FontWeight.w700),
                     ),
                   ),

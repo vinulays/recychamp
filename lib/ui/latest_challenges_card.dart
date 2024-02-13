@@ -60,9 +60,9 @@ class LatestChallengeCard extends StatelessWidget {
                   SizedBox(
                     child: Text(
                       challenge.title,
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                         color: const Color(0xFF1E1E1E),
-                        fontSize: 16.83,
+                        fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -70,9 +70,9 @@ class LatestChallengeCard extends StatelessWidget {
                   SizedBox(
                     child: Text(
                       challenge.location,
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                         color: const Color(0xFF747474),
-                        fontSize: 16.83,
+                        fontSize: 16,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -82,8 +82,8 @@ class LatestChallengeCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        width: 18,
-                        height: 17,
+                        width: 17,
+                        height: 16,
                         decoration: const ShapeDecoration(
                           color: Color(0xFFFFB61D),
                           shape: StarBorder(
@@ -104,9 +104,9 @@ class LatestChallengeCard extends StatelessWidget {
                         height: 21.04,
                         child: Text(
                           challenge.rating.toString(),
-                          style: GoogleFonts.almarai(
+                          style: GoogleFonts.poppins(
                             color: const Color(0xFF1E1E1E),
-                            fontSize: 16,
+                            fontSize: 15,
                             fontWeight: FontWeight.w400,
                           ),
                         ),

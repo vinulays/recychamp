@@ -14,14 +14,14 @@ class ParentAgreementSection extends StatelessWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.almarai(fontSize: 16, fontWeight: FontWeight.w700),
+          style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
         ),
         const SizedBox(
           height: 20,
         ),
         Text(
           description,
-          style: GoogleFonts.almarai(fontSize: 14, fontWeight: FontWeight.w300),
+          style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w300),
         ),
         const SizedBox(
           height: 20,

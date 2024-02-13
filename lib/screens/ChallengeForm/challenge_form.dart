@@ -92,7 +92,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                 const SizedBox(width: 10),
                 Text(
                   "Add a Challenge",
-                  style: GoogleFonts.almarai(
+                  style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontSize: 25,
                       fontWeight: FontWeight.w700),
@@ -137,7 +137,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                 value: "challenge",
                                 child: Text(
                                   "Challenge",
-                                  style: GoogleFonts.almarai(
+                                  style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16),
                                 ),
@@ -146,7 +146,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                 value: "event",
                                 child: Text(
                                   "Event",
-                                  style: GoogleFonts.almarai(
+                                  style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 16),
                                 ),
@@ -215,7 +215,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                   value: "low",
                                   child: Text(
                                     "Low",
-                                    style: GoogleFonts.almarai(
+                                    style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16),
                                   ),
@@ -224,7 +224,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                   value: "medium",
                                   child: Text(
                                     "Medium",
-                                    style: GoogleFonts.almarai(
+                                    style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16),
                                   ),
@@ -233,7 +233,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                   value: "high",
                                   child: Text(
                                     "High",
-                                    style: GoogleFonts.almarai(
+                                    style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16),
                                   ),
@@ -250,7 +250,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                     value: category.id,
                                     child: Text(
                                       category.name,
-                                      style: GoogleFonts.almarai(
+                                      style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 16),
                                     ),
@@ -267,7 +267,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                   children: [
                                     TextSpan(
                                       text: "Cover Photo",
-                                      style: GoogleFonts.almarai(
+                                      style: GoogleFonts.poppins(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
@@ -276,7 +276,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                     ),
                                     TextSpan(
                                       text: '*',
-                                      style: GoogleFonts.almarai(
+                                      style: GoogleFonts.poppins(
                                         color: const Color(0xFFFF0000),
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
@@ -308,14 +308,14 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                     ),
                                     Text(
                                       "Upload a cover photo",
-                                      style: GoogleFonts.almarai(fontSize: 16),
+                                      style: GoogleFonts.poppins(fontSize: 16),
                                     ),
                                     const SizedBox(
                                       height: 10,
                                     ),
                                     Text(
                                       "JPG, PNG, SVG",
-                                      style: GoogleFonts.almarai(
+                                      style: GoogleFonts.poppins(
                                         fontSize: 14,
                                         color: Colors.black
                                             .withOpacity(0.6000000238418579),
@@ -346,7 +346,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                       onPressed: () {},
                                       child: Text(
                                         "Choose file",
-                                        style: GoogleFonts.almarai(
+                                        style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w700,
                                             color: Colors.black),
                                       ),
@@ -379,6 +379,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                     children: [
                                       Row(
                                         children: [
+                                          // * image to be uploaded
                                           Container(
                                             width: 50,
                                             height: 50,
@@ -396,7 +397,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                           ),
                                           Text(
                                             "Cover-photo.png",
-                                            style: GoogleFonts.almarai(
+                                            style: GoogleFonts.poppins(
                                                 fontSize: 15),
                                           )
                                         ],
@@ -416,8 +417,6 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                           ),
                                         ),
                                       ),
-
-                                      // * image to be uploaded
                                     ],
                                   ),
                                 ),
@@ -442,7 +441,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                     children: [
                                       Text(
                                         "35%",
-                                        style: GoogleFonts.almarai(
+                                        style: GoogleFonts.poppins(
                                           fontSize: 15,
                                           color: Colors.black
                                               .withOpacity(0.6000000238418579),
@@ -450,7 +449,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                       ),
                                       Text(
                                         "750kB",
-                                        style: GoogleFonts.almarai(
+                                        style: GoogleFonts.poppins(
                                           fontSize: 15,
                                           color: Colors.black
                                               .withOpacity(0.6000000238418579),
@@ -488,7 +487,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                   ),
                                   child: Text(
                                     "Submit",
-                                    style: GoogleFonts.almarai(
+                                    style: GoogleFonts.poppins(
                                         fontSize: 19,
                                         fontWeight: FontWeight.w700,
                                         color: Colors.white),

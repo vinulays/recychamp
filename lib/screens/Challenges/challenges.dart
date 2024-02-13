@@ -78,7 +78,7 @@ class _ChallengesState extends State<Challenges> {
                           // todo greeting must change according to the time of the day
                           Text(
                             "Challenges",
-                            style: GoogleFonts.almarai(
+                            style: GoogleFonts.poppins(
                               // color: Colors.white,
                               fontSize: 25,
                               fontWeight: FontWeight.w700,
@@ -105,7 +105,7 @@ class _ChallengesState extends State<Challenges> {
                   margin: EdgeInsets.symmetric(
                       horizontal: deviceData.size.width * 0.05),
                   child: TextField(
-                    style: GoogleFonts.almarai(
+                    style: GoogleFonts.poppins(
                       fontSize: 17,
                     ),
                     decoration: InputDecoration(
@@ -149,7 +149,7 @@ class _ChallengesState extends State<Challenges> {
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(12.62),
                         ),
-                        hintStyle: GoogleFonts.almarai(
+                        hintStyle: GoogleFonts.poppins(
                             fontSize: 17, color: const Color(0xff75A488)),
                         hintText: "Search Challenges"),
                   ),

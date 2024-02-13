@@ -45,13 +45,13 @@ class _ChallengeFiltersBottomSheetState
                       margin: const EdgeInsets.only(left: 45),
                       child: Text(
                         "Filters",
-                        style: GoogleFonts.almarai(
+                        style: GoogleFonts.poppins(
                             fontSize: 18, fontWeight: FontWeight.w700),
                       ),
                     ),
                     Text(
                       "Reset All",
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                           color: const Color(0xFF75A488),
                           fontSize: 16,
                           fontWeight: FontWeight.w700),
@@ -66,7 +66,7 @@ class _ChallengeFiltersBottomSheetState
                   children: [
                     Text(
                       "Challenge Categories",
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Colors.black.withOpacity(0.699999988079071),
@@ -101,7 +101,7 @@ class _ChallengeFiltersBottomSheetState
                       },
                       label: Text(
                         filterName,
-                        style: GoogleFonts.almarai(
+                        style: GoogleFonts.poppins(
                             fontSize: 13, fontWeight: FontWeight.w700),
                       ),
                     );
@@ -115,7 +115,7 @@ class _ChallengeFiltersBottomSheetState
                   children: [
                     Text(
                       "Show only completed challenges",
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Colors.black.withOpacity(0.699999988079071),
@@ -154,7 +154,7 @@ class _ChallengeFiltersBottomSheetState
                     ),
                     child: Text(
                       "Confirm",
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                           fontSize: 19,
                           fontWeight: FontWeight.w700,
                           color: Colors.white),

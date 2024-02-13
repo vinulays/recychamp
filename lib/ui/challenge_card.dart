@@ -64,7 +64,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                   children: [
                     Text(
                       widget.challenge.title,
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -72,7 +72,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                     ),
                     Text(
                       "${widget.challenge.location}, ${widget.challenge.country}",
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                         color: const Color(0xA53D3D3D),
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -103,7 +103,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
               widget.challenge.description,
               overflow: TextOverflow.ellipsis,
               maxLines: 4,
-              style: GoogleFonts.almarai(
+              style: GoogleFonts.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w300,
                 color: Colors.black.withOpacity(0.6000000238418579),
@@ -121,7 +121,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                       children: [
                         TextSpan(
                           text: 'Difficulty: ',
-                          style: GoogleFonts.almarai(
+                          style: GoogleFonts.poppins(
                             color: Colors.black,
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
@@ -129,7 +129,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                         ),
                         TextSpan(
                           text: widget.challenge.difficulty,
-                          style: GoogleFonts.almarai(
+                          style: GoogleFonts.poppins(
                             color: (widget.challenge.difficulty == "High")
                                 ? const Color(0xFFB53131)
                                 : (widget.challenge.difficulty == "Low")

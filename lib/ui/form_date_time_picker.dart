@@ -31,7 +31,7 @@ class FormDateTimePicker extends StatelessWidget {
               children: [
                 TextSpan(
                   text: title,
-                  style: GoogleFonts.almarai(
+                  style: GoogleFonts.poppins(
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
@@ -41,7 +41,7 @@ class FormDateTimePicker extends StatelessWidget {
                 if (isRequired)
                   TextSpan(
                     text: '*',
-                    style: GoogleFonts.almarai(
+                    style: GoogleFonts.poppins(
                       color: const Color(0xFFFF0000),
                       fontSize: 16,
                       fontWeight: FontWeight.w400,

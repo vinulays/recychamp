@@ -57,11 +57,11 @@ class _ChallengeFormState extends State<ChallengeForm> {
         _categories = categories;
       });
     } catch (e) {
-      // Handle error
       throw Exception('Failed to load categories: $e');
     }
   }
 
+  // * selected image file from the file system (use flutter file picker library)
   Future<void> _getImage() async {
     FilePickerResult? pickedImage = await FilePicker.platform
         .pickFiles(allowMultiple: false, type: FileType.image);
@@ -84,6 +84,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
     });
   }
 
+  // * get selected image name using flutter path library
   void _getImageName() {
     if (_image != null) {
       setState(() {
@@ -92,6 +93,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
     }
   }
 
+  //  * deleting the uploaded image from the firebase when clicked closed button in upload progress
   Future<void> _deleteImageFromFirebase() async {
     Reference imageRef = FirebaseStorage.instance.refFromURL(imageURL!);
     await imageRef.delete();
@@ -105,6 +107,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
     });
   }
 
+  // * uploading image to firebase
   Future<void> _uploadImageToFirebase() async {
     try {
       if (_image != null) {
@@ -130,6 +133,8 @@ class _ChallengeFormState extends State<ChallengeForm> {
           (firebase_storage.TaskSnapshot snapshot) {
             double percentage =
                 (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+            // * formating percentage to have two decimal positions
             String percentageStr = percentage.toStringAsFixed(2);
             setState(() {
               uploadPercentage = double.parse(percentageStr);
@@ -146,7 +151,6 @@ class _ChallengeFormState extends State<ChallengeForm> {
                 imageURL = downloadURL;
               },
             );
-            print(imageURL);
           },
         );
       }

@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,6 +17,8 @@ import 'package:recychamp/ui/form_date_time_picker.dart';
 import 'package:recychamp/ui/form_drop_down.dart';
 import 'package:recychamp/ui/form_input_field.dart';
 import 'package:recychamp/ui/form_text_area.dart';
+import 'package:recychamp/utils/challenge_utils.dart';
+import 'package:path/path.dart';
 
 class ChallengeForm extends StatefulWidget {
   const ChallengeForm({super.key});
@@ -24,6 +29,10 @@ class ChallengeForm extends StatefulWidget {
 
 class _ChallengeFormState extends State<ChallengeForm> {
   File? _image;
+  String? imageURL;
+  String? _imageName;
+  String? _imageSize = "";
+  double uploadPercentage = 0;
 
   final ChallengeCategoryRepository _categoryRepository =
       ChallengeCategoryRepository(
@@ -54,15 +63,96 @@ class _ChallengeFormState extends State<ChallengeForm> {
   }
 
   Future<void> _getImage() async {
-    final imagePicker = ImagePicker();
-    final pickedImage =
-        await imagePicker.pickImage(source: ImageSource.gallery);
+    FilePickerResult? pickedImage = await FilePicker.platform
+        .pickFiles(allowMultiple: false, type: FileType.image);
 
     setState(() {
       if (pickedImage != null) {
-        _image = File(pickedImage.path);
+        _image = File(pickedImage.files.single.path!);
+        _getImageSize();
+        _getImageName();
+        _uploadImageToFirebase();
       }
     });
+  }
+
+  //  * getting selected file size from utils file
+  Future<void> _getImageSize() async {
+    String sizeString = await getImageSize(_image!);
+    setState(() {
+      _imageSize = sizeString;
+    });
+  }
+
+  void _getImageName() {
+    if (_image != null) {
+      setState(() {
+        _imageName = basename(_image!.path);
+      });
+    }
+  }
+
+  Future<void> _deleteImageFromFirebase() async {
+    Reference imageRef = FirebaseStorage.instance.refFromURL(imageURL!);
+    await imageRef.delete();
+
+    setState(() {
+      _image = null;
+      imageURL = null;
+      _imageName = "";
+      uploadPercentage = 0;
+      _imageSize = "";
+    });
+  }
+
+  Future<void> _uploadImageToFirebase() async {
+    try {
+      if (_image != null) {
+        String fileExtension = _image!.path.split('.').last;
+
+        // * selecting where to store image file
+        // * filename = date & time in milliseconds when image is uploading + file extension
+        firebase_storage.Reference ref = firebase_storage
+            .FirebaseStorage.instance
+            .ref()
+            .child("challengeThumbnails")
+            .child('${DateTime.now().millisecondsSinceEpoch}.$fileExtension');
+
+        firebase_storage.UploadTask uploadTask = ref.putFile(
+          _image!,
+          firebase_storage.SettableMetadata(
+            contentType: 'image/$fileExtension',
+          ),
+        );
+
+        // * getting upload percentage
+        uploadTask.snapshotEvents.listen(
+          (firebase_storage.TaskSnapshot snapshot) {
+            double percentage =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            String percentageStr = percentage.toStringAsFixed(2);
+            setState(() {
+              uploadPercentage = double.parse(percentageStr);
+            });
+          },
+          onError: (e) {
+            throw Exception("Upload error");
+          },
+          // * getting download url after upload completion
+          onDone: () async {
+            final String downloadURL = await ref.getDownloadURL();
+            setState(
+              () {
+                imageURL = downloadURL;
+              },
+            );
+            print(imageURL);
+          },
+        );
+      }
+    } catch (e) {
+      throw Exception('Failed to upload image: $e');
+    }
   }
 
   @override
@@ -343,7 +433,8 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                                     .withOpacity(
                                                         0.6000000238418579)),
                                       ),
-                                      onPressed: () {},
+                                      onPressed:
+                                          _image == null ? _getImage : null,
                                       child: Text(
                                         "Choose file",
                                         style: GoogleFonts.poppins(
@@ -357,110 +448,116 @@ class _ChallengeFormState extends State<ChallengeForm> {
                             ],
                           ),
                           // * Image upload process (with firebase)
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xFF75A488), width: 2),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          // * image to be uploaded
-                                          Container(
-                                            width: 50,
-                                            height: 50,
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(10)),
-                                              image: DecorationImage(
-                                                  image: AssetImage(
-                                                      "assets/images/challenge_details_thumbnail_dummy.png"),
-                                                  fit: BoxFit.fill),
+                          if (_image != null)
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 10),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: const Color(0xFF75A488), width: 2),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            // * image to be uploaded
+                                            Container(
+                                              width: 50,
+                                              height: 50,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(10)),
+                                                image: DecorationImage(
+                                                    image: FileImage(_image!),
+                                                    fit: BoxFit.cover),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            SizedBox(
+                                              width: 200,
+                                              child: Text(
+                                                _imageName!,
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 15),
+                                                // overflow: TextOverflow.visible,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        // * close button
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(right: 10),
+                                          child: GestureDetector(
+                                            onTap: _deleteImageFromFirebase,
+                                            child: SvgPicture.asset(
+                                              "assets/icons/close.svg",
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      Colors.black,
+                                                      BlendMode.srcIn),
                                             ),
                                           ),
-                                          const SizedBox(
-                                            width: 10,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 5),
+                                    child: LinearPercentIndicator(
+                                      animateFromLastPercent: true,
+                                      barRadius: const Radius.circular(10),
+                                      lineHeight: 5.0,
+                                      percent: uploadPercentage / 100,
+                                      animation: true,
+                                      animationDuration: 1000,
+                                      backgroundColor: const Color(0xffC8E8D5),
+                                      progressColor: const Color(0xff75A488),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "$uploadPercentage%",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 15,
+                                            color: Colors.black.withOpacity(
+                                                0.6000000238418579),
                                           ),
-                                          Text(
-                                            "Cover-photo.png",
-                                            style: GoogleFonts.poppins(
-                                                fontSize: 15),
-                                          )
-                                        ],
-                                      ),
-                                      // * close button
-                                      Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 10),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: SvgPicture.asset(
-                                            "assets/icons/close.svg",
-                                            colorFilter: const ColorFilter.mode(
-                                                Colors.black, BlendMode.srcIn),
+                                        ),
+                                        Text(
+                                          "$_imageSize",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 15,
+                                            color: Colors.black.withOpacity(
+                                                0.6000000238418579),
                                           ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(top: 5),
-                                  child: LinearPercentIndicator(
-                                    barRadius: const Radius.circular(10),
-                                    lineHeight: 5.0,
-                                    percent: 0.35,
-                                    animation: true,
-                                    animationDuration: 1000,
-                                    backgroundColor: const Color(0xffC8E8D5),
-                                    progressColor: const Color(0xff75A488),
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "35%",
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 15,
-                                          color: Colors.black
-                                              .withOpacity(0.6000000238418579),
-                                        ),
-                                      ),
-                                      Text(
-                                        "750kB",
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 15,
-                                          color: Colors.black
-                                              .withOpacity(0.6000000238418579),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
                           // * submit & reset buttons
                           Column(
                             children: [

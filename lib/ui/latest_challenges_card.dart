@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recychamp/models/challenge.dart';
 
 class LatestChallengeCard extends StatelessWidget {
-  const LatestChallengeCard({super.key});
+  final Challenge challenge;
+  const LatestChallengeCard({super.key, required this.challenge});
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +41,8 @@ class LatestChallengeCard extends StatelessWidget {
                 width: 84.15,
                 height: 84.15,
                 decoration: ShapeDecoration(
-                  image: const DecorationImage(
-                    image: AssetImage(
-                        "assets/images/home_latest_challenges_dummy.png"),
+                  image: DecorationImage(
+                    image: NetworkImage(challenge.imageURL),
                     fit: BoxFit.fill,
                   ),
                   shape: RoundedRectangleBorder(
@@ -58,7 +59,7 @@ class LatestChallengeCard extends StatelessWidget {
                 children: [
                   SizedBox(
                     child: Text(
-                      'Eco-Warrior Challenge',
+                      challenge.title,
                       style: GoogleFonts.almarai(
                         color: const Color(0xFF1E1E1E),
                         fontSize: 16.83,
@@ -68,7 +69,7 @@ class LatestChallengeCard extends StatelessWidget {
                   ),
                   SizedBox(
                     child: Text(
-                      'Colombo',
+                      challenge.location,
                       style: GoogleFonts.almarai(
                         color: const Color(0xFF747474),
                         fontSize: 16.83,
@@ -102,7 +103,7 @@ class LatestChallengeCard extends StatelessWidget {
                         width: 24.19,
                         height: 21.04,
                         child: Text(
-                          '4.9',
+                          challenge.rating.toString(),
                           style: GoogleFonts.almarai(
                             color: const Color(0xFF1E1E1E),
                             fontSize: 16,

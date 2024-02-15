@@ -53,9 +53,6 @@ dependencies:
   # generating ids for users
   uuid: ^4.3.3
 
-  # state management
-  flutter_riverpod: ^2.3.7
-
   # show toast message
   fluttertoast: ^8.2.2
 
@@ -68,7 +65,7 @@ dependencies:
   readmore: ^2.2.0
   avatar_glow: ^3.0.1
   bloc: ^8.1.2
-  meta: ^1.11.0
+  meta: 1.10.0
   equatable: ^2.0.5
 
 dev_dependencies:

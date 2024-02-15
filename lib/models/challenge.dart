@@ -17,6 +17,7 @@ class Challenge {
   String? type;
   double rating;
   ChallengeCategory category;
+  DateTime? createdAt;
 
   Challenge(
       {this.id,
@@ -34,5 +35,6 @@ class Challenge {
       required this.imageURL,
       this.type,
       required this.rating,
-      required this.category});
+      required this.category,
+      this.createdAt});
 }

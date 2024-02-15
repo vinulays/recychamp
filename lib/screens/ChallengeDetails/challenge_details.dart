@@ -121,7 +121,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                           widget.challenge.endDateTime))
                                   ? "online"
                                   : "offline",
-                              style: GoogleFonts.almarai(
+                              style: GoogleFonts.poppins(
                                   fontSize: 14, fontWeight: FontWeight.w700),
                             ),
                           ],
@@ -148,7 +148,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           children: [
                             Text(
                               widget.challenge.category.name,
-                              style: GoogleFonts.almarai(
+                              style: GoogleFonts.poppins(
                                   fontSize: 13, fontWeight: FontWeight.w400),
                             ),
                           ],
@@ -162,7 +162,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                     left: 25.58,
                     child: Text(
                       widget.challenge.title,
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                           fontSize: 25,
                           fontWeight: FontWeight.w700,
                           color: Colors.white),
@@ -208,33 +208,30 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                               children: [
                                 TextSpan(
                                   text: 'You have ',
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     color: Colors.black
                                         .withOpacity(0.6499999761581421),
                                     fontSize: 14,
-                                    fontFamily: 'Almarai',
                                     fontWeight: FontWeight.w400,
                                     height: 0,
                                   ),
                                 ),
                                 TextSpan(
                                   text: '3 days',
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     color: Colors.black
                                         .withOpacity(0.6499999761581421),
                                     fontSize: 14,
-                                    fontFamily: 'Almarai',
                                     fontWeight: FontWeight.w700,
                                     height: 0,
                                   ),
                                 ),
                                 TextSpan(
                                   text: ' to complete the challenge !',
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     color: Colors.black
                                         .withOpacity(0.6499999761581421),
                                     fontSize: 14,
-                                    fontFamily: 'Almarai',
                                     fontWeight: FontWeight.w400,
                                     height: 0,
                                   ),
@@ -248,7 +245,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           ),
                           Container(
                             margin: EdgeInsets.symmetric(
-                                horizontal: deviceSize.width * 0.03),
+                                horizontal: deviceSize.width * 0.01),
                             child: LinearPercentIndicator(
                               barRadius: const Radius.circular(16.83),
                               lineHeight: 20.0,
@@ -279,11 +276,10 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                       radius: const Radius.circular(16.83),
                       thickness: 10,
                       child: ListView(
-                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "Details",
-                            style: GoogleFonts.almarai(
+                            style: GoogleFonts.poppins(
                               fontSize: 25,
                               fontWeight: FontWeight.w700,
                             ),
@@ -333,7 +329,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                             (challengeType == "event")
                                 ? 'About Event'
                                 : "Instructions",
-                            style: GoogleFonts.almarai(
+                            style: GoogleFonts.poppins(
                               color: const Color(0xFF1E1E1E),
                               fontSize: 25,
                               fontWeight: FontWeight.w700,
@@ -345,7 +341,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           //  * challenge description
                           Text(
                             widget.challenge.description,
-                            style: GoogleFonts.almarai(
+                            style: GoogleFonts.poppins(
                                 fontSize: 14, fontWeight: FontWeight.w300),
                           ),
                           const SizedBox(
@@ -356,7 +352,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                               challengeType == "challenge"
                                   ? 'Challenge Rules'
                                   : "Event Rules",
-                              style: GoogleFonts.almarai(
+                              style: GoogleFonts.poppins(
                                 color: const Color(0xFF1E1E1E),
                                 fontSize: 25,
                                 fontWeight: FontWeight.w700,
@@ -367,21 +363,23 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           ),
 
                           Column(
-                              children: List.generate(ruleList.length, (index) {
-                            return Column(
-                              children: [
-                                Text(
-                                  "${index + 1}. ${ruleList[index]}",
-                                  style: GoogleFonts.almarai(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                )
-                              ],
-                            );
-                          }))
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: List.generate(ruleList.length, (index) {
+                              return Column(
+                                children: [
+                                  Text(
+                                    "${index + 1}. ${ruleList[index]}",
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  const SizedBox(
+                                    height: 12,
+                                  )
+                                ],
+                              );
+                            }),
+                          )
                         ],
                       ),
                     ),
@@ -431,7 +429,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                               : (challengeType == "event" && !state.isAccepted)
                                   ? "Join the Event"
                                   : "Joined the Event",
-                      style: GoogleFonts.almarai(
+                      style: GoogleFonts.poppins(
                           fontSize: 19,
                           fontWeight: FontWeight.w700,
                           color: Colors.white),

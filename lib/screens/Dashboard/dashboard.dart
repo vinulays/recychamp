@@ -43,7 +43,7 @@ class _DashboardState extends State<Dashboard> {
                         // todo greeting must change according to the time of the day
                         Text(
                           "Good Morning",
-                          style: GoogleFonts.almarai(
+                          style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontSize: 25,
                             fontWeight: FontWeight.w700,
@@ -51,7 +51,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Text(
                           "Susan Clay",
-                          style: GoogleFonts.almarai(
+                          style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -145,7 +145,7 @@ class _DashboardState extends State<Dashboard> {
                                                   TextSpan(
                                                     text:
                                                         "Your fresh and green comfortable ",
-                                                    style: GoogleFonts.almarai(
+                                                    style: GoogleFonts.poppins(
                                                         color: const Color(
                                                             0xFF1E1E1E),
                                                         fontSize: 27,
@@ -154,7 +154,7 @@ class _DashboardState extends State<Dashboard> {
                                                   ),
                                                   TextSpan(
                                                     text: "place",
-                                                    style: GoogleFonts.almarai(
+                                                    style: GoogleFonts.poppins(
                                                         color: const Color(
                                                             0xFF75A488),
                                                         fontSize: 27,
@@ -217,7 +217,7 @@ class _DashboardState extends State<Dashboard> {
                                                 children: [
                                                   Text(
                                                     "Latest Challenges",
-                                                    style: GoogleFonts.almarai(
+                                                    style: GoogleFonts.poppins(
                                                       color: const Color(
                                                           0xFF1E1E1E),
                                                       fontSize: 18,

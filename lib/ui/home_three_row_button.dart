@@ -40,7 +40,7 @@ class HomeThreeRowButton extends StatelessWidget {
             ),
             Text(
               description,
-              style: GoogleFonts.almarai(
+              style: GoogleFonts.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 color: const Color(0xFF1E1E1E),

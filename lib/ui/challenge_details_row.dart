@@ -19,7 +19,7 @@ class ChallengeDetailsRow extends StatelessWidget {
         ),
         Text(
           description,
-          style: GoogleFonts.almarai(
+          style: GoogleFonts.poppins(
             fontSize: 14,
             fontWeight: FontWeight.w400,
             color: const Color(0xA53D3D3D),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recychamp/screens/Community/user_profile.dart';
 
 class Community extends StatefulWidget {
   const Community({super.key});
@@ -120,6 +121,14 @@ class _CommunityState extends State<Community> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Add functionality for the floating action button
+          showGeneralDialog(
+            context: context,
+            pageBuilder: (BuildContext buildContext,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return const UserProfileScreen();
+            },
+          );
         },
         backgroundColor: const Color(0xFF75A488),
         shape: RoundedRectangleBorder(

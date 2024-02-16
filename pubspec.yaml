@@ -120,6 +120,7 @@ flutter:
     - assets/images/challenge_details_thumbnail_dummy.png
     - assets/images/Rectangle.png
     - assets/icons/calendar.svg
+    - assets/images/profile.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

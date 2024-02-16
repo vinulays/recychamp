@@ -16,8 +16,8 @@ class PostRepository {
 
   //Post Creation
   Future<String?> makePost({
-    required String content,
-    required File file,
+    required String postContent,
+    required File postFile,
     required String postType,
   }) async {
     try {
@@ -28,18 +28,18 @@ class PostRepository {
       //Post to Storage
       final fileUid = const Uuid().v1();
       final path = _storage.ref(postType).child(fileUid);
-      final processSnapshot = await path.putFile(file);
+      final processSnapshot = await path.putFile(postFile);
       final downloadUrl = await processSnapshot.ref.getDownloadURL();
 
       // Creating a post
       Post post = Post(
         postId: postId,
         postUserId: postUserId,
-        content: content,
+        content: postContent,
         postType: postType,
         postUrl: downloadUrl,
         createdAt: now,
-        likes: [],
+        likesList: [],
       );
 
       // Put our post into the firestore
@@ -57,14 +57,22 @@ class PostRepository {
   //Method to like  a post
   Future<String?> likePosts({
     required String postId,
-    required List<String> likes,
+    required List<String> likesList,
   }) async {
     try {
       final userId = _auth.currentUser!.uid;
 
-      if (likes.contains(userId)) {
-        _firestore.collection(CollectionNames.posts).doc(postId);
+      if (likesList.contains(userId)) {
+        likesList.remove(userId);
+      } else {
+        likesList.add(userId);
       }
+
+      // Update likes in Firestore
+      await _firestore
+          .collection(CollectionNames.posts)
+          .doc(postId)
+          .update({'likesList': likesList});
       return null;
     } catch (e) {
       return e.toString();

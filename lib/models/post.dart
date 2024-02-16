@@ -8,7 +8,7 @@ class Post {
   final String postType;
   final String postUrl;
   final DateTime createdAt;
-  final List<String> likes;
+  final List<String> likesList;
 
   const Post(
       {required this.postId,
@@ -17,7 +17,7 @@ class Post {
       required this.postType,
       required this.postUrl,
       required this.createdAt,
-      required this.likes});
+      required this.likesList});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -27,7 +27,7 @@ class Post {
       'postType': postType,
       'postUrl': postUrl,
       'createdAt': createdAt.millisecondsSinceEpoch,
-      'likes': likes,
+      'likeslist': likesList,
     };
   }
 
@@ -42,6 +42,6 @@ class Post {
         createdAt: DateTime.fromMillisecondsSinceEpoch(
           map['createdAt'] ?? 0,
         ),
-        likes: List<String>.from((map['likes'] ?? [])));
+        likesList: List<String>.from((map['likesList'] ?? [])));
   }
 }

@@ -41,7 +41,7 @@ dependencies:
   flutter_svg: ^2.0.9
   percent_indicator: ^4.2.3
   firebase_core: ^2.24.2
-  cloud_firestore: ^4.14.0
+  cloud_firestore: ^4.15.4
   firebase_auth: ^4.7.2
   firebase_storage: ^11.2.5
   # for providing icons

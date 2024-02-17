@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:recychamp/models/challenge_category.dart';
 import 'package:recychamp/repositories/challenge_category_repository.dart';
@@ -33,6 +32,8 @@ class _ChallengeFormState extends State<ChallengeForm> {
   String? _imageName;
   String? _imageSize = "";
   double uploadPercentage = 0;
+
+  final _formKey = GlobalKey<FormBuilderState>();
 
   final ChallengeCategoryRepository _categoryRepository =
       ChallengeCategoryRepository(
@@ -104,6 +105,9 @@ class _ChallengeFormState extends State<ChallengeForm> {
       _imageName = "";
       uploadPercentage = 0;
       _imageSize = "";
+
+      // * resetting the imageURL field
+      _formKey.currentState?.fields["imageURL"]?.reset();
     });
   }
 
@@ -146,9 +150,12 @@ class _ChallengeFormState extends State<ChallengeForm> {
           // * getting download url after upload completion
           onDone: () async {
             final String downloadURL = await ref.getDownloadURL();
+            // * adding downloadURL to the formData
             setState(
               () {
                 imageURL = downloadURL;
+                _formKey.currentState?.fields["imageURL"]
+                    ?.didChange(downloadURL);
               },
             );
           },
@@ -207,6 +214,11 @@ class _ChallengeFormState extends State<ChallengeForm> {
                   thickness: 4,
                   child: SingleChildScrollView(
                     child: FormBuilder(
+                      key: _formKey,
+                      onChanged: () {
+                        _formKey.currentState!.save();
+                        debugPrint(_formKey.currentState!.value.toString());
+                      },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -299,6 +311,12 @@ class _ChallengeFormState extends State<ChallengeForm> {
                               title: "Maximum Participants",
                               isRequired: true,
                               formBuilderName: "maximumParticipants"),
+                          // * Challenge rules
+                          const FormTextArea(
+                              title: "Rules",
+                              isRequired: true,
+                              formBuilderName: "rules",
+                              maxLines: 4),
                           //  * Challenge difficulty
                           FormDropDown(
                               title: "Difficulty",
@@ -418,34 +436,43 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    TextButton(
-                                      style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        padding: MaterialStateProperty.all(
-                                            const EdgeInsets.symmetric(
-                                                vertical: 10.88,
-                                                horizontal: 20)),
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                const Color(0xFF75A488)
-                                                    .withOpacity(
-                                                        0.6000000238418579)),
-                                      ),
-                                      onPressed:
-                                          _image == null ? _getImage : null,
-                                      child: Text(
-                                        "Choose file",
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.black),
-                                      ),
-                                    )
+                                    FormBuilderField(
+                                        name: "imageURL",
+                                        builder:
+                                            (FormFieldState<dynamic> field) {
+                                          return TextButton(
+                                            style: ButtonStyle(
+                                              shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                              ),
+                                              padding:
+                                                  MaterialStateProperty.all(
+                                                      const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 10.88,
+                                                          horizontal: 20)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all<
+                                                      Color>(const Color(
+                                                          0xFF75A488)
+                                                      .withOpacity(
+                                                          0.6000000238418579)),
+                                            ),
+                                            onPressed: _image == null
+                                                ? _getImage
+                                                : null,
+                                            child: Text(
+                                              "Choose file",
+                                              style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Colors.black),
+                                            ),
+                                          );
+                                        })
                                   ],
                                 ),
                               ),

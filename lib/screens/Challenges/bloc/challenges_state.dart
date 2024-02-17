@@ -14,3 +14,17 @@ class ChallengesLoaded extends ChallengesState {
 }
 
 class ChallengesError extends ChallengesState {}
+
+class ChallengeAdding extends ChallengesState {}
+
+class ChallengeAdded extends ChallengesState {
+  final List<Challenge> updatedChallenges;
+
+  ChallengeAdded(this.updatedChallenges);
+}
+
+class ChallengeAddingError extends ChallengesState {
+  final String errorMessage;
+
+  ChallengeAddingError(this.errorMessage);
+}

@@ -59,4 +59,10 @@ class ChallengeService {
       throw Exception('Failed to fetch challenges: $e');
     }
   }
+
+  Future<void> addChallenge(Map<String, dynamic> formData) async {
+    try {} catch (e) {
+      rethrow;
+    }
+  }
 }

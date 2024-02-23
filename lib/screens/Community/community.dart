@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recychamp/screens/Community/user_profile.dart';
+import 'package:recychamp/screens/Community/createpost.dart';
 
 class Community extends StatefulWidget {
   const Community({super.key});
@@ -126,7 +126,7 @@ class _CommunityState extends State<Community> {
             pageBuilder: (BuildContext buildContext,
                 Animation<double> animation,
                 Animation<double> secondaryAnimation) {
-              return const UserProfileScreen();
+              return const CreatePost();
             },
           );
         },

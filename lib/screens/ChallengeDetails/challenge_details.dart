@@ -1,4 +1,5 @@
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -147,10 +148,10 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              widget.challenge.category.name,
+                              widget.challenge.category!.name,
                               style: GoogleFonts.poppins(
                                   fontSize: 13, fontWeight: FontWeight.w400),
-                            ),
+                            )
                           ],
                         ),
                       ),

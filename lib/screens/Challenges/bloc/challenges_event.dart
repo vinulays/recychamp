@@ -8,8 +8,8 @@ sealed class ChallengesEvent extends Equatable {
 
 class FetchChallengesEvent extends ChallengesEvent {}
 
-class SubmitChallengeForm extends ChallengesEvent {
+class AddChallengeEvent extends ChallengesEvent {
   final Map<String, dynamic> formData;
 
-  SubmitChallengeForm(this.formData);
+  AddChallengeEvent(this.formData);
 }

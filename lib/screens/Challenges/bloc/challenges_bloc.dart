@@ -17,11 +17,24 @@ class ChallengesBloc extends Bloc<ChallengesEvent, ChallengesState> {
     // * get challenges event from firebase
     on<FetchChallengesEvent>((event, emit) async {
       emit(ChallengesLoading());
+
       try {
         final challenges = await _challengeRepository.getChallenges();
         emit(ChallengesLoaded(challenges));
       } catch (e) {
         emit(ChallengesError());
+      }
+    });
+
+    // * add challenge to firebase
+    on<AddChallengeEvent>((event, emit) async {
+      emit(ChallengeAdding());
+
+      try {
+        await _challengeRepository.addChallenge(event.formData);
+        emit(ChallengeAdded(await _challengeRepository.getChallenges()));
+      } catch (e) {
+        emit(ChallengeAddingError("Challenge adding failed"));
       }
     });
   }

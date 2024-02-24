@@ -173,8 +173,6 @@ class _ChallengeFormState extends State<ChallengeForm> {
     var deviceSize = MediaQuery.of(context).size;
     return BlocBuilder<ChallengesBloc, ChallengesState>(
       builder: (context, state) {
-        final challengesBloc = BlocProvider.of<ChallengesBloc>(context);
-
         return Scaffold(
           body: Container(
             margin: EdgeInsets.symmetric(horizontal: deviceSize.width * 0.05),

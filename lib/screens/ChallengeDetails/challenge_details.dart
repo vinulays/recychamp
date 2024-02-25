@@ -58,7 +58,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                         height: 292,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.fill),
+                              image: imageProvider, fit: BoxFit.cover),
                         ),
                       ),
                       placeholder: (context, url) =>

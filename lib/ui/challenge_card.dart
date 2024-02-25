@@ -47,7 +47,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
               height: 170,
               decoration: ShapeDecoration(
                   image:
-                      DecorationImage(image: imageProvider, fit: BoxFit.fill),
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.83))),
             ),

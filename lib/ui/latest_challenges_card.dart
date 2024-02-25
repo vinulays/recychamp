@@ -45,7 +45,7 @@ class LatestChallengeCard extends StatelessWidget {
                   width: 84.15,
                   decoration: ShapeDecoration(
                       image: DecorationImage(
-                          image: imageProvider, fit: BoxFit.fill),
+                          image: imageProvider, fit: BoxFit.cover),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.62))),
                 ),

@@ -37,6 +37,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
         ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // * Challenge thumbnail
           Container(

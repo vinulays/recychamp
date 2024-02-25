@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recychamp/models/challenge.dart';
-import 'package:recychamp/models/challenge_category.dart';
 
 class ChallengeService {
   final FirebaseFirestore _firestore;
@@ -16,22 +15,8 @@ class ChallengeService {
           .orderBy("createdAt", descending: true)
           .get();
       List<Challenge> challenges = [];
-
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data();
-
-        DocumentReference categoryRef = data['category'];
-
-        // * Fetching the category document based on the reference
-        DocumentSnapshot<Map<String, dynamic>> categoryDoc =
-            await categoryRef.get() as DocumentSnapshot<Map<String, dynamic>>;
-
-        // * Extracting category data from the category document
-        Map<String, dynamic> categoryData = categoryDoc.data()!;
-        ChallengeCategory category = ChallengeCategory(
-          id: categoryDoc.id,
-          name: categoryData['name'],
-        );
 
         Challenge challenge = Challenge(
             id: doc.id,
@@ -48,8 +33,9 @@ class ChallengeService {
             difficulty: data['difficulty'],
             imageURL: data['imageURL'],
             type: data['type'],
-            rating: data['rating'],
-            category: category);
+            rating: double.parse(data['rating']
+                .toString()), // * converting firebase number format to double format
+            categoryId: data["categoryId"]);
 
         challenges.add(challenge);
       }
@@ -57,6 +43,44 @@ class ChallengeService {
       return challenges;
     } catch (e) {
       throw Exception('Failed to fetch challenges: $e');
+    }
+  }
+
+  // * add challenge to firebase
+  Future<void> addChallenge(Map<String, dynamic> formData) async {
+    try {
+      await _firestore.collection("challenges").add({
+        "title": formData['title'],
+        "description": formData["description"],
+        "location": formData["location"],
+        "country": formData["country"],
+        "rules": formData["rules"],
+        "startDateTime": DateTime(
+            formData["startDate"]
+                .year, // * combining selected dates and times to create the timestamp
+            formData["startDate"].month,
+            formData["startDate"].day,
+            formData["startTime"].hour,
+            formData["startTime"].minute),
+        "endDateTime": DateTime(
+            formData["endDate"].year,
+            formData["endDate"].month,
+            formData["endDate"].day,
+            formData["endTime"].hour,
+            formData["endTime"].minute),
+        "completedPercentage": 0,
+        "maximumParticipants": int.parse(
+            formData["maximumParticipants"]), // * converting string to integer
+        "registeredParticipants": 0,
+        "difficulty": formData["difficulty"],
+        "imageURL": formData["imageURL"],
+        "rating": 0,
+        "categoryId": formData["categoryId"],
+        "createdAt": DateTime.now(),
+        "type": formData["type"]
+      });
+    } catch (e) {
+      rethrow;
     }
   }
 }

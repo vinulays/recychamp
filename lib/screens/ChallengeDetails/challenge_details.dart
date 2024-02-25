@@ -9,6 +9,7 @@ import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ParentAgreement/parent_agreement.dart';
 import 'package:recychamp/ui/challenge_details_row.dart';
+import 'package:recychamp/utils/challenge_categories.dart';
 
 class ChallengeDetails extends StatefulWidget {
   final Challenge challenge;
@@ -28,7 +29,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
     String endDateTime = widget.challenge.endDateTime.toString();
     DateTime currentDateTime = DateTime.now();
 
-    List<String> ruleList = widget.challenge.rules!.split(";");
+    List<String> ruleList = widget.challenge.rules.split(";");
 
     // * Wrapping the widget with the bloc builder
     return BlocBuilder<ChallengeDetailsBloc, ChallengeDetailsState>(
@@ -147,10 +148,14 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              widget.challenge.category.name,
+                              challengeCategories
+                                  .firstWhere((category) =>
+                                      category.id ==
+                                      widget.challenge.categoryId)
+                                  .name,
                               style: GoogleFonts.poppins(
                                   fontSize: 13, fontWeight: FontWeight.w400),
-                            ),
+                            )
                           ],
                         ),
                       ),

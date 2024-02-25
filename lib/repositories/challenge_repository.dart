@@ -10,4 +10,8 @@ class ChallengeRepository {
   Future<List<Challenge>> getChallenges() async {
     return _challengeService.getChallenges();
   }
+
+  Future<void> addChallenge(Map<String, dynamic> formData) async {
+    _challengeService.addChallenge(formData);
+  }
 }

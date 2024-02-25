@@ -1,12 +1,10 @@
-import 'package:recychamp/models/challenge_category.dart';
-
 class Challenge {
   String? id;
   String title;
   String description;
   String location;
   String country;
-  String? rules;
+  String rules;
   DateTime startDateTime;
   DateTime endDateTime;
   int completedPercentage;
@@ -16,7 +14,7 @@ class Challenge {
   String imageURL;
   String? type;
   double rating;
-  ChallengeCategory category;
+  String categoryId;
   DateTime? createdAt;
 
   Challenge(
@@ -25,7 +23,7 @@ class Challenge {
       required this.description,
       required this.location,
       required this.country,
-      this.rules,
+      required this.rules,
       required this.startDateTime,
       required this.endDateTime,
       required this.completedPercentage,
@@ -35,6 +33,6 @@ class Challenge {
       required this.imageURL,
       this.type,
       required this.rating,
-      required this.category,
+      required this.categoryId,
       this.createdAt});
 }

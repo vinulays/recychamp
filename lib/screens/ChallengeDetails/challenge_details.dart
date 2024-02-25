@@ -1,4 +1,5 @@
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -51,16 +52,30 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                         colors: [Colors.black.withOpacity(0), Colors.black],
                       ).createShader(bounds);
                     },
-                    child: Container(
-                      width: double.infinity,
-                      height: 292,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(widget.challenge.imageURL),
-                          fit: BoxFit.fill,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.challenge.imageURL,
+                      imageBuilder: (context, imageProvider) => Container(
+                        height: 292,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
                         ),
                       ),
+                      placeholder: (context, url) =>
+                          const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
+                    // child: Container(
+                    //   width: double.infinity,
+                    //   height: 292,
+                    //   decoration: BoxDecoration(
+                    //     image: DecorationImage(
+                    //       image: NetworkImage(widget.challenge.imageURL),
+                    //       fit: BoxFit.fill,
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                   // * back button to challenges list
                   Positioned(

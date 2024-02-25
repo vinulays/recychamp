@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recychamp/models/challenge.dart';
@@ -37,19 +38,44 @@ class LatestChallengeCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: 84.15,
-                height: 84.15,
-                decoration: ShapeDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(challenge.imageURL),
-                    fit: BoxFit.fill,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.62),
+              CachedNetworkImage(
+                imageUrl: challenge.imageURL,
+                imageBuilder: (context, imageProvider) => Container(
+                  height: 84.15,
+                  width: 84.15,
+                  decoration: ShapeDecoration(
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.62))),
+                ),
+                placeholder: (context, url) => const Center(
+                  // child: CircularProgressIndicator(),
+                  child: SizedBox(
+                    height: 84.15,
+                    width: 84.15,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [CircularProgressIndicator()],
+                    ),
                   ),
                 ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
+              // Container(
+              //   width: 84.15,
+              //   height: 84.15,
+              //   decoration: ShapeDecoration(
+              //     image: DecorationImage(
+              //       image: NetworkImage(challenge.imageURL),
+              //       fit: BoxFit.fill,
+              //     ),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(12.62),
+              //     ),
+              //   ),
+              // ),
               const SizedBox(
                 width: 27.35,
               ),

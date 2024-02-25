@@ -32,8 +32,10 @@ class ChallengesBloc extends Bloc<ChallengesEvent, ChallengesState> {
 
       try {
         await _challengeRepository.addChallenge(event.formData);
-        final updatedChallenges = await _challengeRepository.getChallenges();
-        emit(ChallengeAdded(updatedChallenges));
+        emit(ChallengeAdded());
+
+        // * getting updated challenges
+        add(FetchChallengesEvent());
       } catch (e) {
         emit(ChallengeAddingError("Challenge adding failed"));
       }

@@ -35,9 +35,9 @@ class _ChallengeFormState extends State<ChallengeForm> {
 
   final _formKey = GlobalKey<FormBuilderState>();
 
+  // * get categories from the utils file
   final List<ChallengeCategory> _categories = challengeCategories;
 
-// * loading categories from firebase when initiating the widget
   @override
   void initState() {
     super.initState();
@@ -80,16 +80,18 @@ class _ChallengeFormState extends State<ChallengeForm> {
     Reference imageRef = FirebaseStorage.instance.refFromURL(imageURL!);
     await imageRef.delete();
 
-    setState(() {
-      _image = null;
-      imageURL = null;
-      _imageName = "";
-      uploadPercentage = 0;
-      _imageSize = "";
+    if (mounted) {
+      setState(() {
+        _image = null;
+        imageURL = null;
+        _imageName = "";
+        uploadPercentage = 0;
+        _imageSize = "";
 
-      // * resetting the imageURL field
-      _formKey.currentState?.fields["imageURL"]?.reset();
-    });
+        // * resetting the imageURL field
+        _formKey.currentState?.fields["imageURL"]?.reset();
+      });
+    }
   }
 
   // * uploading image to firebase
@@ -165,7 +167,50 @@ class _ChallengeFormState extends State<ChallengeForm> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.white,
+                                title: Text(
+                                  "Go back",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                content: Text(
+                                  "You will lost unsaved data if you go back. Do you really want to go back?",
+                                  style: GoogleFonts.poppins(fontSize: 14),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        "No",
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 14),
+                                      )),
+                                  TextButton(
+                                      onPressed: () async {
+                                        // * deleting the uploaded image if go back without submitting
+                                        if (_image != null) {
+                                          _deleteImageFromFirebase();
+                                        }
+
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        "Yes",
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 14),
+                                      )),
+                                ],
+                              );
+                            });
                       },
                       child: SvgPicture.asset(
                         "assets/icons/go_back.svg",
@@ -592,11 +637,13 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                             .saveAndValidate()) {
                                           Map<String, dynamic> formData =
                                               _formKey.currentState!.value;
-                                          // Dispatch the event
+                                          // * Dispatch the add challenge event
                                           context
                                               .read<ChallengesBloc>()
                                               .add(AddChallengeEvent(formData));
                                           _formKey.currentState!.reset();
+
+                                          Navigator.of(context).pop();
                                         }
                                       },
                                       style: ButtonStyle(

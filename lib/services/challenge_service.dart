@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recychamp/models/challenge.dart';
-import 'package:recychamp/models/challenge_category.dart';
 
 class ChallengeService {
   final FirebaseFirestore _firestore;
@@ -19,19 +18,6 @@ class ChallengeService {
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data();
 
-        DocumentReference categoryRef = data['categoryRef'];
-
-        // * Fetching the category document based on the reference
-        DocumentSnapshot<Map<String, dynamic>> categoryDoc =
-            await categoryRef.get() as DocumentSnapshot<Map<String, dynamic>>;
-
-        // * Extracting category data from the category document
-        Map<String, dynamic> categoryData = categoryDoc.data()!;
-        ChallengeCategory category = ChallengeCategory(
-          id: categoryDoc.id,
-          name: categoryData['name'],
-        );
-
         Challenge challenge = Challenge(
             id: doc.id,
             title: data['title'],
@@ -47,8 +33,9 @@ class ChallengeService {
             difficulty: data['difficulty'],
             imageURL: data['imageURL'],
             type: data['type'],
-            rating: double.parse(data['rating'].toString()),
-            category: category);
+            rating: double.parse(data['rating']
+                .toString()), // * converting firebase number format to double format
+            categoryId: data["categoryId"]);
 
         challenges.add(challenge);
       }
@@ -62,15 +49,6 @@ class ChallengeService {
   // * add challenge to firebase
   Future<void> addChallenge(Map<String, dynamic> formData) async {
     try {
-      // Fetch the category document from Firestore
-      DocumentReference? categoryRef;
-
-      if (formData["categoryRef"] != null) {
-        categoryRef = FirebaseFirestore.instance
-            .collection('challengeCategories')
-            .doc(formData['categoryRef']);
-      }
-
       await _firestore.collection("challenges").add({
         "title": formData['title'],
         "description": formData["description"],
@@ -78,7 +56,8 @@ class ChallengeService {
         "country": formData["country"],
         "rules": formData["rules"],
         "startDateTime": DateTime(
-            formData["startDate"].year,
+            formData["startDate"]
+                .year, // * combining selected dates and times to create the timestamp
             formData["startDate"].month,
             formData["startDate"].day,
             formData["startTime"].hour,
@@ -90,12 +69,13 @@ class ChallengeService {
             formData["endTime"].hour,
             formData["endTime"].minute),
         "completedPercentage": 0,
-        "maximumParticipants": int.parse(formData["maximumParticipants"]),
+        "maximumParticipants": int.parse(
+            formData["maximumParticipants"]), // * converting string to integer
         "registeredParticipants": 0,
         "difficulty": formData["difficulty"],
         "imageURL": formData["imageURL"],
         "rating": 0,
-        "categoryRef": categoryRef,
+        "categoryId": formData["categoryId"],
         "createdAt": DateTime.now(),
         "type": formData["type"]
       });

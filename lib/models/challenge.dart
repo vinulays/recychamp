@@ -1,6 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:recychamp/models/challenge_category.dart';
-
 class Challenge {
   String? id;
   String title;
@@ -17,8 +14,7 @@ class Challenge {
   String imageURL;
   String? type;
   double rating;
-  DocumentReference? categoryRef;
-  ChallengeCategory? category;
+  String categoryId;
   DateTime? createdAt;
 
   Challenge(
@@ -37,7 +33,6 @@ class Challenge {
       required this.imageURL,
       this.type,
       required this.rating,
-      this.category,
-      this.categoryRef,
+      required this.categoryId,
       this.createdAt});
 }

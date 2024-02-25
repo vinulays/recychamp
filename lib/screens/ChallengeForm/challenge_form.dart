@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,13 +10,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:recychamp/models/challenge_category.dart';
-import 'package:recychamp/repositories/challenge_category_repository.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
-import 'package:recychamp/services/challenge_category_service.dart';
 import 'package:recychamp/ui/form_date_time_picker.dart';
 import 'package:recychamp/ui/form_drop_down.dart';
 import 'package:recychamp/ui/form_input_field.dart';
 import 'package:recychamp/ui/form_text_area.dart';
+import 'package:recychamp/utils/challenge_categories.dart';
 import 'package:recychamp/utils/challenge_utils.dart';
 import 'package:path/path.dart';
 
@@ -37,31 +35,12 @@ class _ChallengeFormState extends State<ChallengeForm> {
 
   final _formKey = GlobalKey<FormBuilderState>();
 
-  final ChallengeCategoryRepository _categoryRepository =
-      ChallengeCategoryRepository(
-    challengeCategoryService:
-        ChallengeCategoryService(firestore: FirebaseFirestore.instance),
-  );
-
-  List<ChallengeCategory> _categories = [];
+  final List<ChallengeCategory> _categories = challengeCategories;
 
 // * loading categories from firebase when initiating the widget
   @override
   void initState() {
     super.initState();
-    _loadCategories();
-  }
-
-  Future<void> _loadCategories() async {
-    try {
-      List<ChallengeCategory> categories =
-          await _categoryRepository.getChallengeCategories();
-      setState(() {
-        _categories = categories;
-      });
-    } catch (e) {
-      throw Exception('Failed to load categories: $e');
-    }
   }
 
   // * selected image file from the file system (use flutter file picker library)
@@ -355,7 +334,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                               FormDropDown(
                                 title: "Category",
                                 isRequired: true,
-                                formBuilderName: "categoryRef",
+                                formBuilderName: "categoryId",
                                 items: _categories
                                     .map(
                                       (category) => DropdownMenuItem(

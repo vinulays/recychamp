@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,19 +41,42 @@ class _ChallengeCardState extends State<ChallengeCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // * Challenge thumbnail
-          Container(
-            margin: const EdgeInsets.all(9),
-            height: 170,
-            decoration: ShapeDecoration(
-              image: DecorationImage(
-                image: NetworkImage(widget.challenge.imageURL),
-                fit: BoxFit.fill,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.83),
+          CachedNetworkImage(
+            imageUrl: widget.challenge.imageURL,
+            imageBuilder: (context, imageProvider) => Container(
+              height: 170,
+              decoration: ShapeDecoration(
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.fill),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.83))),
+            ),
+            placeholder: (context, url) =>
+                // const Center(child: CircularProgressIndicator()),
+                const SizedBox(
+              height: 170,
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [CircularProgressIndicator()],
               ),
             ),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
+          // Container(
+          //   margin: const EdgeInsets.all(9),
+          //   height: 170,
+          //   decoration: ShapeDecoration(
+          //     image: DecorationImage(
+          //       image: NetworkImage(widget.challenge.imageURL),
+          //       fit: BoxFit.fill,
+          //     ),
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(16.83),
+          //     ),
+          //   ),
+          // ),
           // * Title and percentage
           Container(
             margin: const EdgeInsets.all(15),

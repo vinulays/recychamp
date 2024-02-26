@@ -51,9 +51,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.83))),
             ),
-            placeholder: (context, url) =>
-                // const Center(child: CircularProgressIndicator()),
-                const SizedBox(
+            placeholder: (context, url) => const SizedBox(
               height: 170,
               width: double.infinity,
               child: Column(
@@ -64,19 +62,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
             ),
             errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
-          // Container(
-          //   margin: const EdgeInsets.all(9),
-          //   height: 170,
-          //   decoration: ShapeDecoration(
-          //     image: DecorationImage(
-          //       image: NetworkImage(widget.challenge.imageURL),
-          //       fit: BoxFit.fill,
-          //     ),
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(16.83),
-          //     ),
-          //   ),
-          // ),
+
           // * Title and percentage
           Container(
             margin: const EdgeInsets.all(15),

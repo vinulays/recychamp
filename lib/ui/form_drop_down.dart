@@ -7,13 +7,15 @@ class FormDropDown extends StatelessWidget {
   final bool isRequired;
   final String formBuilderName;
   final List<DropdownMenuItem<String>> items;
+  final String? Function(String?)? validators;
 
   const FormDropDown(
       {super.key,
       required this.title,
       required this.isRequired,
       required this.formBuilderName,
-      required this.items});
+      required this.items,
+      this.validators});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,20 @@ class FormDropDown extends StatelessWidget {
             items: items,
             name: formBuilderName,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 15),
+              errorStyle: GoogleFonts.poppins(
+                  fontSize: 14, color: const Color(0xffba000d)),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Color(0xffba000d), width: 2.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Color(0xffba000d), width: 2.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              contentPadding: EdgeInsets.zero,
+              prefix: Container(width: 15),
               enabledBorder: OutlineInputBorder(
                 borderSide:
                     const BorderSide(color: Color(0xFF75A488), width: 2.0),
@@ -68,6 +83,7 @@ class FormDropDown extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+            validator: validators,
           ),
         ],
       ),

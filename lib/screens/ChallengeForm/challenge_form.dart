@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:recychamp/models/challenge_category.dart';
@@ -247,16 +248,32 @@ class _ChallengeFormState extends State<ChallengeForm> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // * Challenge title
-                              const FormInputField(
-                                  title: "Title",
-                                  isRequired: true,
-                                  formBuilderName: "title"),
+                              FormInputField(
+                                title: "Title",
+                                isRequired: true,
+                                formBuilderName: "title",
+                                validators: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(
+                                      errorText: "Title is required"),
+                                  FormBuilderValidators.minLength(10,
+                                      errorText:
+                                          "Title should be longer than 10 letters"),
+                                ]),
+                              ),
                               // * Challenge description
-                              const FormTextArea(
-                                  title: "Description",
-                                  isRequired: true,
-                                  formBuilderName: "description",
-                                  maxLines: 7),
+                              FormTextArea(
+                                title: "Description",
+                                isRequired: true,
+                                formBuilderName: "description",
+                                maxLines: 7,
+                                validators: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(
+                                      errorText: "Description is required"),
+                                  FormBuilderValidators.minLength(100,
+                                      errorText:
+                                          "Description should have at least 100 letters"),
+                                ]),
+                              ),
                               // * Challenge type
                               FormDropDown(
                                 title: "Type",
@@ -282,27 +299,45 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                     ),
                                   ),
                                 ],
+                                validators: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(
+                                      errorText: "Type is required")
+                                ]),
                               ),
                               // * Challenge location
-                              const FormInputField(
-                                  title: "Location",
-                                  isRequired: true,
-                                  formBuilderName: "location"),
+                              FormInputField(
+                                title: "Location",
+                                isRequired: true,
+                                formBuilderName: "location",
+                                validators: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(
+                                      errorText: "Location is required"),
+                                  FormBuilderValidators.minLength(10,
+                                      errorText:
+                                          "Location should have at least 10 letters")
+                                ]),
+                              ),
                               // * Challenge country
-                              const FormInputField(
-                                  title: "Country",
-                                  isRequired: true,
-                                  formBuilderName: "country"),
+                              FormInputField(
+                                title: "Country",
+                                isRequired: true,
+                                formBuilderName: "country",
+                                validators: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(
+                                      errorText: "Country is required"),
+                                ]),
+                              ),
                               // * Challenge start date & time
                               const Wrap(
                                 spacing: 50,
                                 children: [
                                   FormDateTimePicker(
-                                      title: "Start Date",
-                                      isRequired: true,
-                                      formBuilderName: "startDate",
-                                      iconURL: "assets/icons/calendar.svg",
-                                      inputType: InputType.date),
+                                    title: "Start Date",
+                                    isRequired: true,
+                                    formBuilderName: "startDate",
+                                    iconURL: "assets/icons/calendar.svg",
+                                    inputType: InputType.date,
+                                  ),
                                   FormDateTimePicker(
                                       title: "Start Time",
                                       isRequired: true,
@@ -331,69 +366,100 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                 ],
                               ),
                               // * Challenge maximum participants
-                              const FormInputField(
-                                  title: "Maximum Participants",
-                                  isRequired: true,
-                                  formBuilderName: "maximumParticipants"),
+                              FormInputField(
+                                title: "Maximum Participants",
+                                isRequired: true,
+                                formBuilderName: "maximumParticipants",
+                                validators: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(
+                                      errorText:
+                                          "Maximum Participants is required"),
+                                  FormBuilderValidators.numeric(
+                                      errorText:
+                                          "Maximum Participants should be a number"),
+                                  FormBuilderValidators.min(10,
+                                      errorText:
+                                          "Minimum Participants should be 10"),
+                                  FormBuilderValidators.max(500,
+                                      errorText:
+                                          "Maximum Particpants should be less than 500")
+                                ]),
+                              ),
                               // * Challenge rules
-                              const FormTextArea(
-                                  title: "Rules",
-                                  isRequired: true,
-                                  formBuilderName: "rules",
-                                  maxLines: 4),
+                              FormTextArea(
+                                title: "Rules",
+                                isRequired: true,
+                                formBuilderName: "rules",
+                                maxLines: 4,
+                                validators: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(
+                                      errorText: "Rules is required"),
+                                  FormBuilderValidators.minLength(20,
+                                      errorText:
+                                          "Description should have at least 20 letters"),
+                                ]),
+                              ),
                               //  * Challenge difficulty
                               FormDropDown(
-                                  title: "Difficulty",
-                                  isRequired: true,
-                                  formBuilderName: "difficulty",
-                                  items: [
-                                    DropdownMenuItem(
-                                      value: "Low",
-                                      child: Text(
-                                        "Low",
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16),
-                                      ),
+                                title: "Difficulty",
+                                isRequired: true,
+                                formBuilderName: "difficulty",
+                                items: [
+                                  DropdownMenuItem(
+                                    value: "Low",
+                                    child: Text(
+                                      "Low",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16),
                                     ),
-                                    DropdownMenuItem(
-                                      value: "Medium",
-                                      child: Text(
-                                        "Medium",
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16),
-                                      ),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: "Medium",
+                                    child: Text(
+                                      "Medium",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16),
                                     ),
-                                    DropdownMenuItem(
-                                      value: "High",
-                                      child: Text(
-                                        "High",
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16),
-                                      ),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: "High",
+                                    child: Text(
+                                      "High",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16),
                                     ),
-                                  ]),
+                                  ),
+                                ],
+                                validators: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(
+                                      errorText: "Difficulty is required"),
+                                ]),
+                              ),
                               //  * Challenge / Event Category
                               FormDropDown(
-                                title: "Category",
-                                isRequired: true,
-                                formBuilderName: "categoryId",
-                                items: _categories
-                                    .map(
-                                      (category) => DropdownMenuItem(
-                                        value: category.id,
-                                        child: Text(
-                                          category.name,
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16),
+                                  title: "Category",
+                                  isRequired: true,
+                                  formBuilderName: "categoryId",
+                                  items: _categories
+                                      .map(
+                                        (category) => DropdownMenuItem(
+                                          value: category.id,
+                                          child: Text(
+                                            category.name,
+                                            style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16),
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
+                                      )
+                                      .toList(),
+                                  validators: FormBuilderValidators.compose([
+                                    FormBuilderValidators.required(
+                                        errorText: "Category is required"),
+                                  ])),
                               // * Image
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,12 +493,19 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                     height: 10,
                                   ),
                                   Container(
-                                    margin: const EdgeInsets.only(bottom: 10),
+                                    margin: const EdgeInsets.only(bottom: 8),
                                     height: 200,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                         border: Border.all(
-                                            color: const Color(0xFF75A488),
+                                            color: (_formKey.currentState !=
+                                                        null &&
+                                                    _formKey
+                                                        .currentState!.errors
+                                                        .containsKey(
+                                                            "imageURL"))
+                                                ? const Color(0xffba000d)
+                                                : const Color(0xFF75A488),
                                             width: 2),
                                         borderRadius:
                                             BorderRadius.circular(10)),
@@ -464,48 +537,68 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                           height: 10,
                                         ),
                                         FormBuilderField(
-                                            name: "imageURL",
-                                            builder: (FormFieldState<dynamic>
-                                                field) {
-                                              return TextButton(
-                                                style: ButtonStyle(
-                                                  shape:
-                                                      MaterialStateProperty.all<
-                                                          RoundedRectangleBorder>(
-                                                    RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
+                                          name: "imageURL",
+                                          builder:
+                                              (FormFieldState<dynamic> field) {
+                                            return TextButton(
+                                              style: ButtonStyle(
+                                                shape:
+                                                    MaterialStateProperty.all<
+                                                        RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                   ),
-                                                  padding:
-                                                      MaterialStateProperty.all(
-                                                          const EdgeInsets
-                                                              .symmetric(
-                                                              vertical: 10.88,
-                                                              horizontal: 20)),
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all<
-                                                          Color>(const Color(
-                                                              0xFF75A488)
-                                                          .withOpacity(
-                                                              0.6000000238418579)),
                                                 ),
-                                                onPressed: _image == null
-                                                    ? _getImage
-                                                    : null,
-                                                child: Text(
-                                                  "Choose file",
-                                                  style: GoogleFonts.poppins(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: Colors.black),
-                                                ),
-                                              );
-                                            })
+                                                padding:
+                                                    MaterialStateProperty.all(
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                            vertical: 10.88,
+                                                            horizontal: 20)),
+                                                backgroundColor:
+                                                    MaterialStateProperty.all<
+                                                        Color>(const Color(
+                                                            0xFF75A488)
+                                                        .withOpacity(
+                                                            0.6000000238418579)),
+                                              ),
+                                              onPressed: _image == null
+                                                  ? _getImage
+                                                  : null,
+                                              child: Text(
+                                                "Choose file",
+                                                style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w700,
+                                                    color: Colors.black),
+                                              ),
+                                            );
+                                          },
+                                          validator: (value) {
+                                            if (value == null) {
+                                              return "Cover Photo is required";
+                                            }
+                                            return null;
+                                          },
+                                        )
                                       ],
                                     ),
                                   ),
+
+                                  // * checking whether the form contains any errros related to the imageURL
+                                  if (_formKey.currentState != null &&
+                                      _formKey.currentState!.errors
+                                          .containsKey("imageURL"))
+                                    Container(
+                                      margin: const EdgeInsets.only(bottom: 10),
+                                      child: Text(
+                                        "Cover photo is required",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 14,
+                                            color: const Color(0xffba000d)),
+                                      ),
+                                    )
                                 ],
                               ),
                               // * Image upload process (with firebase)

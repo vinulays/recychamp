@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FormDateTimePicker extends StatelessWidget {
@@ -58,7 +59,21 @@ class FormDateTimePicker extends StatelessWidget {
           FormBuilderDateTimePicker(
             name: formBuilderName,
             inputType: inputType,
+            // * disabling the previous days
+            firstDate: DateTime.now().subtract(const Duration(days: 0)),
             decoration: InputDecoration(
+              errorStyle: GoogleFonts.poppins(
+                  fontSize: 14, color: const Color(0xffba000d)),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Color(0xffba000d), width: 2.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Color(0xffba000d), width: 2.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
               prefixIconConstraints:
                   const BoxConstraints(maxHeight: 26, minWidth: 26),
               prefixIcon: Padding(
@@ -67,7 +82,7 @@ class FormDateTimePicker extends StatelessWidget {
                   iconURL,
                 ),
               ),
-              contentPadding: const EdgeInsets.only(left: 15),
+              contentPadding: EdgeInsets.zero,
               enabledBorder: OutlineInputBorder(
                 borderSide:
                     const BorderSide(color: Color(0xFF75A488), width: 2.0),
@@ -79,6 +94,9 @@ class FormDateTimePicker extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: "$title is required")
+            ]),
           )
         ],
       ),

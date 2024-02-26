@@ -22,7 +22,7 @@ class FormDateTimePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 158,
+      width: 150,
       margin: const EdgeInsets.only(bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

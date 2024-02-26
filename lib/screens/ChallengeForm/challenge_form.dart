@@ -332,11 +332,12 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                 spacing: 50,
                                 children: [
                                   FormDateTimePicker(
-                                      title: "Start Date",
-                                      isRequired: true,
-                                      formBuilderName: "startDate",
-                                      iconURL: "assets/icons/calendar.svg",
-                                      inputType: InputType.date),
+                                    title: "Start Date",
+                                    isRequired: true,
+                                    formBuilderName: "startDate",
+                                    iconURL: "assets/icons/calendar.svg",
+                                    inputType: InputType.date,
+                                  ),
                                   FormDateTimePicker(
                                       title: "Start Time",
                                       isRequired: true,
@@ -385,64 +386,80 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                 ]),
                               ),
                               // * Challenge rules
-                              const FormTextArea(
-                                  title: "Rules",
-                                  isRequired: true,
-                                  formBuilderName: "rules",
-                                  maxLines: 4),
+                              FormTextArea(
+                                title: "Rules",
+                                isRequired: true,
+                                formBuilderName: "rules",
+                                maxLines: 4,
+                                validators: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(
+                                      errorText: "Rules is required"),
+                                  FormBuilderValidators.minLength(20,
+                                      errorText:
+                                          "Description should have at least 20 letters"),
+                                ]),
+                              ),
                               //  * Challenge difficulty
                               FormDropDown(
-                                  title: "Difficulty",
-                                  isRequired: true,
-                                  formBuilderName: "difficulty",
-                                  items: [
-                                    DropdownMenuItem(
-                                      value: "Low",
-                                      child: Text(
-                                        "Low",
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16),
-                                      ),
+                                title: "Difficulty",
+                                isRequired: true,
+                                formBuilderName: "difficulty",
+                                items: [
+                                  DropdownMenuItem(
+                                    value: "Low",
+                                    child: Text(
+                                      "Low",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16),
                                     ),
-                                    DropdownMenuItem(
-                                      value: "Medium",
-                                      child: Text(
-                                        "Medium",
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16),
-                                      ),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: "Medium",
+                                    child: Text(
+                                      "Medium",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16),
                                     ),
-                                    DropdownMenuItem(
-                                      value: "High",
-                                      child: Text(
-                                        "High",
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 16),
-                                      ),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: "High",
+                                    child: Text(
+                                      "High",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16),
                                     ),
-                                  ]),
+                                  ),
+                                ],
+                                validators: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(
+                                      errorText: "Difficulty is required"),
+                                ]),
+                              ),
                               //  * Challenge / Event Category
                               FormDropDown(
-                                title: "Category",
-                                isRequired: true,
-                                formBuilderName: "categoryId",
-                                items: _categories
-                                    .map(
-                                      (category) => DropdownMenuItem(
-                                        value: category.id,
-                                        child: Text(
-                                          category.name,
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16),
+                                  title: "Category",
+                                  isRequired: true,
+                                  formBuilderName: "categoryId",
+                                  items: _categories
+                                      .map(
+                                        (category) => DropdownMenuItem(
+                                          value: category.id,
+                                          child: Text(
+                                            category.name,
+                                            style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16),
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
+                                      )
+                                      .toList(),
+                                  validators: FormBuilderValidators.compose([
+                                    FormBuilderValidators.required(
+                                        errorText: "Category is required"),
+                                  ])),
                               // * Image
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -63,19 +63,6 @@ class LatestChallengeCard extends StatelessWidget {
                 ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
-              // Container(
-              //   width: 84.15,
-              //   height: 84.15,
-              //   decoration: ShapeDecoration(
-              //     image: DecorationImage(
-              //       image: NetworkImage(challenge.imageURL),
-              //       fit: BoxFit.fill,
-              //     ),
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(12.62),
-              //     ),
-              //   ),
-              // ),
               const SizedBox(
                 width: 27.35,
               ),

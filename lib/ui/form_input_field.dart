@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FormInputField extends StatelessWidget {
   final String title;
   final String formBuilderName;
   final bool isRequired;
+  final String? Function(String?)? validators;
 
   const FormInputField(
       {super.key,
       required this.title,
       required this.isRequired,
-      required this.formBuilderName});
+      required this.formBuilderName,
+      this.validators});
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +54,22 @@ class FormInputField extends StatelessWidget {
           ),
           FormBuilderTextField(
             name: formBuilderName,
+            style: GoogleFonts.poppins(),
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(left: 15),
+              errorStyle: GoogleFonts.poppins(
+                  fontSize: 14, color: const Color(0xffba000d)),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Color(0xffba000d), width: 2.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide:
+                    const BorderSide(color: Color(0xffba000d), width: 2.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              contentPadding: EdgeInsets.zero,
+              prefix: Container(width: 15),
               enabledBorder: OutlineInputBorder(
                 borderSide:
                     const BorderSide(color: Color(0xFF75A488), width: 2.0),
@@ -64,6 +81,8 @@ class FormInputField extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: validators,
           ),
         ],
       ),

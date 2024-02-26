@@ -66,16 +66,6 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                       errorWidget: (context, url, error) =>
                           const Icon(Icons.error),
                     ),
-                    // child: Container(
-                    //   width: double.infinity,
-                    //   height: 292,
-                    //   decoration: BoxDecoration(
-                    //     image: DecorationImage(
-                    //       image: NetworkImage(widget.challenge.imageURL),
-                    //       fit: BoxFit.fill,
-                    //     ),
-                    //   ),
-                    // ),
                   ),
                   // * back button to challenges list
                   Positioned(

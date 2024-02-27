@@ -9,6 +9,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
+import 'package:recychamp/screens/ChallengeForm/challenge_form.dart';
 import 'package:recychamp/screens/ParentAgreement/parent_agreement.dart';
 import 'package:recychamp/ui/challenge_details_row.dart';
 import 'package:recychamp/utils/challenge_categories.dart';
@@ -56,7 +57,18 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                     child: const Icon(Icons.edit),
                     backgroundColor: const Color(0xFF75A488),
                     foregroundColor: Colors.white,
-                    onTap: () {},
+                    onTap: () {
+                      showGeneralDialog(
+                          context: context,
+                          barrierColor: Colors.white,
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                            return ChallengeForm(
+                              challenge: widget.challenge,
+                              isUpdate: true,
+                            );
+                          });
+                    },
                     shape: const CircleBorder()),
                 SpeedDialChild(
                     child: const Icon(Icons.delete),

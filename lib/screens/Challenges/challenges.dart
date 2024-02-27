@@ -38,7 +38,9 @@ class _ChallengesState extends State<Challenges> {
                         context: context,
                         barrierColor: Colors.white,
                         pageBuilder: (context, animation, secondaryAnimation) {
-                          return const ChallengeForm();
+                          return const ChallengeForm(
+                            isUpdate: false,
+                          );
                         });
                   },
                   backgroundColor: const Color(0xFF75A488),

@@ -2,6 +2,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
@@ -32,10 +33,40 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
 
     List<String> ruleList = widget.challenge.rules.split(";");
 
+    var isDialOpen = ValueNotifier<bool>(false);
+
     // * Wrapping the widget with the bloc builder
     return BlocBuilder<ChallengeDetailsBloc, ChallengeDetailsState>(
       builder: (context, state) {
         return Scaffold(
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 80, right: 12),
+            child: SpeedDial(
+              openCloseDial: isDialOpen,
+              icon: Icons.settings,
+              activeIcon: Icons.close,
+              backgroundColor: const Color(0xFF75A488),
+              foregroundColor: Colors.white,
+              buttonSize: const Size(63, 63),
+              childrenButtonSize: const Size(73, 73),
+              spaceBetweenChildren: 10,
+              direction: SpeedDialDirection.up,
+              children: [
+                SpeedDialChild(
+                    child: const Icon(Icons.edit),
+                    backgroundColor: const Color(0xFF75A488),
+                    foregroundColor: Colors.white,
+                    onTap: () {},
+                    shape: const CircleBorder()),
+                SpeedDialChild(
+                    child: const Icon(Icons.delete),
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    onTap: () {},
+                    shape: const CircleBorder()),
+              ],
+            ),
+          ),
           backgroundColor: Colors.white,
           body: Column(
             children: [

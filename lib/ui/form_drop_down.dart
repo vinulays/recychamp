@@ -83,6 +83,7 @@ class FormDropDown extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: validators,
           ),
         ],

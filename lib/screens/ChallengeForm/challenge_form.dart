@@ -575,6 +575,8 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                               ),
                                             );
                                           },
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
                                           validator: (value) {
                                             if (value == null) {
                                               return "Cover Photo is required";

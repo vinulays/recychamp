@@ -94,6 +94,7 @@ class FormDateTimePicker extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: "$title is required")
             ]),

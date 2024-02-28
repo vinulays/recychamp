@@ -83,4 +83,41 @@ class ChallengeService {
       rethrow;
     }
   }
+
+  // * update challenge in firebsae
+  Future<void> updateChallenge(Map<String, dynamic> formData) async {
+    try {
+      DocumentReference challengeRef =
+          _firestore.collection("challenges").doc(formData["id"]);
+
+      await challengeRef.update({
+        "title": formData['title'],
+        "description": formData["description"],
+        "location": formData["location"],
+        "country": formData["country"],
+        "rules": formData["rules"],
+        "startDateTime": DateTime(
+            formData["startDate"]
+                .year, // * combining selected dates and times to create the timestamp
+            formData["startDate"].month,
+            formData["startDate"].day,
+            formData["startTime"].hour,
+            formData["startTime"].minute),
+        "endDateTime": DateTime(
+            formData["endDate"].year,
+            formData["endDate"].month,
+            formData["endDate"].day,
+            formData["endTime"].hour,
+            formData["endTime"].minute),
+        "maximumParticipants": int.parse(
+            formData["maximumParticipants"]), // * converting string to integer
+        "difficulty": formData["difficulty"],
+        "imageURL": formData["imageURL"],
+        "categoryId": formData["categoryId"],
+        "type": formData["type"]
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

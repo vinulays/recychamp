@@ -14,4 +14,8 @@ class ChallengeRepository {
   Future<void> addChallenge(Map<String, dynamic> formData) async {
     _challengeService.addChallenge(formData);
   }
+
+  Future<void> updateChallenge(Map<String, dynamic> formData) async {
+    _challengeService.updateChallenge(formData);
+  }
 }

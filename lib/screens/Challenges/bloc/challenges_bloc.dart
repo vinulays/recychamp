@@ -40,5 +40,20 @@ class ChallengesBloc extends Bloc<ChallengesEvent, ChallengesState> {
         emit(ChallengeAddingError("Challenge adding failed"));
       }
     });
+
+    // * update challenge in firebase
+    on<UpdateChallengeEvent>((event, emit) async {
+      emit(ChallengeUpdating());
+
+      try {
+        await _challengeRepository.updateChallenge(event.formData);
+        emit(ChallengeUpdated());
+
+        // * getting updated challenges
+        add(FetchChallengesEvent());
+      } catch (e) {
+        emit(ChallengeUpdatingError("Challenge updating failed"));
+      }
+    });
   }
 }

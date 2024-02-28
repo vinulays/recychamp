@@ -123,7 +123,9 @@ class _ChallengeFormState extends State<ChallengeForm> {
         _imageSize = "";
 
         // * resetting the imageURL field
-        _formKey.currentState?.fields["imageURL"]?.reset();
+        _formKey.currentState?.setInternalFieldValue("imageURL", null);
+        _formKey.currentState?.fields["imageURL"]
+            ?.invalidate("Cover photo is required");
       });
     }
   }
@@ -534,12 +536,14 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                       width: double.infinity,
                                       decoration: BoxDecoration(
                                           border: Border.all(
-                                              color: (_formKey.currentState !=
+                                              color: ((_formKey.currentState !=
                                                           null &&
                                                       _formKey
-                                                          .currentState!.errors
-                                                          .containsKey(
-                                                              "imageURL"))
+                                                              .currentState
+                                                              ?.fields[
+                                                                  "imageURL"]
+                                                              ?.value ==
+                                                          null))
                                                   ? const Color(0xffba000d)
                                                   : const Color(0xFF75A488),
                                               width: 2),
@@ -573,62 +577,65 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                             height: 10,
                                           ),
                                           FormBuilderField(
-                                            name: "imageURL",
-                                            builder: (FormFieldState<dynamic>
-                                                field) {
-                                              return TextButton(
-                                                style: ButtonStyle(
-                                                  shape:
-                                                      MaterialStateProperty.all<
-                                                          RoundedRectangleBorder>(
-                                                    RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
+                                              name: "imageURL",
+                                              builder: (FormFieldState<dynamic>
+                                                  field) {
+                                                return TextButton(
+                                                  style: ButtonStyle(
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
                                                     ),
+                                                    padding:
+                                                        MaterialStateProperty
+                                                            .all(
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    vertical:
+                                                                        10.88,
+                                                                    horizontal:
+                                                                        20)),
+                                                    backgroundColor:
+                                                        MaterialStateProperty.all<
+                                                            Color>(const Color(
+                                                                0xFF75A488)
+                                                            .withOpacity(
+                                                                0.6000000238418579)),
                                                   ),
-                                                  padding:
-                                                      MaterialStateProperty.all(
-                                                          const EdgeInsets
-                                                              .symmetric(
-                                                              vertical: 10.88,
-                                                              horizontal: 20)),
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all<
-                                                          Color>(const Color(
-                                                              0xFF75A488)
-                                                          .withOpacity(
-                                                              0.6000000238418579)),
-                                                ),
-                                                onPressed: _image == null
-                                                    ? _getImage
-                                                    : null,
-                                                child: Text(
-                                                  "Choose file",
-                                                  style: GoogleFonts.poppins(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: Colors.black),
-                                                ),
-                                              );
-                                            },
-                                            autovalidateMode: AutovalidateMode
-                                                .onUserInteraction,
-                                            validator: (value) {
-                                              if (value == null) {
-                                                return "Cover Photo is required";
-                                              }
-                                              return null;
-                                            },
-                                          )
+                                                  onPressed: _image == null
+                                                      ? _getImage
+                                                      : null,
+                                                  child: Text(
+                                                    "Choose file",
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: Colors.black),
+                                                  ),
+                                                );
+                                              },
+                                              autovalidateMode: AutovalidateMode
+                                                  .onUserInteraction,
+                                              validator: (value) {
+                                                if (_image == null) {
+                                                  return "Cover photo is required";
+                                                }
+                                                return null;
+                                              })
                                         ],
                                       ),
                                     ),
 
                                   // * checking whether the form contains any errros related to the imageURL
                                   if (_formKey.currentState != null &&
-                                      _formKey.currentState!.errors
-                                          .containsKey("imageURL"))
+                                      _formKey.currentState?.fields["imageURL"]
+                                              ?.value ==
+                                          null)
                                     Container(
                                       margin: const EdgeInsets.only(bottom: 10),
                                       child: Text(

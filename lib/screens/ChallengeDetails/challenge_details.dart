@@ -344,10 +344,8 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           ChallengeDetailsRow(
                             iconURL:
                                 "assets/icons/challenge_details_calendar.svg",
-                            description: challengeType == "event"
-                                ? Jiffy.parse(startDateTime)
-                                    .format(pattern: "do MMMM yyyy")
-                                : "${Jiffy.parse(startDateTime).format(pattern: "do MMMM yyyy")} - ${Jiffy.parse(endDateTime).format(pattern: "do MMMM yyyy")}",
+                            description:
+                                "${Jiffy.parse(startDateTime).format(pattern: "do MMMM yyyy")} - ${Jiffy.parse(endDateTime).format(pattern: "do MMMM yyyy")}",
                           ),
 
                           const SizedBox(

@@ -13,3 +13,9 @@ class AddChallengeEvent extends ChallengesEvent {
 
   AddChallengeEvent(this.formData);
 }
+
+class UpdateChallengeEvent extends ChallengesEvent {
+  final Map<String, dynamic> formData;
+
+  UpdateChallengeEvent(this.formData);
+}

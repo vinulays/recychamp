@@ -30,3 +30,13 @@ class ChallengeAddingError extends ChallengesState {
 
   ChallengeAddingError(this.errorMessage);
 }
+
+class ChallengeUpdating extends ChallengesState {}
+
+class ChallengeUpdated extends ChallengesState {}
+
+class ChallengeUpdatingError extends ChallengesState {
+  final String errorMessage;
+
+  ChallengeUpdatingError(this.errorMessage);
+}

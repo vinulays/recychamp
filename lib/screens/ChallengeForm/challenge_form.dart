@@ -38,6 +38,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
   String? _imageName;
   String? _imageSize = "";
   double uploadPercentage = 0;
+  bool isImageUpdated = false;
 
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -169,6 +170,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
             // * adding downloadURL to the formData
             setState(
               () {
+                isImageUpdated = true;
                 imageURL = downloadURL;
                 _formKey.currentState?.fields["imageURL"]
                     ?.didChange(downloadURL);
@@ -757,7 +759,9 @@ class _ChallengeFormState extends State<ChallengeForm> {
 
                               // * update form image container (shows the related image to the challenge/event)
 
-                              if (imageURL != null && widget.isUpdate == true)
+                              if (imageURL != null &&
+                                  widget.isUpdate == true &&
+                                  isImageUpdated == false)
                                 Container(
                                   margin: const EdgeInsets.only(
                                       top: 10, bottom: 10),
@@ -793,7 +797,7 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                           right: -8,
                                           child: GestureDetector(
                                             onTap: () {
-                                              // _deleteImageFromFirebase();
+                                              _deleteImageFromFirebase();
                                             },
                                             child: Container(
                                               height: 34,
@@ -825,14 +829,26 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                         if (_formKey.currentState!
                                             .saveAndValidate()) {
                                           Map<String, dynamic> formData =
-                                              _formKey.currentState!.value;
+                                              Map<String, dynamic>.from(
+                                                  _formKey.currentState!.value);
                                           // * Dispatch the add challenge event
-                                          context
-                                              .read<ChallengesBloc>()
-                                              .add(AddChallengeEvent(formData));
-                                          _formKey.currentState!.reset();
+                                          if (widget.isUpdate) {
+                                            formData["id"] =
+                                                widget.challenge!.id!;
+                                            context.read<ChallengesBloc>().add(
+                                                UpdateChallengeEvent(formData));
+                                            _formKey.currentState!.reset();
 
-                                          Navigator.of(context).pop();
+                                            // * navigate to challenges screen after the update
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                          } else {
+                                            context.read<ChallengesBloc>().add(
+                                                AddChallengeEvent(formData));
+                                            _formKey.currentState!.reset();
+
+                                            Navigator.of(context).pop();
+                                          }
                                         }
                                       },
                                       style: ButtonStyle(
@@ -850,7 +866,8 @@ class _ChallengeFormState extends State<ChallengeForm> {
                                             MaterialStateProperty.all<Color>(
                                                 Colors.black),
                                       ),
-                                      child: (state is ChallengeAdding)
+                                      child: (state is ChallengeAdding ||
+                                              state is ChallengeUpdating)
                                           ? const CircularProgressIndicator()
                                           : Text(
                                               "Submit",

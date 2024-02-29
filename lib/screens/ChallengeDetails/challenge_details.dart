@@ -105,6 +105,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                             DeleteChallengeEvent(
                                                 widget.challenge.id!),
                                           );
+
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                     },

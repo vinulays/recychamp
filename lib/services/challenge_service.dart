@@ -14,7 +14,7 @@ class ChallengeService {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection('challenges')
           .orderBy("createdAt", descending: true)
-          .get();
+          .get(const GetOptions(source: Source.server));
       List<Challenge> challenges = [];
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data();
@@ -40,6 +40,8 @@ class ChallengeService {
 
         challenges.add(challenge);
       }
+      print("Challenges array length");
+      print(challenges.length);
 
       return challenges;
     } catch (e) {
@@ -129,7 +131,7 @@ class ChallengeService {
           _firestore.collection("challenges").doc(challengeId);
 
       DocumentSnapshot challengeSnapshot = await challengeRef.get();
-      String imageURL = challengeSnapshot.get("imageURL");
+      String imageURL = await challengeSnapshot.get("imageURL");
 
       await challengeRef.delete();
 

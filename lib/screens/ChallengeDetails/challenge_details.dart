@@ -10,6 +10,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ChallengeForm/challenge_form.dart';
+import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/ParentAgreement/parent_agreement.dart';
 import 'package:recychamp/ui/challenge_details_row.dart';
 import 'package:recychamp/utils/challenge_categories.dart';
@@ -74,7 +75,48 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                     child: const Icon(Icons.delete),
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.white,
+                              title: Text(
+                                "Delete the Challenge",
+                                style: GoogleFonts.poppins(
+                                    fontSize: 18, fontWeight: FontWeight.w700),
+                              ),
+                              content: Text(
+                                "This action cannot be undone. Do you really want to delete this challenge?",
+                                style: GoogleFonts.poppins(fontSize: 14),
+                              ),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      "No",
+                                      style: GoogleFonts.poppins(fontSize: 14),
+                                    )),
+                                TextButton(
+                                    onPressed: () {
+                                      context.read<ChallengesBloc>().add(
+                                            DeleteChallengeEvent(
+                                                widget.challenge.id!),
+                                          );
+
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      "Yes",
+                                      style: GoogleFonts.poppins(fontSize: 14),
+                                    )),
+                              ],
+                            );
+                          });
+                    },
                     shape: const CircleBorder()),
               ],
             ),

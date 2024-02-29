@@ -12,10 +12,14 @@ class ChallengeRepository {
   }
 
   Future<void> addChallenge(Map<String, dynamic> formData) async {
-    _challengeService.addChallenge(formData);
+    await _challengeService.addChallenge(formData);
   }
 
   Future<void> updateChallenge(Map<String, dynamic> formData) async {
-    _challengeService.updateChallenge(formData);
+    await _challengeService.updateChallenge(formData);
+  }
+
+  Future<void> deleteChallenge(String challengeId) async {
+    await _challengeService.deleteChallenge(challengeId);
   }
 }

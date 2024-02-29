@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:recychamp/models/challenge.dart';
 
 class ChallengeService {
@@ -13,7 +14,7 @@ class ChallengeService {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection('challenges')
           .orderBy("createdAt", descending: true)
-          .get();
+          .get(const GetOptions(source: Source.server));
       List<Challenge> challenges = [];
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data();
@@ -39,6 +40,8 @@ class ChallengeService {
 
         challenges.add(challenge);
       }
+      print("Challenges array length");
+      print(challenges.length);
 
       return challenges;
     } catch (e) {
@@ -118,6 +121,25 @@ class ChallengeService {
       });
     } catch (e) {
       rethrow;
+    }
+  }
+
+  // * delete challenge from firebase
+  Future<void> deleteChallenge(String challengeId) async {
+    try {
+      DocumentReference challengeRef =
+          _firestore.collection("challenges").doc(challengeId);
+
+      DocumentSnapshot challengeSnapshot = await challengeRef.get();
+      String imageURL = await challengeSnapshot.get("imageURL");
+
+      await challengeRef.delete();
+
+      // * deleting the image associated with the challenge
+      Reference imageRef = FirebaseStorage.instance.refFromURL(imageURL);
+      await imageRef.delete();
+    } catch (e) {
+      throw Exception('Failed to delete the challenge: $e');
     }
   }
 }

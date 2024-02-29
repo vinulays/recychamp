@@ -18,4 +18,8 @@ class ChallengeRepository {
   Future<void> updateChallenge(Map<String, dynamic> formData) async {
     _challengeService.updateChallenge(formData);
   }
+
+  Future<void> deleteChallenge(String challengeId) async {
+    _challengeService.deleteChallenge(challengeId);
+  }
 }

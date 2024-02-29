@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:recychamp/models/challenge.dart';
 
 class ChallengeService {
@@ -118,6 +119,25 @@ class ChallengeService {
       });
     } catch (e) {
       rethrow;
+    }
+  }
+
+  // * delete challenge from firebase
+  Future<void> deleteChallenge(String challengeId) async {
+    try {
+      DocumentReference challengeRef =
+          _firestore.collection("challenges").doc(challengeId);
+
+      DocumentSnapshot challengeSnapshot = await challengeRef.get();
+      String imageURL = challengeSnapshot.get("imageURL");
+
+      await challengeRef.delete();
+
+      // * deleting the image associated with the challenge
+      Reference imageRef = FirebaseStorage.instance.refFromURL(imageURL);
+      await imageRef.delete();
+    } catch (e) {
+      throw Exception('Failed to delete the challenge: $e');
     }
   }
 }

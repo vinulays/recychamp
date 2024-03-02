@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recychamp/screens/ParentAgreement/parent_agreement.dart';
+import 'package:recychamp/screens/calendar/calendar_event.dart';
 
 class HomeThreeRowButton extends StatelessWidget {
   final String iconURL;
   final String description;
-  const HomeThreeRowButton(
-      {super.key, required this.iconURL, required this.description});
+  Widget widget;
+  HomeThreeRowButton(
+      {super.key,
+      required this.iconURL,
+      required this.description,
+      required this.widget});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const CalendarEvent()));
+      },
       child: Container(
         width: 113.60,
         height: 113.60,

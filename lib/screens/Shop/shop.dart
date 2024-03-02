@@ -10,6 +10,11 @@ class Shop extends StatefulWidget {
 class _ShopState extends State<Shop> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Container(
+        child: const Column(
+            children: [Text(" "), Text("Momda Menuri"), Text("Momda Rashmi")]),
+      ),
+    );
   }
 }

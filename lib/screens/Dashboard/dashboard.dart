@@ -181,7 +181,7 @@ class _DashboardState extends State<Dashboard> {
                                                   horizontal:
                                                       deviceData.size.width *
                                                           0.05),
-                                              child: Row(
+                                              child: const Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
@@ -191,24 +191,19 @@ class _DashboardState extends State<Dashboard> {
                                                         "assets/icons/home-article.svg",
                                                     description: "Articles",
                                                     widget:
-                                                        const EducationalResource(),
-                                                        
-
+                                                        EducationalResource(),
                                                   ),
                                                   HomeThreeRowButton(
                                                     iconURL:
                                                         "assets/icons/home-cart.svg",
                                                     description: "Visit Shop",
-                                                    widget:
-                                                        const Shop(),                                                   
-
+                                                    widget: Shop(),
                                                   ),
                                                   HomeThreeRowButton(
                                                     iconURL:
                                                         "assets/icons/home-calendar.svg",
                                                     description: "Calendar",
-                                                    widget:
-                                                        const CalendarEvent(),
+                                                    widget: CalendarEvent(),
                                                   ),
                                                 ],
                                               ),

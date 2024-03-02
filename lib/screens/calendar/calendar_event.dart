@@ -27,7 +27,7 @@ class _MyWidgetState extends State<CalendarEvent> {
     var deviceSize = MediaQuery.of(context).size;
     return Scaffold(
         body: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: deviceSize.width * 0.05),
+      padding: EdgeInsets.symmetric(horizontal: deviceSize.width * 0.05),
       child: Column(
         children: [
           Container(

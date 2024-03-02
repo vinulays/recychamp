@@ -8,8 +8,8 @@ import 'package:recychamp/screens/calendar/calendar_event.dart';
 class HomeThreeRowButton extends StatelessWidget {
   final String iconURL;
   final String description;
-  Widget widget;
-  HomeThreeRowButton(
+  final Widget widget;
+  const HomeThreeRowButton(
       {super.key,
       required this.iconURL,
       required this.description,
@@ -19,8 +19,8 @@ class HomeThreeRowButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const CalendarEvent()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => widget));
       },
       child: Container(
         width: 113.60,

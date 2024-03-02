@@ -59,8 +59,6 @@ class FormDateTimePicker extends StatelessWidget {
           FormBuilderDateTimePicker(
             name: formBuilderName,
             inputType: inputType,
-            // * disabling the previous days
-            firstDate: DateTime.now().subtract(const Duration(days: 0)),
             decoration: InputDecoration(
               errorStyle: GoogleFonts.poppins(
                   fontSize: 14, color: const Color(0xffba000d)),
@@ -94,6 +92,7 @@ class FormDateTimePicker extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: "$title is required")
             ]),

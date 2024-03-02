@@ -2,12 +2,15 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
+import 'package:recychamp/screens/ChallengeForm/challenge_form.dart';
+import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/ParentAgreement/parent_agreement.dart';
 import 'package:recychamp/ui/challenge_details_row.dart';
 import 'package:recychamp/utils/challenge_categories.dart';
@@ -32,10 +35,92 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
 
     List<String> ruleList = widget.challenge.rules.split(";");
 
+    var isDialOpen = ValueNotifier<bool>(false);
+
     // * Wrapping the widget with the bloc builder
     return BlocBuilder<ChallengeDetailsBloc, ChallengeDetailsState>(
       builder: (context, state) {
         return Scaffold(
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 80, right: 12),
+            child: SpeedDial(
+              openCloseDial: isDialOpen,
+              icon: Icons.settings,
+              activeIcon: Icons.close,
+              backgroundColor: const Color(0xFF75A488),
+              foregroundColor: Colors.white,
+              buttonSize: const Size(63, 63),
+              childrenButtonSize: const Size(73, 73),
+              spaceBetweenChildren: 10,
+              direction: SpeedDialDirection.up,
+              children: [
+                SpeedDialChild(
+                    child: const Icon(Icons.edit),
+                    backgroundColor: const Color(0xFF75A488),
+                    foregroundColor: Colors.white,
+                    onTap: () {
+                      showGeneralDialog(
+                          context: context,
+                          barrierColor: Colors.white,
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                            return ChallengeForm(
+                              challenge: widget.challenge,
+                              isUpdate: true,
+                            );
+                          });
+                    },
+                    shape: const CircleBorder()),
+                SpeedDialChild(
+                    child: const Icon(Icons.delete),
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.white,
+                              title: Text(
+                                "Delete the Challenge",
+                                style: GoogleFonts.poppins(
+                                    fontSize: 18, fontWeight: FontWeight.w700),
+                              ),
+                              content: Text(
+                                "This action cannot be undone. Do you really want to delete this challenge?",
+                                style: GoogleFonts.poppins(fontSize: 14),
+                              ),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      "No",
+                                      style: GoogleFonts.poppins(fontSize: 14),
+                                    )),
+                                TextButton(
+                                    onPressed: () {
+                                      context.read<ChallengesBloc>().add(
+                                            DeleteChallengeEvent(
+                                                widget.challenge.id!),
+                                          );
+
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      "Yes",
+                                      style: GoogleFonts.poppins(fontSize: 14),
+                                    )),
+                              ],
+                            );
+                          });
+                    },
+                    shape: const CircleBorder()),
+              ],
+            ),
+          ),
           backgroundColor: Colors.white,
           body: Column(
             children: [
@@ -301,10 +386,8 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           ChallengeDetailsRow(
                             iconURL:
                                 "assets/icons/challenge_details_calendar.svg",
-                            description: challengeType == "event"
-                                ? Jiffy.parse(startDateTime)
-                                    .format(pattern: "do MMMM yyyy")
-                                : "${Jiffy.parse(startDateTime).format(pattern: "do MMMM yyyy")} - ${Jiffy.parse(endDateTime).format(pattern: "do MMMM yyyy")}",
+                            description:
+                                "${Jiffy.parse(startDateTime).format(pattern: "do MMMM yyyy")} - ${Jiffy.parse(endDateTime).format(pattern: "do MMMM yyyy")}",
                           ),
 
                           const SizedBox(

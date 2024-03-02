@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:recychamp/models/challenge.dart';
 
 class ChallengeService {
@@ -13,7 +14,7 @@ class ChallengeService {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection('challenges')
           .orderBy("createdAt", descending: true)
-          .get();
+          .get(const GetOptions(source: Source.server));
       List<Challenge> challenges = [];
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data();
@@ -39,6 +40,8 @@ class ChallengeService {
 
         challenges.add(challenge);
       }
+      print("Challenges array length");
+      print(challenges.length);
 
       return challenges;
     } catch (e) {
@@ -81,6 +84,62 @@ class ChallengeService {
       });
     } catch (e) {
       rethrow;
+    }
+  }
+
+  // * update challenge in firebsae
+  Future<void> updateChallenge(Map<String, dynamic> formData) async {
+    try {
+      DocumentReference challengeRef =
+          _firestore.collection("challenges").doc(formData["id"]);
+
+      await challengeRef.update({
+        "title": formData['title'],
+        "description": formData["description"],
+        "location": formData["location"],
+        "country": formData["country"],
+        "rules": formData["rules"],
+        "startDateTime": DateTime(
+            formData["startDate"]
+                .year, // * combining selected dates and times to create the timestamp
+            formData["startDate"].month,
+            formData["startDate"].day,
+            formData["startTime"].hour,
+            formData["startTime"].minute),
+        "endDateTime": DateTime(
+            formData["endDate"].year,
+            formData["endDate"].month,
+            formData["endDate"].day,
+            formData["endTime"].hour,
+            formData["endTime"].minute),
+        "maximumParticipants": int.parse(
+            formData["maximumParticipants"]), // * converting string to integer
+        "difficulty": formData["difficulty"],
+        "imageURL": formData["imageURL"],
+        "categoryId": formData["categoryId"],
+        "type": formData["type"]
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // * delete challenge from firebase
+  Future<void> deleteChallenge(String challengeId) async {
+    try {
+      DocumentReference challengeRef =
+          _firestore.collection("challenges").doc(challengeId);
+
+      DocumentSnapshot challengeSnapshot = await challengeRef.get();
+      String imageURL = await challengeSnapshot.get("imageURL");
+
+      await challengeRef.delete();
+
+      // * deleting the image associated with the challenge
+      Reference imageRef = FirebaseStorage.instance.refFromURL(imageURL);
+      await imageRef.delete();
+    } catch (e) {
+      throw Exception('Failed to delete the challenge: $e');
     }
   }
 }

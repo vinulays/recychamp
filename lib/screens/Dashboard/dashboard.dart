@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
+import 'package:recychamp/screens/Shop/shop.dart';
 import 'package:recychamp/screens/calendar/calendar_event.dart';
 import 'package:recychamp/screens/educationalresources/educationalresources.dart';
 import 'package:recychamp/ui/home_three_row_button.dart';
@@ -191,13 +192,16 @@ class _DashboardState extends State<Dashboard> {
                                                     description: "Articles",
                                                     widget:
                                                         const EducationalResource(),
+                                                        
+
                                                   ),
                                                   HomeThreeRowButton(
                                                     iconURL:
                                                         "assets/icons/home-cart.svg",
                                                     description: "Visit Shop",
                                                     widget:
-                                                        const CalendarEvent(),
+                                                        const Shop(),                                                   
+
                                                   ),
                                                   HomeThreeRowButton(
                                                     iconURL:

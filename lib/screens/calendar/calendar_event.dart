@@ -29,11 +29,13 @@ class _MyWidgetState extends State<CalendarEvent> {
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
+
     return BlocBuilder<ChallengesBloc, ChallengesState>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Color(0XFF75A488),
           body:
+
 
               // padding: EdgeInsets.symmetric(horizontal: deviceSize.width * 0.05),
               Column(

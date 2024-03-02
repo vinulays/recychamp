@@ -19,3 +19,9 @@ class UpdateChallengeEvent extends ChallengesEvent {
 
   UpdateChallengeEvent(this.formData);
 }
+
+class DeleteChallengeEvent extends ChallengesEvent {
+  final String challengeId;
+
+  DeleteChallengeEvent(this.challengeId);
+}

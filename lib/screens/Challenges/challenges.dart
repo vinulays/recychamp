@@ -16,6 +16,21 @@ class Challenges extends StatefulWidget {
 }
 
 class _ChallengesState extends State<Challenges> {
+  // * Apply filters to the challenge list in challenge loaded state (Apply filters event is called here)
+  Set<String> selectedFilters = {};
+  bool selectedIsCompleted = false;
+
+  void applyFilters(Set<String> filters, bool isCompletedSelected) {
+    // * Setting selected filters to pass back to the filter sheet
+    setState(() {
+      selectedFilters = filters;
+      selectedIsCompleted = isCompletedSelected;
+    });
+
+    final challengesBloc = BlocProvider.of<ChallengesBloc>(context);
+    challengesBloc.add(ApplyFiltersEvent(filters));
+  }
+
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
@@ -23,6 +38,7 @@ class _ChallengesState extends State<Challenges> {
     return BlocBuilder<ChallengesBloc, ChallengesState>(
       builder: (context, state) {
         final challengesBloc = BlocProvider.of<ChallengesBloc>(context);
+
         return Scaffold(
           // * challenge add button (if logged user is an admin/organizer)
           floatingActionButton: Padding(
@@ -137,7 +153,12 @@ class _ChallengesState extends State<Challenges> {
                                   clipBehavior: Clip.antiAliasWithSaveLayer,
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return const ChallengeFiltersBottomSheet();
+                                    return ChallengeFiltersBottomSheet(
+                                      applyFiltersCallBack: applyFilters,
+                                      initialFilters: selectedFilters,
+                                      initialCompletedSelected:
+                                          selectedIsCompleted,
+                                    );
                                   });
                             },
                             child: SvgPicture.asset(
@@ -175,6 +196,7 @@ class _ChallengesState extends State<Challenges> {
                         itemBuilder: (BuildContext context, index) {
                           // * Gesture detector to navigate to details page when clicked on a challenge card
                           return GestureDetector(
+                            // key: UniqueKey(),
                             onTap: () {
                               Navigator.push(
                                 context,

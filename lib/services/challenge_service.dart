@@ -40,8 +40,6 @@ class ChallengeService {
 
         challenges.add(challenge);
       }
-      print("Challenges array length");
-      print(challenges.length);
 
       return challenges;
     } catch (e) {

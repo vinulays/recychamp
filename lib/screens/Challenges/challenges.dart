@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_svg/svg.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:recychamp/repositories/challenge_repository.dart";
 import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import "package:recychamp/screens/ChallengeForm/challenge_form.dart";
 import "package:recychamp/screens/Challenges/bloc/challenges_bloc.dart";
@@ -19,6 +20,7 @@ class _ChallengesState extends State<Challenges> {
   // * Apply filters to the challenge list in challenge loaded state (Apply filters event is called here)
   Set<String> selectedFilters = {};
   bool selectedIsCompleted = false;
+  late ChallengesBloc challengesBloc;
 
   void applyFilters(Set<String> filters, bool isCompletedSelected) {
     // * Setting selected filters to pass back to the filter sheet
@@ -29,6 +31,20 @@ class _ChallengesState extends State<Challenges> {
 
     final challengesBloc = BlocProvider.of<ChallengesBloc>(context);
     challengesBloc.add(ApplyFiltersEvent(filters));
+  }
+
+  // * using this method since dispose method is not allowing to use "context"
+  @override
+  void didChangeDependencies() {
+    challengesBloc = BlocProvider.of<ChallengesBloc>(context);
+    super.didChangeDependencies();
+  }
+
+  // * reset challenges when exit from the challenges screen
+  @override
+  void dispose() {
+    challengesBloc.add(ResetChallengesEvent());
+    super.dispose();
   }
 
   @override

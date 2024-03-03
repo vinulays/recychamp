@@ -31,3 +31,5 @@ class ApplyFiltersEvent extends ChallengesEvent {
 
   ApplyFiltersEvent(this.filters);
 }
+
+class ResetChallengesEvent extends ChallengesEvent {}

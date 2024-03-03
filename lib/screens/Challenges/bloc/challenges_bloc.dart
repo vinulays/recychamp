@@ -90,5 +90,11 @@ class ChallengesBloc extends Bloc<ChallengesEvent, ChallengesState> {
         throw Exception("Challenge filtering failed: $e");
       }
     });
+
+    // * reset challenges
+    on<ResetChallengesEvent>((event, emit) async {
+      List<Challenge> challenges = await _challengeRepository.getChallenges();
+      emit(ChallengesLoaded(challenges));
+    });
   }
 }

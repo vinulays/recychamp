@@ -4,6 +4,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
+import 'package:recychamp/screens/Shop/shop.dart';
+import 'package:recychamp/screens/calendar/calendar_event.dart';
+import 'package:recychamp/screens/educationalresources/educationalresources.dart';
 import 'package:recychamp/ui/home_three_row_button.dart';
 import 'package:recychamp/ui/latest_challenges_card.dart';
 
@@ -184,18 +187,24 @@ class _DashboardState extends State<Dashboard> {
                                                         .spaceBetween,
                                                 children: [
                                                   HomeThreeRowButton(
-                                                      iconURL:
-                                                          "assets/icons/home-article.svg",
-                                                      description: "Articles"),
+                                                    iconURL:
+                                                        "assets/icons/home-article.svg",
+                                                    description: "Articles",
+                                                    widget:
+                                                        EducationalResource(),
+                                                  ),
                                                   HomeThreeRowButton(
-                                                      iconURL:
-                                                          "assets/icons/home-cart.svg",
-                                                      description:
-                                                          "Visit Shop"),
+                                                    iconURL:
+                                                        "assets/icons/home-cart.svg",
+                                                    description: "Visit Shop",
+                                                    widget: Shop(),
+                                                  ),
                                                   HomeThreeRowButton(
-                                                      iconURL:
-                                                          "assets/icons/home-calendar.svg",
-                                                      description: "Calendar"),
+                                                    iconURL:
+                                                        "assets/icons/home-calendar.svg",
+                                                    description: "Calendar",
+                                                    widget: CalendarEvent(),
+                                                  ),
                                                 ],
                                               ),
                                             ),

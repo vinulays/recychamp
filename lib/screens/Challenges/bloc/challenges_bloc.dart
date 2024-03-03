@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
+import 'package:recychamp/utils/challenge_categories.dart';
 
 part 'challenges_event.dart';
 part 'challenges_state.dart';
@@ -70,6 +71,30 @@ class ChallengesBloc extends Bloc<ChallengesEvent, ChallengesState> {
       } catch (e) {
         ChallengeDeletingError("Challenge deleting failed");
       }
+    });
+
+    // * filter challenges locally
+    on<ApplyFiltersEvent>((event, emit) async {
+      try {
+        List<Challenge> challenges = await _challengeRepository.getChallenges();
+
+        List<Challenge> filteredChallenges = challenges.where((challenge) {
+          return (event.filters.isEmpty ||
+              event.filters.contains(challengeCategories
+                  .firstWhere((category) => category.id == challenge.categoryId)
+                  .name));
+        }).toList();
+
+        emit(ChallengesLoaded(filteredChallenges));
+      } catch (e) {
+        throw Exception("Challenge filtering failed: $e");
+      }
+    });
+
+    // * reset challenges
+    on<ResetChallengesEvent>((event, emit) async {
+      List<Challenge> challenges = await _challengeRepository.getChallenges();
+      emit(ChallengesLoaded(challenges));
     });
   }
 }

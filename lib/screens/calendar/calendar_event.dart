@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
-import 'package:recychamp/screens/calendar/constants.dart';
+import 'package:recychamp/screens/Calendar/constants.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -33,9 +32,8 @@ class _MyWidgetState extends State<CalendarEvent> {
     return BlocBuilder<ChallengesBloc, ChallengesState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Color(0XFF75A488),
+          backgroundColor: const Color(0XFF75A488),
           body:
-
 
               // padding: EdgeInsets.symmetric(horizontal: deviceSize.width * 0.05),
               Column(
@@ -55,11 +53,14 @@ class _MyWidgetState extends State<CalendarEvent> {
                         child: SvgPicture.asset(
                           "assets/icons/go_back.svg",
                           colorFilter: const ColorFilter.mode(
-                              Colors.black, BlendMode.srcIn),
+                              Colors.white, BlendMode.srcIn),
                         ),
                       ),
-                      const SizedBox(width: 270),
-                      const Icon(Icons.settings)
+                      const SizedBox(width: 280),
+                      const Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                      )
                     ],
                   ),
                 ),
@@ -80,7 +81,7 @@ class _MyWidgetState extends State<CalendarEvent> {
                           fontSize: 25,
                         ),
                       ),
-                      const SizedBox(width: 130),
+                      const SizedBox(width: 140),
                       const Text(
                         "Jan 2024",
                         style: TextStyle(color: kFontColor, fontSize: 12),

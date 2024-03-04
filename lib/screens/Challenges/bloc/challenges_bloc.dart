@@ -96,5 +96,23 @@ class ChallengesBloc extends Bloc<ChallengesEvent, ChallengesState> {
       List<Challenge> challenges = await _challengeRepository.getChallenges();
       emit(ChallengesLoaded(challenges));
     });
+
+    // * search challenges (title, location)
+    on<SearchChallengesEvent>((event, emit) async {
+      emit(ChallengesSearching());
+
+      List<Challenge> challenges = await _challengeRepository.getChallenges();
+
+      final List<Challenge> searchResult = challenges.where((challenge) {
+        return challenge.title
+                .toLowerCase()
+                .contains(event.query.toLowerCase()) ||
+            challenge.location
+                .toLowerCase()
+                .contains(event.query.toLowerCase());
+      }).toList();
+
+      emit(ChallengesLoaded(searchResult));
+    });
   }
 }

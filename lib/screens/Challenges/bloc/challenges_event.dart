@@ -33,3 +33,12 @@ class ApplyFiltersEvent extends ChallengesEvent {
 }
 
 class ResetChallengesEvent extends ChallengesEvent {}
+
+class SearchChallengesEvent extends ChallengesEvent {
+  final String query;
+
+  SearchChallengesEvent(this.query);
+
+  @override
+  List<Object?> get props => [query];
+}

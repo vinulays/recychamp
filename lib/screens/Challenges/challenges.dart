@@ -21,6 +21,8 @@ class _ChallengesState extends State<Challenges> {
   bool selectedIsCompleted = false;
   late ChallengesBloc challengesBloc;
 
+  final TextEditingController _searchController = TextEditingController();
+
   void applyFilters(Set<String> filters, bool isCompletedSelected) {
     // * Setting selected filters to pass back to the filter sheet
     setState(() {
@@ -29,6 +31,8 @@ class _ChallengesState extends State<Challenges> {
     });
 
     final challengesBloc = BlocProvider.of<ChallengesBloc>(context);
+
+    // todo: apply filters to the completed status of the challenge (need to have authentication)
     challengesBloc.add(ApplyFiltersEvent(filters));
   }
 
@@ -42,6 +46,7 @@ class _ChallengesState extends State<Challenges> {
   // * reset challenges when exit from the challenges screen
   @override
   void dispose() {
+    _searchController.dispose();
     challengesBloc.add(ResetChallengesEvent());
     super.dispose();
   }
@@ -108,7 +113,6 @@ class _ChallengesState extends State<Challenges> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // todo greeting must change according to the time of the day
                           Text(
                             "Challenges",
                             style: GoogleFonts.poppins(
@@ -138,6 +142,12 @@ class _ChallengesState extends State<Challenges> {
                   margin: EdgeInsets.symmetric(
                       horizontal: deviceData.size.width * 0.05),
                   child: TextField(
+                    // * calling search event when user clicks ok on the keyboard after editing the search field
+                    onSubmitted: (query) {
+                      challengesBloc
+                          .add(SearchChallengesEvent(_searchController.text));
+                    },
+                    controller: _searchController,
                     style: GoogleFonts.poppins(
                       fontSize: 17,
                     ),
@@ -147,8 +157,15 @@ class _ChallengesState extends State<Challenges> {
                             const BoxConstraints(maxHeight: 26, minWidth: 26),
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(left: 13, right: 10),
-                          child: SvgPicture.asset(
-                            "assets/icons/search.svg",
+                          child: InkWell(
+                            // * search challenges when tapped search icon
+                            onTap: () {
+                              challengesBloc.add(SearchChallengesEvent(
+                                  _searchController.text));
+                            },
+                            child: SvgPicture.asset(
+                              "assets/icons/search.svg",
+                            ),
                           ),
                         ),
                         suffixIconConstraints:
@@ -195,6 +212,16 @@ class _ChallengesState extends State<Challenges> {
 
                 // * if challenges are loading, displays a loading circle
                 if (state is ChallengesLoading)
+                  const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        strokeCap: StrokeCap.round,
+                        strokeWidth: 5,
+                        color: Color(0xff75A488),
+                      ),
+                    ),
+                  ),
+                if (state is ChallengesSearching)
                   const Expanded(
                     child: Center(
                       child: CircularProgressIndicator(

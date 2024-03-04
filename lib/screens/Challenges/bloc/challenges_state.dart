@@ -50,3 +50,8 @@ class ChallengeDeletingError extends ChallengesState {
 
   ChallengeDeletingError(this.errorMessage);
 }
+
+class ChallengesSearching extends ChallengesState {
+  @override
+  List<Object?> get props => [];
+}

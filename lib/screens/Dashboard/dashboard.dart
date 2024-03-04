@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Shop/shop.dart';
-import 'package:recychamp/screens/calendar/calendar_event.dart';
-import 'package:recychamp/screens/educationalresources/educationalresources.dart';
+import 'package:recychamp/screens/Calendar/calendar_event.dart';
+import 'package:recychamp/screens/EducationalResources/articles.dart';
 import 'package:recychamp/ui/home_three_row_button.dart';
 import 'package:recychamp/ui/latest_challenges_card.dart';
 

@@ -10,6 +10,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ChallengeForm/challenge_form.dart';
+import 'package:recychamp/screens/ChallengeSubmission/challenge_submission.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/ParentAgreement/parent_agreement.dart';
 import 'package:recychamp/ui/challenge_details_row.dart';
@@ -267,6 +268,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
               ),
 
               // * If challenge is accepted, display the progress bar
+              // todo: check the logged user has accepted the challenge
               if (state.isAccepted && challengeType == "challenge")
                 Column(
                   children: [
@@ -500,6 +502,14 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                 },
                               );
                             });
+                      } else if (state.isAccepted &&
+                          challengeType == "challenge") {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChallengeSubmission(
+                                      challenge: widget.challenge,
+                                    )));
                       }
                       // todo add challenge submit form
                     },
@@ -521,7 +531,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                               ? "Submit the Challenge"
                               : (challengeType == "event" && !state.isAccepted)
                                   ? "Join the Event"
-                                  : "Joined the Event",
+                                  : "See you there!",
                       style: GoogleFonts.poppins(
                           fontSize: 19,
                           fontWeight: FontWeight.w700,

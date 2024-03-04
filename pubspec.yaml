@@ -74,6 +74,7 @@ dependencies:
   form_builder_validators: ^9.1.0
   flutter_speed_dial: ^7.0.0
   table_calendar: 3.0.9
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

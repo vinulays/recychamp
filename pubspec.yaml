@@ -44,28 +44,16 @@ dependencies:
   cloud_firestore: ^4.15.4
   firebase_auth: ^4.7.2
   firebase_storage: ^11.2.5
-  # for providing icons
   font_awesome_flutter: ^10.5.0
-
-  # formatting dates and timeago
   jiffy: ^6.2.1
-
-  # generating ids for users
   uuid: ^4.3.3
-
-  # show toast message
   fluttertoast: ^8.2.2
-
-  # pick images
   image_picker: ^1.0.7
-
-  # play videos
   video_player: ^2.0.4
-
   readmore: ^2.2.0
   avatar_glow: ^3.0.1
   bloc: ^8.1.2
-  meta: 1.10.0
+  meta: 1.11.0
   equatable: ^2.0.5
   flutter_form_builder: ^9.2.0
   path: ^1.8.3
@@ -75,6 +63,7 @@ dependencies:
   flutter_speed_dial: ^7.0.0
   table_calendar: 3.0.9
   flutter_rating_bar: ^4.0.1
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:

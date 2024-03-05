@@ -1,13 +1,13 @@
-import 'dart:js_interop';
+// import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/services.dart';
+// import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import 'package:recychamp/screens/EducationalResources/article_model.dart';
-import 'package:recychamp/utils/articles_data.dart';
+// import 'package:recychamp/utils/articles_data.dart';
 
 class ArticleContent extends StatelessWidget {
   final Article articlels;
@@ -17,8 +17,8 @@ class ArticleContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
-    margin:
-    EdgeInsets.symmetric(horizontal: deviceData.size.width * 0.05);
+    // margin:
+    // EdgeInsets.symmetric(horizontal: deviceData.size.width * 0.05);
     return Scaffold(
       body: Column(
         children: [

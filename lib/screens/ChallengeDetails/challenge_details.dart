@@ -1,5 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -25,6 +27,35 @@ class ChallengeDetails extends StatefulWidget {
 }
 
 class _ChallengeDetailsState extends State<ChallengeDetails> {
+  String? userRole;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
+
+  Future<void> getUserRole() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        String? role = userSnapshot.get("role");
+
+        setState(() {
+          userRole = role;
+        });
+      }
+    } catch (error) {
+      throw Exception("Error getting role: $error");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
@@ -34,6 +65,8 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
     String endDateTime = widget.challenge.endDateTime.toString();
     DateTime currentDateTime = DateTime.now();
 
+    bool isAccepted = true;
+
     List<String> ruleList = widget.challenge.rules.split(";");
 
     var isDialOpen = ValueNotifier<bool>(false);
@@ -42,86 +75,91 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
     return BlocBuilder<ChallengeDetailsBloc, ChallengeDetailsState>(
       builder: (context, state) {
         return Scaffold(
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 80, right: 12),
-            child: SpeedDial(
-              openCloseDial: isDialOpen,
-              icon: Icons.settings,
-              activeIcon: Icons.close,
-              backgroundColor: const Color(0xFF75A488),
-              foregroundColor: Colors.white,
-              buttonSize: const Size(63, 63),
-              childrenButtonSize: const Size(73, 73),
-              spaceBetweenChildren: 10,
-              direction: SpeedDialDirection.up,
-              children: [
-                SpeedDialChild(
-                    child: const Icon(Icons.edit),
+          floatingActionButton: (userRole == "admin")
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 80, right: 12),
+                  child: SpeedDial(
+                    openCloseDial: isDialOpen,
+                    icon: Icons.settings,
+                    activeIcon: Icons.close,
                     backgroundColor: const Color(0xFF75A488),
                     foregroundColor: Colors.white,
-                    onTap: () {
-                      showGeneralDialog(
-                          context: context,
-                          barrierColor: Colors.white,
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
-                            return ChallengeForm(
-                              challenge: widget.challenge,
-                              isUpdate: true,
-                            );
-                          });
-                    },
-                    shape: const CircleBorder()),
-                SpeedDialChild(
-                    child: const Icon(Icons.delete),
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              backgroundColor: Colors.white,
-                              title: Text(
-                                "Delete the Challenge",
-                                style: GoogleFonts.poppins(
-                                    fontSize: 18, fontWeight: FontWeight.w700),
-                              ),
-                              content: Text(
-                                "This action cannot be undone. Do you really want to delete this challenge?",
-                                style: GoogleFonts.poppins(fontSize: 14),
-                              ),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      "No",
+                    buttonSize: const Size(63, 63),
+                    childrenButtonSize: const Size(73, 73),
+                    spaceBetweenChildren: 10,
+                    direction: SpeedDialDirection.up,
+                    children: [
+                      SpeedDialChild(
+                          child: const Icon(Icons.edit),
+                          backgroundColor: const Color(0xFF75A488),
+                          foregroundColor: Colors.white,
+                          onTap: () {
+                            showGeneralDialog(
+                                context: context,
+                                barrierColor: Colors.white,
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) {
+                                  return ChallengeForm(
+                                    challenge: widget.challenge,
+                                    isUpdate: true,
+                                  );
+                                });
+                          },
+                          shape: const CircleBorder()),
+                      SpeedDialChild(
+                          child: const Icon(Icons.delete),
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    title: Text(
+                                      "Delete the Challenge",
+                                      style: GoogleFonts.poppins(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    content: Text(
+                                      "This action cannot be undone. Do you really want to delete this challenge?",
                                       style: GoogleFonts.poppins(fontSize: 14),
-                                    )),
-                                TextButton(
-                                    onPressed: () {
-                                      context.read<ChallengesBloc>().add(
-                                            DeleteChallengeEvent(
-                                                widget.challenge.id!),
-                                          );
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                            "No",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 14),
+                                          )),
+                                      TextButton(
+                                          onPressed: () {
+                                            context.read<ChallengesBloc>().add(
+                                                  DeleteChallengeEvent(
+                                                      widget.challenge.id!),
+                                                );
 
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      "Yes",
-                                      style: GoogleFonts.poppins(fontSize: 14),
-                                    )),
-                              ],
-                            );
-                          });
-                    },
-                    shape: const CircleBorder()),
-              ],
-            ),
-          ),
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                            "Yes",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 14),
+                                          )),
+                                    ],
+                                  );
+                                });
+                          },
+                          shape: const CircleBorder()),
+                    ],
+                  ),
+                )
+              : Container(),
           backgroundColor: Colors.white,
           body: Column(
             children: [
@@ -269,7 +307,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
 
               // * If challenge is accepted, display the progress bar
               // todo: check the logged user has accepted the challenge
-              if (state.isAccepted && challengeType == "challenge")
+              if (isAccepted && challengeType == "challenge")
                 Column(
                   children: [
                     const SizedBox(
@@ -488,29 +526,29 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                   child: TextButton(
                     onPressed: () {
                       // * If not accepteed, Parent agreement form (open in a fullscreen dialog). Otherwise submit form
-                      if (!state.isAccepted) {
-                        showGeneralDialog(
-                            context: context,
-                            barrierColor: Colors.white,
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) {
-                              return ParentAgreement(
-                                onAccept: () {
-                                  context
-                                      .read<ChallengeDetailsBloc>()
-                                      .add(const AcceptChallengeEvent());
-                                },
-                              );
-                            });
-                      } else if (state.isAccepted &&
-                          challengeType == "challenge") {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChallengeSubmission(
-                                      challenge: widget.challenge,
-                                    )));
-                      }
+                      // if (!isAccepted) {
+                      //   showGeneralDialog(
+                      //       context: context,
+                      //       barrierColor: Colors.white,
+                      //       pageBuilder:
+                      //           (context, animation, secondaryAnimation) {
+                      //         return ParentAgreement(
+                      //           onAccept: () {
+                      //             context
+                      //                 .read<ChallengeDetailsBloc>()
+                      //                 .add(const AcceptChallengeEvent());
+                      //           },
+                      //         );
+                      //       });
+                      // } else if (state.isAccepted &&
+                      // challengeType == "challenge") {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChallengeSubmission(
+                                    challenge: widget.challenge,
+                                  )));
+                      // }
                       // todo add challenge submit form
                     },
                     style: ButtonStyle(
@@ -525,13 +563,14 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           MaterialStateProperty.all<Color>(Colors.black),
                     ),
                     child: Text(
-                      (challengeType == "challenge" && !state.isAccepted)
-                          ? "Join the Challenge"
-                          : (challengeType == "challenge" && state.isAccepted)
-                              ? "Submit the Challenge"
-                              : (challengeType == "event" && !state.isAccepted)
-                                  ? "Join the Event"
-                                  : "See you there!",
+                      // (challengeType == "challenge" && !state.isAccepted)
+                      //     ? "Join the Challenge"
+                      //     : (challengeType == "challenge" && state.isAccepted)
+                      //         ? "Submit the Challenge"
+                      //         : (challengeType == "event" && !state.isAccepted)
+                      //             ? "Join the Event"
+                      //             : "See you there!",
+                      "Submit Challenge",
                       style: GoogleFonts.poppins(
                           fontSize: 19,
                           fontWeight: FontWeight.w700,

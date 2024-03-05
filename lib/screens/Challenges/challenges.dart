@@ -1,3 +1,5 @@
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_svg/svg.dart";
@@ -23,6 +25,8 @@ class _ChallengesState extends State<Challenges> {
 
   final TextEditingController _searchController = TextEditingController();
 
+  String? userRole;
+
   void applyFilters(Set<String> filters, bool isCompletedSelected) {
     // * Setting selected filters to pass back to the filter sheet
     setState(() {
@@ -34,6 +38,34 @@ class _ChallengesState extends State<Challenges> {
 
     // todo: apply filters to the completed status of the challenge (need to have authentication)
     challengesBloc.add(ApplyFiltersEvent(filters));
+  }
+
+  // * getting the role of the logged user when initialising the widget
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
+
+  Future<void> getUserRole() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        String? role = userSnapshot.get("role");
+
+        setState(() {
+          userRole = role;
+        });
+      }
+    } catch (error) {
+      throw Exception("Error getting role: $error");
+    }
   }
 
   // * using this method since dispose method is not allowing to use "context"
@@ -61,37 +93,40 @@ class _ChallengesState extends State<Challenges> {
 
         return Scaffold(
           // * challenge add button (if logged user is an admin/organizer)
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 15.0, right: 12.0),
-            child: SizedBox(
-              height: 63,
-              width: 63,
-              child: FittedBox(
-                child: FloatingActionButton(
-                  onPressed: () {
-                    // * challenge form (add form)
-                    showGeneralDialog(
-                        context: context,
-                        barrierColor: Colors.white,
-                        pageBuilder: (context, animation, secondaryAnimation) {
-                          return const ChallengeForm(
-                            isUpdate: false,
-                          );
-                        });
-                  },
-                  backgroundColor: const Color(0xFF75A488),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+          floatingActionButton: (userRole == "admin")
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0, right: 12.0),
+                  child: SizedBox(
+                    height: 63,
+                    width: 63,
+                    child: FittedBox(
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          // * challenge form (add form)
+                          showGeneralDialog(
+                              context: context,
+                              barrierColor: Colors.white,
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return const ChallengeForm(
+                                  isUpdate: false,
+                                );
+                              });
+                        },
+                        backgroundColor: const Color(0xFF75A488),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 40.0,
+                        ),
+                      ),
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 40.0,
-                  ),
-                ),
-              ),
-            ),
-          ),
+                )
+              : Container(),
           resizeToAvoidBottomInset: false,
           body: RefreshIndicator(
             onRefresh: () async {

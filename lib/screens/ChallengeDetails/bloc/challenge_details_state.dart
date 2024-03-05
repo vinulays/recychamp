@@ -11,6 +11,26 @@ final class ChallengeDetailsInitial extends ChallengeDetailsState {
   ChallengeDetailsInitial();
 }
 
+class ChallengeLoading extends ChallengeDetailsState {}
+
+class ChallengeLoaded extends ChallengeDetailsState {
+  final Challenge challenge;
+
+  ChallengeLoaded(this.challenge);
+
+  @override
+  List<Object> get props => [challenge];
+}
+
+class ChallengeLoadingError extends ChallengeDetailsState {
+  final String message;
+
+  ChallengeLoadingError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class ChallengeAccepting extends ChallengeDetailsState {}
 
 class ChallengeAccepted extends ChallengeDetailsState {}

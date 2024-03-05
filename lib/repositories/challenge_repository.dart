@@ -11,6 +11,10 @@ class ChallengeRepository {
     return _challengeService.getChallenges();
   }
 
+  Future<Challenge> getChallengeById(String challengeId) async {
+    return _challengeService.getChallengeById(challengeId);
+  }
+
   Future<void> addChallenge(Map<String, dynamic> formData) async {
     await _challengeService.addChallenge(formData);
   }

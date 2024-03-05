@@ -6,6 +6,12 @@ sealed class ChallengeDetailsEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class FetchChallengeDetailsEvent extends ChallengeDetailsEvent {
+  final String challengeID;
+
+  FetchChallengeDetailsEvent(this.challengeID);
+}
+
 class AcceptChallengeEvent extends ChallengeDetailsEvent {
   final String challengeID;
 

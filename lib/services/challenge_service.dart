@@ -48,6 +48,43 @@ class ChallengeService {
     }
   }
 
+  Future<Challenge> getChallengeById(String challengeId) async {
+    try {
+      DocumentSnapshot challengeDoc =
+          await _firestore.collection('challenges').doc(challengeId).get();
+      if (challengeDoc.exists) {
+        Map<String, dynamic> data = challengeDoc.data() as Map<String, dynamic>;
+
+        Challenge challenge = Challenge(
+            id: challengeDoc.id,
+            title: data['title'],
+            description: data['description'],
+            location: data['location'],
+            country: data['country'],
+            rules: data['rules'],
+            startDateTime: data['startDateTime'].toDate(),
+            endDateTime: data['endDateTime'].toDate(),
+            completedPercentage: data['completedPercentage'],
+            maximumParticipants: data['maximumParticipants'],
+            acceptedParticipants: List<String>.from(data[
+                "acceptedParticipants"]), // * converting dynamic array to string array
+            difficulty: data['difficulty'],
+            imageURL: data['imageURL'],
+            type: data['type'],
+            rating: double.parse(data['rating']
+                .toString()), // * converting firebase number format to double format
+            categoryId: data["categoryId"]);
+
+        return challenge;
+      } else {
+        throw Exception('Challenge with id $challengeId not found');
+      }
+    } catch (e) {
+      // Handle errors if any
+      throw Exception('Failed to get challenge: $e');
+    }
+  }
+
   // * add challenge to firebase
   Future<void> addChallenge(Map<String, dynamic> formData) async {
     try {

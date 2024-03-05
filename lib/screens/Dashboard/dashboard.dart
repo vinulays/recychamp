@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Shop/shop.dart';
@@ -253,6 +254,14 @@ class _DashboardState extends State<Dashboard> {
                                                         int index) {
                                                   return GestureDetector(
                                                     onTap: () {
+                                                      final challengeId = state
+                                                          .challenges[index].id;
+                                                      context
+                                                          .read<
+                                                              ChallengeDetailsBloc>()
+                                                          .add(FetchChallengeDetailsEvent(
+                                                              challengeId!));
+
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(

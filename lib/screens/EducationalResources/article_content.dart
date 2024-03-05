@@ -1,13 +1,8 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import 'package:recychamp/screens/EducationalResources/article_model.dart';
-import 'package:recychamp/utils/articles_data.dart';
 
 class ArticleContent extends StatelessWidget {
   final Article articlels;
@@ -17,8 +12,8 @@ class ArticleContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
-    margin:
-    EdgeInsets.symmetric(horizontal: deviceData.size.width * 0.05);
+    // margin:
+    // EdgeInsets.symmetric(horizontal: deviceData.size.width * 0.05);
     return Scaffold(
       body: Column(
         children: [
@@ -77,25 +72,32 @@ class ArticleContent extends StatelessWidget {
                   margin: EdgeInsets.symmetric(
                       horizontal: deviceData.size.width * 0.05),
                   child: Text(
-                    "${DateFormat('yyyy-MM-dd').format(articlels.modifiedDate)}",
+                    "${DateFormat('d MMMM yyyy').format(articlels.modifiedDate)}",
                     style: kFontFamily(
-                      color: const Color.fromRGBO(61, 61, 61, 0.65),
-                    ),
+                        color: const Color.fromRGBO(61, 61, 61, 0.65),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400),
                   )),
             ],
           ),
-          Row(
-            children: [
-              Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: deviceData.size.width * 0.05),
-                  child: Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. ",
-                    style: kFontFamily(
-                      color: const Color.fromRGBO(61, 61, 61, 0.65),
-                    ),
-                  )),
-            ],
+          const SizedBox(
+            height: 20,
+          ),
+          Container(
+            margin:
+                EdgeInsets.symmetric(horizontal: deviceData.size.width * 0.05),
+            width: double.infinity,
+            child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Text(
+                  articlels.content,
+                  style: kFontFamily(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                      height: 1.5),
+                  textAlign: TextAlign.justify,
+                )),
           )
         ],
       ),

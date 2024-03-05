@@ -18,8 +18,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // * Manually sign in to implement challenge submission
-  // ! remove this when implementing authentication
+  // * Manually sign in to implement challenge submission (roles: admin, organizer, parent)
+  // * remove this when implementing authentication
   signInManually();
 
   // logout();

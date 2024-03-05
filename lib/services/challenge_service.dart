@@ -30,7 +30,8 @@ class ChallengeService {
             endDateTime: data['endDateTime'].toDate(),
             completedPercentage: data['completedPercentage'],
             maximumParticipants: data['maximumParticipants'],
-            registeredParticipants: data['registeredParticipants'],
+            acceptedParticipants: List<String>.from(data[
+                "acceptedParticipants"]), // * converting dynamic array to string array
             difficulty: data['difficulty'],
             imageURL: data['imageURL'],
             type: data['type'],
@@ -72,7 +73,6 @@ class ChallengeService {
         "completedPercentage": 0,
         "maximumParticipants": int.parse(
             formData["maximumParticipants"]), // * converting string to integer
-        "registeredParticipants": 0,
         "difficulty": formData["difficulty"],
         "imageURL": formData["imageURL"],
         "rating": 0,
@@ -112,6 +112,7 @@ class ChallengeService {
             formData["endTime"].minute),
         "maximumParticipants": int.parse(
             formData["maximumParticipants"]), // * converting string to integer
+        "acceptedParticipants": [],
         "difficulty": formData["difficulty"],
         "imageURL": formData["imageURL"],
         "categoryId": formData["categoryId"],

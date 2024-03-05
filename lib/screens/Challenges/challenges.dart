@@ -93,7 +93,7 @@ class _ChallengesState extends State<Challenges> {
 
         return Scaffold(
           // * challenge add button (if logged user is an admin/organizer)
-          floatingActionButton: (userRole == "admin")
+          floatingActionButton: (userRole == "admin" || userRole == "organizer")
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 15.0, right: 12.0),
                   child: SizedBox(

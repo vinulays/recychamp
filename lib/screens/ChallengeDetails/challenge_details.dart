@@ -28,6 +28,7 @@ class ChallengeDetails extends StatefulWidget {
 
 class _ChallengeDetailsState extends State<ChallengeDetails> {
   String? userRole;
+  String? userId;
 
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
     getUserRole();
   }
 
+  // todo: get user details from the user state
   Future<void> getUserRole() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
@@ -45,10 +47,11 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
             .doc(user.uid)
             .get();
 
-        String? role = userSnapshot.get("role");
+        String? role = await userSnapshot.get("role");
 
         setState(() {
           userRole = role;
+          userId = user.uid;
         });
       }
     } catch (error) {
@@ -65,8 +68,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
     String endDateTime = widget.challenge.endDateTime.toString();
     DateTime currentDateTime = DateTime.now();
 
-    bool isAccepted = true;
-
+    List<String> acceptedParticipants = widget.challenge.acceptedParticipants;
     List<String> ruleList = widget.challenge.rules.split(";");
 
     var isDialOpen = ValueNotifier<bool>(false);
@@ -75,7 +77,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
     return BlocBuilder<ChallengeDetailsBloc, ChallengeDetailsState>(
       builder: (context, state) {
         return Scaffold(
-          floatingActionButton: (userRole == "admin")
+          floatingActionButton: (userRole == "admin" || userRole == "organizer")
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 80, right: 12),
                   child: SpeedDial(
@@ -106,56 +108,60 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                 });
                           },
                           shape: const CircleBorder()),
-                      SpeedDialChild(
-                          child: const Icon(Icons.delete),
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    backgroundColor: Colors.white,
-                                    title: Text(
-                                      "Delete the Challenge",
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    content: Text(
-                                      "This action cannot be undone. Do you really want to delete this challenge?",
-                                      style: GoogleFonts.poppins(fontSize: 14),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text(
-                                            "No",
-                                            style: GoogleFonts.poppins(
-                                                fontSize: 14),
-                                          )),
-                                      TextButton(
-                                          onPressed: () {
-                                            context.read<ChallengesBloc>().add(
-                                                  DeleteChallengeEvent(
-                                                      widget.challenge.id!),
-                                                );
+                      if (userRole == "admin")
+                        SpeedDialChild(
+                            child: const Icon(Icons.delete),
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      title: Text(
+                                        "Delete the Challenge",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      content: Text(
+                                        "This action cannot be undone. Do you really want to delete this challenge?",
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 14),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              "No",
+                                              style: GoogleFonts.poppins(
+                                                  fontSize: 14),
+                                            )),
+                                        TextButton(
+                                            onPressed: () {
+                                              context
+                                                  .read<ChallengesBloc>()
+                                                  .add(
+                                                    DeleteChallengeEvent(
+                                                        widget.challenge.id!),
+                                                  );
 
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text(
-                                            "Yes",
-                                            style: GoogleFonts.poppins(
-                                                fontSize: 14),
-                                          )),
-                                    ],
-                                  );
-                                });
-                          },
-                          shape: const CircleBorder()),
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              "Yes",
+                                              style: GoogleFonts.poppins(
+                                                  fontSize: 14),
+                                            )),
+                                      ],
+                                    );
+                                  });
+                            },
+                            shape: const CircleBorder()),
                     ],
                   ),
                 )
@@ -307,7 +313,8 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
 
               // * If challenge is accepted, display the progress bar
               // todo: check the logged user has accepted the challenge
-              if (isAccepted && challengeType == "challenge")
+              if (acceptedParticipants.contains(userId) &&
+                  challengeType == "challenge")
                 Column(
                   children: [
                     const SizedBox(
@@ -454,7 +461,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                               iconURL:
                                   "assets/icons/challenge_details_users.svg",
                               description:
-                                  "${widget.challenge.registeredParticipants} out of ${widget.challenge.maximumParticipants} Participants Joined"),
+                                  "${widget.challenge.acceptedParticipants.length} out of ${widget.challenge.maximumParticipants} Participants Joined"),
                           const SizedBox(
                             height: 20,
                           ),
@@ -526,29 +533,28 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                   child: TextButton(
                     onPressed: () {
                       // * If not accepteed, Parent agreement form (open in a fullscreen dialog). Otherwise submit form
-                      // if (!isAccepted) {
-                      //   showGeneralDialog(
-                      //       context: context,
-                      //       barrierColor: Colors.white,
-                      //       pageBuilder:
-                      //           (context, animation, secondaryAnimation) {
-                      //         return ParentAgreement(
-                      //           onAccept: () {
-                      //             context
-                      //                 .read<ChallengeDetailsBloc>()
-                      //                 .add(const AcceptChallengeEvent());
-                      //           },
-                      //         );
-                      //       });
-                      // } else if (state.isAccepted &&
-                      // challengeType == "challenge") {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ChallengeSubmission(
-                                    challenge: widget.challenge,
-                                  )));
-                      // }
+                      if (!acceptedParticipants.contains(userId)) {
+                        showGeneralDialog(
+                            context: context,
+                            barrierColor: Colors.white,
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return ParentAgreement(
+                                onAccept: () {
+                                  context.read<ChallengeDetailsBloc>().add(
+                                      AcceptChallengeEvent(
+                                          userId!, widget.challenge.id!));
+                                },
+                              );
+                            });
+                      } else if (acceptedParticipants.contains(userId)) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChallengeSubmission(
+                                      challenge: widget.challenge,
+                                    )));
+                      }
                       // todo add challenge submit form
                     },
                     style: ButtonStyle(
@@ -563,14 +569,9 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           MaterialStateProperty.all<Color>(Colors.black),
                     ),
                     child: Text(
-                      // (challengeType == "challenge" && !state.isAccepted)
-                      //     ? "Join the Challenge"
-                      //     : (challengeType == "challenge" && state.isAccepted)
-                      //         ? "Submit the Challenge"
-                      //         : (challengeType == "event" && !state.isAccepted)
-                      //             ? "Join the Event"
-                      //             : "See you there!",
-                      "Submit Challenge",
+                      (!acceptedParticipants.contains(userId))
+                          ? "Join the Challenge"
+                          : "Submit the Challenge",
                       style: GoogleFonts.poppins(
                           fontSize: 19,
                           fontWeight: FontWeight.w700,

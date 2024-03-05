@@ -22,4 +22,8 @@ class ChallengeRepository {
   Future<void> deleteChallenge(String challengeId) async {
     await _challengeService.deleteChallenge(challengeId);
   }
+
+  Future<void> acceptChallenge(String challengeId, String userId) async {
+    await _challengeService.acceptChallenge(challengeId, userId);
+  }
 }

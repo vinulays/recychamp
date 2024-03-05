@@ -141,4 +141,18 @@ class ChallengeService {
       throw Exception('Failed to delete the challenge: $e');
     }
   }
+
+  // * accept challenge in firebase
+  Future<void> acceptChallenge(String challengeId, String userId) async {
+    try {
+      DocumentReference challengeRef =
+          _firestore.collection("challenges").doc(challengeId);
+
+      await challengeRef.update({
+        'acceptedParticipants': FieldValue.arrayUnion([userId]),
+      });
+    } catch (e) {
+      throw Exception("Failed to accept challenge $e");
+    }
+  }
 }

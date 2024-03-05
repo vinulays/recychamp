@@ -7,10 +7,9 @@ sealed class ChallengeDetailsEvent extends Equatable {
 }
 
 class AcceptChallengeEvent extends ChallengeDetailsEvent {
-  final String userID;
   final String challengeID;
 
-  AcceptChallengeEvent(this.userID, this.challengeID);
+  AcceptChallengeEvent(this.challengeID);
 }
 
 class SubmitChallengeEvent extends ChallengeDetailsEvent {

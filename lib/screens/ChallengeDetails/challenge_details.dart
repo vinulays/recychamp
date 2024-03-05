@@ -543,7 +543,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                 onAccept: () {
                                   context.read<ChallengeDetailsBloc>().add(
                                       AcceptChallengeEvent(
-                                          userId!, widget.challenge.id!));
+                                          widget.challenge.id!));
                                 },
                               );
                             });

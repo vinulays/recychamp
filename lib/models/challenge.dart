@@ -9,7 +9,7 @@ class Challenge {
   DateTime endDateTime;
   int completedPercentage;
   int maximumParticipants;
-  int registeredParticipants;
+  List<String> acceptedParticipants;
   String difficulty;
   String imageURL;
   String? type;
@@ -28,7 +28,7 @@ class Challenge {
       required this.endDateTime,
       required this.completedPercentage,
       required this.maximumParticipants,
-      required this.registeredParticipants,
+      required this.acceptedParticipants,
       required this.difficulty,
       required this.imageURL,
       this.type,

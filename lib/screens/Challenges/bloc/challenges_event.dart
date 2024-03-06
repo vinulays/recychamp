@@ -25,3 +25,20 @@ class DeleteChallengeEvent extends ChallengesEvent {
 
   DeleteChallengeEvent(this.challengeId);
 }
+
+class ApplyFiltersEvent extends ChallengesEvent {
+  final Set<String> filters;
+
+  ApplyFiltersEvent(this.filters);
+}
+
+class ResetChallengesEvent extends ChallengesEvent {}
+
+class SearchChallengesEvent extends ChallengesEvent {
+  final String query;
+
+  SearchChallengesEvent(this.query);
+
+  @override
+  List<Object?> get props => [query];
+}

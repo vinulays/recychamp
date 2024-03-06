@@ -2,15 +2,23 @@ part of 'challenge_details_bloc.dart';
 
 @immutable
 sealed class ChallengeDetailsEvent extends Equatable {
-  const ChallengeDetailsEvent();
-
   @override
   List<Object?> get props => [];
 }
 
-class AcceptChallengeEvent extends ChallengeDetailsEvent {
-  const AcceptChallengeEvent();
+class FetchChallengeDetailsEvent extends ChallengeDetailsEvent {
+  final String challengeID;
 
-  @override
-  List<Object?> get props => [];
+  FetchChallengeDetailsEvent(this.challengeID);
+}
+
+class AcceptChallengeEvent extends ChallengeDetailsEvent {
+  final String challengeID;
+
+  AcceptChallengeEvent(this.challengeID);
+}
+
+class SubmitChallengeEvent extends ChallengeDetailsEvent {
+  final Map<String, dynamic> formData;
+  SubmitChallengeEvent(this.formData);
 }

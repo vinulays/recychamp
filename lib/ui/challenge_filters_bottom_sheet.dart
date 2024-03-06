@@ -4,7 +4,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:recychamp/utils/challenge_filters.dart';
 
 class ChallengeFiltersBottomSheet extends StatefulWidget {
-  const ChallengeFiltersBottomSheet({super.key});
+  final Function(Set<String>, bool) applyFiltersCallBack;
+  final Set<String> initialFilters;
+  final bool initialCompletedSelected;
+
+  const ChallengeFiltersBottomSheet(
+      {super.key,
+      required this.applyFiltersCallBack,
+      required this.initialFilters,
+      required this.initialCompletedSelected});
 
   @override
   State<ChallengeFiltersBottomSheet> createState() =>
@@ -15,6 +23,15 @@ class _ChallengeFiltersBottomSheetState
     extends State<ChallengeFiltersBottomSheet> {
   Set<String> filters = <String>{};
   bool isCompletedSelected = false;
+
+  // * setting selected filters when initialising the widget
+  @override
+  void initState() {
+    super.initState();
+    filters = widget.initialFilters;
+    isCompletedSelected = widget.initialCompletedSelected;
+  }
+
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
@@ -49,12 +66,19 @@ class _ChallengeFiltersBottomSheetState
                             fontSize: 18, fontWeight: FontWeight.w700),
                       ),
                     ),
-                    Text(
-                      "Reset All",
-                      style: GoogleFonts.poppins(
-                          color: const Color(0xFF75A488),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          filters.clear();
+                        });
+                      },
+                      child: Text(
+                        "Reset All",
+                        style: GoogleFonts.poppins(
+                            color: const Color(0xFF75A488),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ],
                 ),
@@ -139,7 +163,10 @@ class _ChallengeFiltersBottomSheetState
                 SizedBox(
                   width: double.infinity,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      widget.applyFiltersCallBack(filters, isCompletedSelected);
+                      Navigator.pop(context);
+                    },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(

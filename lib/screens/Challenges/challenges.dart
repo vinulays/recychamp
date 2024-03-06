@@ -1,7 +1,10 @@
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_svg/svg.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart";
 import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import "package:recychamp/screens/ChallengeForm/challenge_form.dart";
 import "package:recychamp/screens/Challenges/bloc/challenges_bloc.dart";
@@ -16,6 +19,71 @@ class Challenges extends StatefulWidget {
 }
 
 class _ChallengesState extends State<Challenges> {
+  // * Apply filters to the challenge list in challenge loaded state (Apply filters event is called here)
+  Set<String> selectedFilters = {};
+  bool selectedIsCompleted = false;
+  late ChallengesBloc challengesBloc;
+
+  final TextEditingController _searchController = TextEditingController();
+
+  String? userRole;
+
+  void applyFilters(Set<String> filters, bool isCompletedSelected) {
+    // * Setting selected filters to pass back to the filter sheet
+    setState(() {
+      selectedFilters = filters;
+      selectedIsCompleted = isCompletedSelected;
+    });
+
+    final challengesBloc = BlocProvider.of<ChallengesBloc>(context);
+
+    // todo: apply filters to the completed status of the challenge (need to have authentication)
+    challengesBloc.add(ApplyFiltersEvent(filters));
+  }
+
+  // * getting the role of the logged user when initialising the widget
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
+
+  Future<void> getUserRole() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        String? role = userSnapshot.get("role");
+
+        setState(() {
+          userRole = role;
+        });
+      }
+    } catch (error) {
+      throw Exception("Error getting role: $error");
+    }
+  }
+
+  // * using this method since dispose method is not allowing to use "context"
+  @override
+  void didChangeDependencies() {
+    challengesBloc = BlocProvider.of<ChallengesBloc>(context);
+    super.didChangeDependencies();
+  }
+
+  // * reset challenges when exit from the challenges screen
+  @override
+  void dispose() {
+    _searchController.dispose();
+    challengesBloc.add(ResetChallengesEvent());
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
@@ -23,39 +91,43 @@ class _ChallengesState extends State<Challenges> {
     return BlocBuilder<ChallengesBloc, ChallengesState>(
       builder: (context, state) {
         final challengesBloc = BlocProvider.of<ChallengesBloc>(context);
+
         return Scaffold(
           // * challenge add button (if logged user is an admin/organizer)
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 15.0, right: 12.0),
-            child: SizedBox(
-              height: 63,
-              width: 63,
-              child: FittedBox(
-                child: FloatingActionButton(
-                  onPressed: () {
-                    // * challenge form (add form)
-                    showGeneralDialog(
-                        context: context,
-                        barrierColor: Colors.white,
-                        pageBuilder: (context, animation, secondaryAnimation) {
-                          return const ChallengeForm(
-                            isUpdate: false,
-                          );
-                        });
-                  },
-                  backgroundColor: const Color(0xFF75A488),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+          floatingActionButton: (userRole == "admin" || userRole == "organizer")
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0, right: 12.0),
+                  child: SizedBox(
+                    height: 63,
+                    width: 63,
+                    child: FittedBox(
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          // * challenge form (add form)
+                          showGeneralDialog(
+                              context: context,
+                              barrierColor: Colors.white,
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return const ChallengeForm(
+                                  isUpdate: false,
+                                );
+                              });
+                        },
+                        backgroundColor: const Color(0xFF75A488),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 40.0,
+                        ),
+                      ),
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 40.0,
-                  ),
-                ),
-              ),
-            ),
-          ),
+                )
+              : Container(),
           resizeToAvoidBottomInset: false,
           body: RefreshIndicator(
             onRefresh: () async {
@@ -77,7 +149,6 @@ class _ChallengesState extends State<Challenges> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // todo greeting must change according to the time of the day
                           Text(
                             "Challenges",
                             style: GoogleFonts.poppins(
@@ -107,6 +178,12 @@ class _ChallengesState extends State<Challenges> {
                   margin: EdgeInsets.symmetric(
                       horizontal: deviceData.size.width * 0.05),
                   child: TextField(
+                    // * calling search event when user clicks ok on the keyboard after editing the search field
+                    onSubmitted: (query) {
+                      challengesBloc
+                          .add(SearchChallengesEvent(_searchController.text));
+                    },
+                    controller: _searchController,
                     style: GoogleFonts.poppins(
                       fontSize: 17,
                     ),
@@ -116,8 +193,15 @@ class _ChallengesState extends State<Challenges> {
                             const BoxConstraints(maxHeight: 26, minWidth: 26),
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(left: 13, right: 10),
-                          child: SvgPicture.asset(
-                            "assets/icons/search.svg",
+                          child: InkWell(
+                            // * search challenges when tapped search icon
+                            onTap: () {
+                              challengesBloc.add(SearchChallengesEvent(
+                                  _searchController.text));
+                            },
+                            child: SvgPicture.asset(
+                              "assets/icons/search.svg",
+                            ),
                           ),
                         ),
                         suffixIconConstraints:
@@ -137,7 +221,12 @@ class _ChallengesState extends State<Challenges> {
                                   clipBehavior: Clip.antiAliasWithSaveLayer,
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return const ChallengeFiltersBottomSheet();
+                                    return ChallengeFiltersBottomSheet(
+                                      applyFiltersCallBack: applyFilters,
+                                      initialFilters: selectedFilters,
+                                      initialCompletedSelected:
+                                          selectedIsCompleted,
+                                    );
                                   });
                             },
                             child: SvgPicture.asset(
@@ -168,28 +257,54 @@ class _ChallengesState extends State<Challenges> {
                       ),
                     ),
                   ),
+                if (state is ChallengesSearching)
+                  const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        strokeCap: StrokeCap.round,
+                        strokeWidth: 5,
+                        color: Color(0xff75A488),
+                      ),
+                    ),
+                  ),
                 if (state is ChallengesLoaded)
                   Expanded(
-                    child: ListView.builder(
-                        itemCount: state.challenges.length,
-                        itemBuilder: (BuildContext context, index) {
-                          // * Gesture detector to navigate to details page when clicked on a challenge card
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChallengeDetails(
-                                    challenge: state.challenges[index],
-                                  ),
+                    child: (state.challenges.isNotEmpty)
+                        ? ListView.builder(
+                            itemCount: state.challenges.length,
+                            itemBuilder: (BuildContext context, index) {
+                              // * Gesture detector to navigate to details page when clicked on a challenge card
+                              return GestureDetector(
+                                // key: UniqueKey(),
+                                onTap: () {
+                                  final challengeId =
+                                      state.challenges[index].id;
+                                  context.read<ChallengeDetailsBloc>().add(
+                                      FetchChallengeDetailsEvent(challengeId!));
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ChallengeDetails(),
+                                    ),
+                                  );
+                                },
+                                child: ChallengeCard(
+                                  challenge: state.challenges[index],
                                 ),
                               );
-                            },
-                            child: ChallengeCard(
-                              challenge: state.challenges[index],
-                            ),
-                          );
-                        }),
+                            })
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "No challenges found :(",
+                                style: GoogleFonts.poppins(),
+                              ),
+                            ],
+                          ),
                   ),
               ],
             ),

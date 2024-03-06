@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import 'package:recychamp/models/article_model.dart';
+// import 'package:recychamp/utils/articles_data.dart';
 
 class ArticleContent extends StatelessWidget {
   final Article articlels;

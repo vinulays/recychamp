@@ -30,7 +30,8 @@ class ChallengeService {
             endDateTime: data['endDateTime'].toDate(),
             completedPercentage: data['completedPercentage'],
             maximumParticipants: data['maximumParticipants'],
-            registeredParticipants: data['registeredParticipants'],
+            acceptedParticipants: List<String>.from(data[
+                "acceptedParticipants"]), // * converting dynamic array to string array
             difficulty: data['difficulty'],
             imageURL: data['imageURL'],
             type: data['type'],
@@ -40,12 +41,47 @@ class ChallengeService {
 
         challenges.add(challenge);
       }
-      print("Challenges array length");
-      print(challenges.length);
 
       return challenges;
     } catch (e) {
       throw Exception('Failed to fetch challenges: $e');
+    }
+  }
+
+  Future<Challenge> getChallengeById(String challengeId) async {
+    try {
+      DocumentSnapshot challengeDoc =
+          await _firestore.collection('challenges').doc(challengeId).get();
+      if (challengeDoc.exists) {
+        Map<String, dynamic> data = challengeDoc.data() as Map<String, dynamic>;
+
+        Challenge challenge = Challenge(
+            id: challengeDoc.id,
+            title: data['title'],
+            description: data['description'],
+            location: data['location'],
+            country: data['country'],
+            rules: data['rules'],
+            startDateTime: data['startDateTime'].toDate(),
+            endDateTime: data['endDateTime'].toDate(),
+            completedPercentage: data['completedPercentage'],
+            maximumParticipants: data['maximumParticipants'],
+            acceptedParticipants: List<String>.from(data[
+                "acceptedParticipants"]), // * converting dynamic array to string array
+            difficulty: data['difficulty'],
+            imageURL: data['imageURL'],
+            type: data['type'],
+            rating: double.parse(data['rating']
+                .toString()), // * converting firebase number format to double format
+            categoryId: data["categoryId"]);
+
+        return challenge;
+      } else {
+        throw Exception('Challenge with id $challengeId not found');
+      }
+    } catch (e) {
+      // Handle errors if any
+      throw Exception('Failed to get challenge: $e');
     }
   }
 
@@ -74,7 +110,6 @@ class ChallengeService {
         "completedPercentage": 0,
         "maximumParticipants": int.parse(
             formData["maximumParticipants"]), // * converting string to integer
-        "registeredParticipants": 0,
         "difficulty": formData["difficulty"],
         "imageURL": formData["imageURL"],
         "rating": 0,
@@ -114,6 +149,7 @@ class ChallengeService {
             formData["endTime"].minute),
         "maximumParticipants": int.parse(
             formData["maximumParticipants"]), // * converting string to integer
+        "acceptedParticipants": [],
         "difficulty": formData["difficulty"],
         "imageURL": formData["imageURL"],
         "categoryId": formData["categoryId"],
@@ -140,6 +176,20 @@ class ChallengeService {
       await imageRef.delete();
     } catch (e) {
       throw Exception('Failed to delete the challenge: $e');
+    }
+  }
+
+  // * accept challenge in firebase
+  Future<void> acceptChallenge(String challengeId, String userId) async {
+    try {
+      DocumentReference challengeRef =
+          _firestore.collection("challenges").doc(challengeId);
+
+      await challengeRef.update({
+        'acceptedParticipants': FieldValue.arrayUnion([userId]),
+      });
+    } catch (e) {
+      throw Exception("Failed to accept challenge $e");
     }
   }
 }

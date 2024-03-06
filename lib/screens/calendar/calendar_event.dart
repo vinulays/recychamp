@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recychamp/screens/Calendar/event_details.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
+import 'package:recychamp/utils/event_data.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -156,21 +158,23 @@ class _MyWidgetState extends State<CalendarEvent> {
 
               Expanded(
                 child: FractionallySizedBox(
-                    //rounded corner box
-                    // heightFactor: 0.4,
-                    child: Container(
-                  width: double.infinity,
-                  // height: double.infinity,
-                  decoration: const ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(42.07),
-                        topRight: Radius.circular(42.07),
+                  //rounded corner box
+                  // heightFactor: 0.4,
+                  child: Container(
+                    width: double.infinity,
+                    // height: double.infinity,
+                    decoration: const ShapeDecoration(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(42.07),
+                          topRight: Radius.circular(42.07),
+                        ),
                       ),
                     ),
+                    child: eventDetails(eventDetails: eventDataSet[1]),
                   ),
-                )),
+                ),
               )
             ],
           ),
@@ -178,4 +182,62 @@ class _MyWidgetState extends State<CalendarEvent> {
       },
     );
   }
+}
+
+Widget eventDetails({required EventData eventDetails}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 42.1),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        //const SizedBox(height: 1),
+        // Add your event details UI here, including picture, description, and join button
+        // Example:
+        ClipRRect(
+          borderRadius: BorderRadius.circular(42.07),
+          child: Image.network(
+            .eventImaeventDetailsge,
+            width: 822.4,
+            height: 368,
+            fit: BoxFit.cover,
+          ),
+        ),
+
+        const SizedBox(height: 15),
+
+        Text(
+          eventDetails.eventTitle,
+          style: kFontFamily(
+            color: Colors.black,
+            fontSize: 25,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        Text(
+          eventDetails.eventLocation,
+          style: kFontFamily(
+            color: const Color.fromARGB(116, 116, 116, 1),
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        Text(
+          eventDetails.description,
+          style: kFontFamily(
+            color: Colors.black,
+            fontSize: 14,
+            fontWeight: FontWeight.w300,
+          ),
+        ),
+
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: () {
+            // Handle join button click
+          },
+          child: const Text("Join Now"),
+        ),
+      ],
+    ),
+  );
 }

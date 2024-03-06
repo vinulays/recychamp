@@ -10,7 +10,7 @@ import 'package:recychamp/screens/Calendar/calendar_event.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import "package:google_fonts/google_fonts.dart";
 import 'package:recychamp/screens/EducationalResources/article_content.dart';
-import 'package:recychamp/screens/EducationalResources/article_model.dart';
+import 'package:recychamp/models/article_model.dart';
 import 'package:recychamp/ui/article_filter.dart';
 import 'package:recychamp/utils/articles_data.dart';
 

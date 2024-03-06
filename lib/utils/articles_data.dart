@@ -1,4 +1,4 @@
-import 'package:recychamp/screens/EducationalResources/article_model.dart';
+import 'package:recychamp/models/article_model.dart';
 
 final List<Article> articlelNature = [
   Article(

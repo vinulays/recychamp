@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
-import 'package:recychamp/screens/EducationalResources/article_model.dart';
+import 'package:recychamp/models/article_model.dart';
 
 class ArticleContent extends StatelessWidget {
   final Article articlels;
@@ -83,22 +83,25 @@ class ArticleContent extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Container(
-            margin:
-                EdgeInsets.symmetric(horizontal: deviceData.size.width * 0.05),
-            width: double.infinity,
+          Flexible(
             child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
+              scrollDirection: Axis.vertical,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: deviceData.size.width * 0.05),
                 child: Text(
                   articlels.content,
                   style: kFontFamily(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w300,
-                      height: 1.5),
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                    height: 1.5,
+                  ),
                   textAlign: TextAlign.justify,
-                )),
-          )
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

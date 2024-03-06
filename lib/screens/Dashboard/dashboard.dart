@@ -266,11 +266,7 @@ class _DashboardState extends State<Dashboard> {
                                                         context,
                                                         MaterialPageRoute(
                                                           builder: (context) =>
-                                                              ChallengeDetails(
-                                                            challenge: state
-                                                                    .challenges[
-                                                                index],
-                                                          ),
+                                                              const ChallengeDetails(),
                                                         ),
                                                       );
                                                     },

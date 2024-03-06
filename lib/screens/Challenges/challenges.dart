@@ -285,9 +285,8 @@ class _ChallengesState extends State<Challenges> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ChallengeDetails(
-                                        challenge: state.challenges[index],
-                                      ),
+                                      builder: (context) =>
+                                          const ChallengeDetails(),
                                     ),
                                   );
                                 },

@@ -19,8 +19,7 @@ import 'package:recychamp/ui/challenge_details_row.dart';
 import 'package:recychamp/utils/challenge_categories.dart';
 
 class ChallengeDetails extends StatefulWidget {
-  final Challenge challenge;
-  const ChallengeDetails({super.key, required this.challenge});
+  const ChallengeDetails({super.key});
 
   @override
   State<ChallengeDetails> createState() => _ChallengeDetailsState();
@@ -62,20 +61,32 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
+    Challenge? challenge;
 
-    String? challengeType = widget.challenge.type;
-    String startDateTime = widget.challenge.startDateTime.toString();
-    String endDateTime = widget.challenge.endDateTime.toString();
+    String? challengeType;
+    String? startDateTime;
+    String? endDateTime;
     DateTime currentDateTime = DateTime.now();
 
-    List<String> acceptedParticipants = widget.challenge.acceptedParticipants;
-    List<String> ruleList = widget.challenge.rules.split(";");
+    List<String> acceptedParticipants;
+    bool? isAccepted;
+
+    List<String>? ruleList;
 
     var isDialOpen = ValueNotifier<bool>(false);
 
     // * Wrapping the widget with the bloc builder
     return BlocBuilder<ChallengeDetailsBloc, ChallengeDetailsState>(
       builder: (context, state) {
+        if (state is ChallengeLoaded) {
+          challenge = state.challenge;
+          ruleList = state.challenge.rules.split(";");
+          challengeType = state.challenge.type;
+          startDateTime = state.challenge.startDateTime.toString();
+          endDateTime = state.challenge.endDateTime.toString();
+          acceptedParticipants = state.challenge.acceptedParticipants;
+          isAccepted = acceptedParticipants.contains(userId);
+        }
         return Scaffold(
           floatingActionButton: (userRole == "admin" || userRole == "organizer")
               ? Padding(
@@ -102,7 +113,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                 pageBuilder:
                                     (context, animation, secondaryAnimation) {
                                   return ChallengeForm(
-                                    challenge: widget.challenge,
+                                    challenge: challenge,
                                     isUpdate: true,
                                   );
                                 });
@@ -146,7 +157,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                                   .read<ChallengesBloc>()
                                                   .add(
                                                     DeleteChallengeEvent(
-                                                        widget.challenge.id!),
+                                                        challenge!.id!),
                                                   );
 
                                               Navigator.of(context).pop();
@@ -187,7 +198,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                             ).createShader(bounds);
                           },
                           child: CachedNetworkImage(
-                            imageUrl: widget.challenge.imageURL,
+                            imageUrl: state.challenge.imageURL,
                             imageBuilder: (context, imageProvider) => Container(
                               height: 292,
                               decoration: BoxDecoration(
@@ -231,21 +242,21 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   AvatarGlow(
-                                    glowColor: ((currentDateTime.isAfter(widget
-                                                .challenge.startDateTime)) &&
+                                    glowColor: ((currentDateTime.isAfter(
+                                                challenge!.startDateTime)) &&
                                             currentDateTime.isBefore(
-                                                widget.challenge.endDateTime))
+                                                state.challenge.endDateTime))
                                         ? Colors.green
                                         : Colors.red,
                                     child: Container(
                                       height: 10,
                                       width: 10,
                                       decoration: BoxDecoration(
-                                        color: ((currentDateTime.isAfter(widget
-                                                    .challenge
-                                                    .startDateTime)) &&
-                                                currentDateTime.isBefore(widget
-                                                    .challenge.endDateTime))
+                                        color: ((currentDateTime.isAfter(
+                                                    challenge!
+                                                        .startDateTime)) &&
+                                                currentDateTime.isBefore(
+                                                    challenge!.endDateTime))
                                             ? Colors.green
                                             : Colors.red,
                                         shape: BoxShape.circle,
@@ -256,10 +267,10 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                     width: 5,
                                   ),
                                   Text(
-                                    ((currentDateTime.isAfter(widget
-                                                .challenge.startDateTime)) &&
+                                    ((currentDateTime.isAfter(
+                                                challenge!.startDateTime)) &&
                                             currentDateTime.isBefore(
-                                                widget.challenge.endDateTime))
+                                                state.challenge.endDateTime))
                                         ? "online"
                                         : "offline",
                                     style: GoogleFonts.poppins(
@@ -293,7 +304,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                     challengeCategories
                                         .firstWhere((category) =>
                                             category.id ==
-                                            widget.challenge.categoryId)
+                                            state.challenge.categoryId)
                                         .name,
                                     style: GoogleFonts.poppins(
                                         fontSize: 13,
@@ -309,7 +320,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           top: 234,
                           left: 25.58,
                           child: Text(
-                            widget.challenge.title,
+                            state.challenge.title,
                             style: GoogleFonts.poppins(
                                 fontSize: 25,
                                 fontWeight: FontWeight.w700,
@@ -321,8 +332,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
 
                     // * If challenge is accepted, display the progress bar
                     // todo: check the logged user has accepted the challenge
-                    if (acceptedParticipants.contains(userId) &&
-                        challengeType == "challenge")
+                    if (isAccepted! && challengeType == "challenge")
                       Column(
                         children: [
                           const SizedBox(
@@ -442,7 +452,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                   iconURL:
                                       "assets/icons/challenge_details_calendar.svg",
                                   description:
-                                      "${Jiffy.parse(startDateTime).format(pattern: "do MMMM yyyy")} - ${Jiffy.parse(endDateTime).format(pattern: "do MMMM yyyy")}",
+                                      "${Jiffy.parse(startDateTime!).format(pattern: "do MMMM yyyy")} - ${Jiffy.parse(endDateTime!).format(pattern: "do MMMM yyyy")}",
                                 ),
 
                                 const SizedBox(
@@ -452,8 +462,8 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                     iconURL:
                                         "assets/icons/challenge_details_clock.svg",
                                     description: challengeType == "event"
-                                        ? "${Jiffy.parse(startDateTime).format(pattern: "hh:mm a").toLowerCase()} - ${Jiffy.parse(endDateTime).format(pattern: "hh:mm a").toLowerCase()}"
-                                        : "${Jiffy.parse(endDateTime).diff(Jiffy.parse(startDateTime), unit: Unit.day).toString()} days duration"),
+                                        ? "${Jiffy.parse(startDateTime!).format(pattern: "hh:mm a").toLowerCase()} - ${Jiffy.parse(endDateTime!).format(pattern: "hh:mm a").toLowerCase()}"
+                                        : "${Jiffy.parse(endDateTime!).diff(Jiffy.parse(startDateTime!), unit: Unit.day).toString()} days duration"),
                                 const SizedBox(
                                   height: 13,
                                 ),
@@ -461,7 +471,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                     iconURL:
                                         "assets/icons/challenge_details_location.svg",
                                     description:
-                                        "${widget.challenge.location}, ${widget.challenge.country}"),
+                                        "${state.challenge.location}, ${state.challenge.country}"),
                                 const SizedBox(
                                   height: 13,
                                 ),
@@ -469,7 +479,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                     iconURL:
                                         "assets/icons/challenge_details_users.svg",
                                     description:
-                                        "${widget.challenge.acceptedParticipants.length} out of ${widget.challenge.maximumParticipants} Participants Joined"),
+                                        "${state.challenge.acceptedParticipants.length} out of ${state.challenge.maximumParticipants} Participants Joined"),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -488,7 +498,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                 ),
                                 //  * challenge description
                                 Text(
-                                  widget.challenge.description,
+                                  state.challenge.description,
                                   style: GoogleFonts.poppins(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w300),
@@ -496,7 +506,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                if (ruleList.isNotEmpty)
+                                if (ruleList!.isNotEmpty)
                                   Text(
                                     challengeType == "challenge"
                                         ? 'Challenge Rules'
@@ -514,11 +524,11 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children:
-                                      List.generate(ruleList.length, (index) {
+                                      List.generate(ruleList!.length, (index) {
                                     return Column(
                                       children: [
                                         Text(
-                                          "${index + 1}. ${ruleList[index]}",
+                                          "${index + 1}. ${ruleList![index]}",
                                           style: GoogleFonts.poppins(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w300),
@@ -543,7 +553,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                         child: TextButton(
                           onPressed: () {
                             // * If not accepteed, Parent agreement form (open in a fullscreen dialog). Otherwise submit form
-                            if (!acceptedParticipants.contains(userId)) {
+                            if (!isAccepted!) {
                               showGeneralDialog(
                                   context: context,
                                   barrierColor: Colors.white,
@@ -554,16 +564,16 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                         context
                                             .read<ChallengeDetailsBloc>()
                                             .add(AcceptChallengeEvent(
-                                                widget.challenge.id!));
+                                                state.challenge.id!));
                                       },
                                     );
                                   });
-                            } else if (acceptedParticipants.contains(userId)) {
+                            } else if (isAccepted!) {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ChallengeSubmission(
-                                            challenge: widget.challenge,
+                                            challenge: state.challenge,
                                           )));
                             }
                             // todo add challenge submit form
@@ -581,7 +591,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                 MaterialStateProperty.all<Color>(Colors.black),
                           ),
                           child: Text(
-                            (!acceptedParticipants.contains(userId))
+                            (!isAccepted!)
                                 ? "Join the Challenge"
                                 : "Submit the Challenge",
                             style: GoogleFonts.poppins(

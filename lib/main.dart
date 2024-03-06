@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +17,39 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // * Manually sign in to implement challenge submission (roles: admin, organizer, parent)
+  // * remove this when implementing authentication
+  signInManually();
+
+  // logout();
   runApp(const MyApp());
+}
+
+Future<void> signInManually() async {
+  try {
+    String email = 'vinula@gmail.com';
+    String password = '12345678';
+
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    // Access the signed-in user
+    User user = userCredential.user!;
+
+    // Print user information
+    debugPrint('User signed in: ${user.uid}');
+  } catch (e) {
+    // Handle sign-in errors
+    throw Exception("Sign in error: $e");
+  }
+}
+
+Future<void> logout() async {
+  FirebaseAuth.instance.signOut();
 }
 
 class MyApp extends StatelessWidget {
@@ -30,7 +63,13 @@ class MyApp extends StatelessWidget {
       providers: [
         // * challenge details state provider
         BlocProvider<ChallengeDetailsBloc>(
-            create: (context) => ChallengeDetailsBloc()),
+          create: (context) => ChallengeDetailsBloc(
+            repository: ChallengeRepository(
+              challengeService:
+                  ChallengeService(firestore: FirebaseFirestore.instance),
+            ),
+          ),
+        ),
         // * challenges state provider
         BlocProvider<ChallengesBloc>(
           create: (context) => ChallengesBloc(

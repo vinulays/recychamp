@@ -161,7 +161,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                       width: 5,
                     ),
                     Text(
-                      "${widget.challenge.registeredParticipants}/${widget.challenge.maximumParticipants}",
+                      "${widget.challenge.acceptedParticipants.length}/${widget.challenge.maximumParticipants}",
                       style: GoogleFonts.poppins(
                           fontSize: 14,
                           color: Colors.black.withOpacity(0.4000000059604645),

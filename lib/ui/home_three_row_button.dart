@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:recychamp/screens/ParentAgreement/parent_agreement.dart';
-import 'package:recychamp/screens/Calendar/calendar_event.dart';
 
 class HomeThreeRowButton extends StatelessWidget {
   final String iconURL;

@@ -39,8 +39,10 @@ class ChallengeDetailsBloc
           final userId = user.uid;
 
           await _challengeRepository.acceptChallenge(event.challengeID, userId);
-
           emit(ChallengeAccepted());
+
+          // * Refreshing the challenge after accepting
+          add(FetchChallengeDetailsEvent(event.challengeID));
         } else {
           emit(ChallengeAcceptingError("User not authenticated"));
         }

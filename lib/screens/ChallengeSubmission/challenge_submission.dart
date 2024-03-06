@@ -532,7 +532,7 @@ class _ChallengeSubmissionState extends State<ChallengeSubmission> {
                                   title:
                                       "Briefly describe your experiance in this challenge (optional)",
                                   isRequired: false,
-                                  formBuilderName: "description",
+                                  formBuilderName: "experiance",
                                   maxLines: 4,
                                   validators: FormBuilderValidators.compose([
                                     FormBuilderValidators.required(

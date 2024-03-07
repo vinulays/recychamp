@@ -60,8 +60,12 @@ class ChallengeDetailsBloc
         if (user != null) {
           final userId = user.uid;
 
-          await _challengeRepository.submitChallenge(userId, event.formData);
+          await _challengeRepository.submitChallenge(
+              userId, event.formData, event.challengeId);
           emit(ChallengeSubmitted());
+
+          // * refreshing the challenge after the submission
+          add(FetchChallengeDetailsEvent(event.challengeId));
         }
       } catch (e) {
         emit(ChallengeSubmittingError("Failed to submit the challenge: $e"));

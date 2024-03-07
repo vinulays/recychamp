@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recychamp/firebase_options.dart';
@@ -67,8 +68,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<ChallengeDetailsBloc>(
           create: (context) => ChallengeDetailsBloc(
             repository: ChallengeRepository(
-              challengeService:
-                  ChallengeService(firestore: FirebaseFirestore.instance),
+              challengeService: ChallengeService(
+                  firestore: FirebaseFirestore.instance,
+                  storage: FirebaseStorage.instance),
             ),
           ),
         ),
@@ -78,7 +80,9 @@ class MyApp extends StatelessWidget {
             repository: ChallengeRepository(
               challengeService:
                   // * adding current firebase instance to the challenge service
-                  ChallengeService(firestore: FirebaseFirestore.instance),
+                  ChallengeService(
+                      firestore: FirebaseFirestore.instance,
+                      storage: FirebaseStorage.instance),
             ),
           )..add(
               FetchChallengesEvent(),

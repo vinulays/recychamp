@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:recychamp/models/challenge.dart';
 
 class ChallengeService {
   final FirebaseFirestore _firestore;
+  final FirebaseStorage _storage;
 
-  ChallengeService({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+  ChallengeService(
+      {required FirebaseStorage storage, required FirebaseFirestore firestore})
+      : _firestore = firestore,
+        _storage = storage;
 
   // * getting challenges from firebase
   Future<List<Challenge>> getChallenges() async {
@@ -195,15 +200,35 @@ class ChallengeService {
 
   // * submit challenge to firebase
   Future<void> submitChallenge(
-      String userId, Map<String, dynamic> formData) async {
+      String userId, Map<String, dynamic> formData, String challengeId) async {
+    List<String> imageURLs = [];
+
     try {
+      // * uploading images to firestore and getting the URLs
+      for (String imagePath in formData["imageURLs"]) {
+        String fileExtension = imagePath.split(".").last;
+        String imageName = DateTime.now().microsecondsSinceEpoch.toString();
+
+        Reference ref = _storage
+            .ref()
+            .child("submissionImages")
+            .child("$imageName.$fileExtension");
+
+        File imageFile = File(imagePath);
+        UploadTask uploadTask = ref.putFile(imageFile);
+        TaskSnapshot taskSnapshot = await uploadTask;
+        String downloadURL = await taskSnapshot.ref.getDownloadURL();
+
+        imageURLs.add(downloadURL);
+      }
+
       await _firestore.collection("submissions").add({
-        "challengeId": formData["challengeId"],
+        "challengeId": challengeId,
         "userId": userId,
         "description": formData["description"],
-        "imageURLs": formData["imageURLs"],
+        "imageURLs": imageURLs,
         "rating": formData["rating"],
-        "experience": formData["experience"]!
+        "experience": formData["experience"] ?? "Not Given"
       });
     } catch (e) {
       throw Exception("Failed to submit challenge: $e");

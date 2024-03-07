@@ -84,8 +84,8 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
           challengeType = state.challenge.type;
           startDateTime = state.challenge.startDateTime.toString();
           endDateTime = state.challenge.endDateTime.toString();
-          acceptedParticipants = state.challenge.acceptedParticipants;
-          isAccepted = acceptedParticipants.contains(userId);
+         // acceptedParticipants = state.challenge.acceptedParticipants;
+       //   isAccepted = acceptedParticipants.contains(userId);
         }
         return Scaffold(
           floatingActionButton: (userRole == "admin" || userRole == "organizer")

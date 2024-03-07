@@ -1,11 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recychamp/screens/Calendar/event_details.dart';
+import 'package:intl/intl.dart';
+import 'package:recychamp/models/challenge.dart';
+import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
+import 'package:recychamp/screens/Challenges/challenges.dart';
 import 'package:recychamp/utils/event_data.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'dart:async';
 
 class CalendarEvent extends StatefulWidget {
   const CalendarEvent({super.key});
@@ -18,18 +23,23 @@ class _MyWidgetState extends State<CalendarEvent> {
   late DateTime _selectedDay;
   late Map<DateTime, List<dynamic>> _events;
   late List<dynamic> _selectedEvents;
+  late Challenge? _selectedEvent;
 
   @override
   void initState() {
     super.initState();
     _selectedDay = DateTime.now();
-    _events = {};
+    _events = {
+      DateTime(2024, 3, 7): ['1', '2'],
+      DateTime(2024, 3, 8): ['3'],
+    };
     _selectedEvents = _events[_selectedDay] ?? [];
+    _selectedEvent = null;
   }
 
   @override
   Widget build(BuildContext context) {
-    var deviceSize = MediaQuery.of(context).size;
+    //var deviceSize = MediaQuery.of(context).size;
 
     return BlocBuilder<ChallengesBloc, ChallengesState>(
       builder: (context, state) {
@@ -94,7 +104,7 @@ class _MyWidgetState extends State<CalendarEvent> {
               ),
 
               Container(
-                height: 150,
+                height: 130,
                 color: const Color(0XFF75A488),
                 child: Padding(
                   padding: const EdgeInsets.only(
@@ -110,10 +120,9 @@ class _MyWidgetState extends State<CalendarEvent> {
                           onFormatChanged: (format) {},
                           onDaySelected: (selectedDay, focusedDay) {
                             setState(() {
-                              // if (state is ChallengesLoaded) {
-                              //   state.challenges
-
-                              // }
+                              if (state is ChallengesLoaded) {
+                                state.challenges;
+                              }
                               _selectedDay = selectedDay;
                               _selectedEvents = _events[selectedDay] ?? [];
                             });
@@ -172,7 +181,7 @@ class _MyWidgetState extends State<CalendarEvent> {
                         ),
                       ),
                     ),
-                    child: eventDetails(eventDetails: eventDataSet[1]),
+                    child: _buildChallengeDetails(state),
                   ),
                 ),
               )
@@ -182,62 +191,92 @@ class _MyWidgetState extends State<CalendarEvent> {
       },
     );
   }
-}
 
-Widget eventDetails({required EventData eventDetails}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 42.1),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        //const SizedBox(height: 1),
-        // Add your event details UI here, including picture, description, and join button
-        // Example:
-        ClipRRect(
-          borderRadius: BorderRadius.circular(42.07),
-          child: Image.network(
-            .eventImaeventDetailsge,
-            width: 822.4,
-            height: 368,
-            fit: BoxFit.cover,
-          ),
-        ),
+  Widget _buildChallengeDetails(ChallengesState state) {
+    if (state is ChallengesLoaded) {
+      final List<Challenge> challenges = state.challenges;
+      final selectedDateChallenges = challenges
+          .where((challenge) =>
+              (_events[_selectedDay] ?? []).contains(challenge.categoryId))
+          .toList();
+      print('Selected Day: $_selectedDay');
+      print('Events Map: $_events');
 
-        const SizedBox(height: 15),
-
-        Text(
-          eventDetails.eventTitle,
-          style: kFontFamily(
-            color: Colors.black,
-            fontSize: 25,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        Text(
-          eventDetails.eventLocation,
-          style: kFontFamily(
-            color: const Color.fromARGB(116, 116, 116, 1),
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        Text(
-          eventDetails.description,
-          style: kFontFamily(
-            color: Colors.black,
-            fontSize: 14,
-            fontWeight: FontWeight.w300,
-          ),
-        ),
-
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: () {
-            // Handle join button click
+      if (selectedDateChallenges.isNotEmpty) {
+        return ListView.builder(
+          itemCount: selectedDateChallenges.length,
+          itemBuilder: (context, index) {
+            return eventDetails(eventDetails_: selectedDateChallenges[index]);
           },
-          child: const Text("Join Now"),
-        ),
-      ],
-    ),
-  );
+        );
+      } else {
+        return Center(
+          child: Text(
+            'No challenges for selected date',
+            style: kFontFamily(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        );
+      }
+    } else {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+  }
+
+  Widget eventDetails({required Challenge eventDetails_}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 42.1),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(42.07),
+            child: Image.network(
+              eventDetails_.imageURL,
+              width: 822.4,
+              height: 368,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(height: 15),
+          Text(
+            eventDetails_.title,
+            style: kFontFamily(
+              color: Colors.black,
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          Text(
+            'Date: ${DateFormat('MMMM d, y').format(eventDetails_.startDateTime)}',
+            style: kFontFamily(
+              color: const Color.fromARGB(116, 116, 116, 1),
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          Text(
+            'Description: ${eventDetails_.description}',
+            style: kFontFamily(
+              color: Colors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              // Handle join button click
+            },
+            child: const Text("Join Now"),
+          ),
+        ],
+      ),
+    );
+  }
 }

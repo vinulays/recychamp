@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class Challenge {
   String? id;
   String title;

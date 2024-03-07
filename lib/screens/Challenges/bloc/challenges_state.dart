@@ -17,6 +17,8 @@ class ChallengesLoaded extends ChallengesState {
 
   @override
   List<Object?> get props => [challenges];
+
+  
 }
 
 class ChallengesError extends ChallengesState {}

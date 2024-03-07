@@ -69,7 +69,9 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
     DateTime currentDateTime = DateTime.now();
 
     List<String> acceptedParticipants;
+    List<String> submittedParticipants;
     bool? isAccepted;
+    bool? isSubmitted;
 
     List<String>? ruleList;
 
@@ -85,12 +87,14 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
           startDateTime = state.challenge.startDateTime.toString();
           endDateTime = state.challenge.endDateTime.toString();
           acceptedParticipants = state.challenge.acceptedParticipants;
+          submittedParticipants = state.challenge.submittedParticipants;
           isAccepted = acceptedParticipants.contains(userId);
+          isSubmitted = submittedParticipants.contains(userId);
         }
         return Scaffold(
           floatingActionButton: (userRole == "admin" || userRole == "organizer")
               ? Padding(
-                  padding: const EdgeInsets.only(bottom: 80, right: 12),
+                  padding: const EdgeInsets.only(bottom: 20, right: 12),
                   child: SpeedDial(
                     openCloseDial: isDialOpen,
                     icon: Icons.settings,
@@ -330,9 +334,9 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                       ],
                     ),
 
-                    // * If challenge is accepted, display the progress bar
+                    // * If challenge/event is accepted, display the progress bar
                     // todo: check the logged user has accepted the challenge
-                    if (isAccepted! && challengeType == "challenge")
+                    if (isAccepted!)
                       Column(
                         children: [
                           const SizedBox(
@@ -357,67 +361,99 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                 )
                               ],
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                Text.rich(
-                                  TextSpan(
+                            child: (isSubmitted!)
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      TextSpan(
-                                        text: 'You have ',
-                                        style: GoogleFonts.poppins(
-                                          color: Colors.black
-                                              .withOpacity(0.6499999761581421),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: '3 days',
-                                        style: GoogleFonts.poppins(
-                                          color: Colors.black
-                                              .withOpacity(0.6499999761581421),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                          height: 0,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: ' to complete the challenge !',
-                                        style: GoogleFonts.poppins(
-                                          color: Colors.black
-                                              .withOpacity(0.6499999761581421),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          (Text(
+                                            "You have completed this ${challengeType == "challenge" ? "challenge" : "event"}",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 14),
+                                          )),
+                                          const SizedBox(
+                                            width: 7,
+                                          ),
+                                          const Icon(
+                                            Icons.check_circle_outline_rounded,
+                                            color: Colors.green,
+                                          )
+                                        ],
                                       ),
                                     ],
+                                  )
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: 'You have ',
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black.withOpacity(
+                                                    0.6499999761581421),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                height: 0,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: '3 days',
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black.withOpacity(
+                                                    0.6499999761581421),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                                height: 0,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  ' to complete the challenge !',
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black.withOpacity(
+                                                    0.6499999761581421),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                height: 0,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal:
+                                                deviceSize.width * 0.01),
+                                        child: LinearPercentIndicator(
+                                          barRadius:
+                                              const Radius.circular(16.83),
+                                          lineHeight: 20.0,
+                                          percent: 0.35,
+                                          animation: true,
+                                          animationDuration: 1000,
+                                          backgroundColor:
+                                              const Color(0xffC8E8D5),
+                                          progressColor:
+                                              const Color(0xff75A488),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: deviceSize.width * 0.01),
-                                  child: LinearPercentIndicator(
-                                    barRadius: const Radius.circular(16.83),
-                                    lineHeight: 20.0,
-                                    percent: 0.35,
-                                    animation: true,
-                                    animationDuration: 1000,
-                                    backgroundColor: const Color(0xffC8E8D5),
-                                    progressColor: const Color(0xff75A488),
-                                  ),
-                                )
-                              ],
-                            ),
                           ),
                         ],
                       ),
@@ -546,62 +582,67 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.all(deviceSize.width * 0.05),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          onPressed: () {
-                            // * If not accepteed, Parent agreement form (open in a fullscreen dialog). Otherwise submit form
-                            if (!isAccepted!) {
-                              showGeneralDialog(
-                                  context: context,
-                                  barrierColor: Colors.white,
-                                  pageBuilder:
-                                      (context, animation, secondaryAnimation) {
-                                    return ParentAgreement(
-                                      onAccept: () {
-                                        context
-                                            .read<ChallengeDetailsBloc>()
-                                            .add(AcceptChallengeEvent(
-                                                state.challenge.id!));
-                                      },
-                                    );
-                                  });
-                            } else if (isAccepted!) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChallengeSubmission(
-                                            challenge: state.challenge,
-                                          )));
-                            }
-                            // todo add challenge submit form
-                          },
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.8),
+                    // * displaying the accept/submit button only if the signed user role is parent
+                    if (userRole == "parent")
+                      Container(
+                        margin: EdgeInsets.all(deviceSize.width * 0.05),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: TextButton(
+                            onPressed: () {
+                              // * If not accepteed, Parent agreement form (open in a fullscreen dialog). Otherwise submit form
+                              if (!isAccepted!) {
+                                showGeneralDialog(
+                                    context: context,
+                                    barrierColor: Colors.white,
+                                    pageBuilder: (context, animation,
+                                        secondaryAnimation) {
+                                      return ParentAgreement(
+                                        onAccept: () {
+                                          context
+                                              .read<ChallengeDetailsBloc>()
+                                              .add(AcceptChallengeEvent(
+                                                  state.challenge.id!));
+                                        },
+                                      );
+                                    });
+                              } else if (isAccepted!) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChallengeSubmission(
+                                              challenge: state.challenge,
+                                            )));
+                              }
+                              // todo add challenge submit form
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.8),
+                                ),
                               ),
+                              padding: MaterialStateProperty.all(
+                                  const EdgeInsets.symmetric(vertical: 17.88)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
                             ),
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.symmetric(vertical: 17.88)),
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.black),
-                          ),
-                          child: Text(
-                            (!isAccepted!)
-                                ? "Join the Challenge"
-                                : "Submit the Challenge",
-                            style: GoogleFonts.poppins(
-                                fontSize: 19,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white),
+                            child: Text(
+                              (!isAccepted!)
+                                  ? "Join the Challenge"
+                                  : (isSubmitted!)
+                                      ? "View Submission"
+                                      : "Submit the Challenge",
+                              style: GoogleFonts.poppins(
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white),
+                            ),
                           ),
                         ),
-                      ),
-                    )
+                      )
                   ],
                 )
               : (state is ChallengeLoading)

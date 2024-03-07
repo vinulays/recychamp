@@ -43,13 +43,13 @@ dependencies:
   firebase_core: ^2.24.2
   cloud_firestore: ^4.15.4
   firebase_auth: ^4.7.2
-  firebase_storage: ^11.2.5
+  firebase_storage: ^11.6.8
   font_awesome_flutter: ^10.5.0
   jiffy: ^6.2.1
   uuid: ^4.3.3
   fluttertoast: ^8.2.2
   image_picker: ^1.0.7
-  video_player: ^2.0.4
+  video_player: ^2.8.3
   readmore: ^2.2.0
   avatar_glow: ^3.0.1
   bloc: ^8.1.2
@@ -64,6 +64,7 @@ dependencies:
   table_calendar: 3.0.9
   flutter_rating_bar: ^4.0.1
   intl: ^0.18.0
+  permission_handler: ^11.3.0
 
 dev_dependencies:
   flutter_test:

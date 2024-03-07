@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:recychamp/models/challenge.dart';
 
 class ChallengeService {
   final FirebaseFirestore _firestore;
+  final FirebaseStorage _storage;
 
-  ChallengeService({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+  ChallengeService(
+      {required FirebaseStorage storage, required FirebaseFirestore firestore})
+      : _firestore = firestore,
+        _storage = storage;
 
   // * getting challenges from firebase
   Future<List<Challenge>> getChallenges() async {
@@ -32,6 +37,8 @@ class ChallengeService {
             maximumParticipants: data['maximumParticipants'],
             acceptedParticipants: List<String>.from(data[
                 "acceptedParticipants"]), // * converting dynamic array to string array
+            submittedParticipants: List<String>.from(data[
+                "submittedParticipants"]), // * converting dynamic array to string array
             difficulty: data['difficulty'],
             imageURL: data['imageURL'],
             type: data['type'],
@@ -68,6 +75,8 @@ class ChallengeService {
             maximumParticipants: data['maximumParticipants'],
             acceptedParticipants: List<String>.from(data[
                 "acceptedParticipants"]), // * converting dynamic array to string array
+            submittedParticipants: List<String>.from(data[
+                "submittedParticipants"]), // * converting dynamic array to string array
             difficulty: data['difficulty'],
             imageURL: data['imageURL'],
             type: data['type'],
@@ -110,6 +119,8 @@ class ChallengeService {
         "completedPercentage": 0,
         "maximumParticipants": int.parse(
             formData["maximumParticipants"]), // * converting string to integer
+        "acceptedParticipants": [],
+        "submittedParticipants": [],
         "difficulty": formData["difficulty"],
         "imageURL": formData["imageURL"],
         "rating": 0,
@@ -149,7 +160,6 @@ class ChallengeService {
             formData["endTime"].minute),
         "maximumParticipants": int.parse(
             formData["maximumParticipants"]), // * converting string to integer
-        "acceptedParticipants": [],
         "difficulty": formData["difficulty"],
         "imageURL": formData["imageURL"],
         "categoryId": formData["categoryId"],
@@ -190,6 +200,50 @@ class ChallengeService {
       });
     } catch (e) {
       throw Exception("Failed to accept challenge $e");
+    }
+  }
+
+  // * submit challenge to firebase
+  Future<void> submitChallenge(
+      String userId, Map<String, dynamic> formData, String challengeId) async {
+    List<String> imageURLs = [];
+
+    try {
+      DocumentReference challengeRef =
+          _firestore.collection("challenges").doc(challengeId);
+
+      // * uploading images to firestore and getting the URLs
+      for (String imagePath in formData["imageURLs"]) {
+        String fileExtension = imagePath.split(".").last;
+        String imageName = DateTime.now().microsecondsSinceEpoch.toString();
+
+        Reference ref = _storage
+            .ref()
+            .child("submissionImages")
+            .child("$imageName.$fileExtension");
+
+        File imageFile = File(imagePath);
+        UploadTask uploadTask = ref.putFile(imageFile);
+        TaskSnapshot taskSnapshot = await uploadTask;
+        String downloadURL = await taskSnapshot.ref.getDownloadURL();
+
+        imageURLs.add(downloadURL);
+      }
+
+      await _firestore.collection("submissions").add({
+        "challengeId": challengeId,
+        "userId": userId,
+        "description": formData["description"],
+        "imageURLs": imageURLs,
+        "rating": formData["rating"],
+        "experience": formData["experience"] ?? "Not Given"
+      });
+
+      await challengeRef.update({
+        'submittedParticipants': FieldValue.arrayUnion([userId]),
+      });
+    } catch (e) {
+      throw Exception("Failed to submit challenge: $e");
     }
   }
 }

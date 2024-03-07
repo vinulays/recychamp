@@ -29,7 +29,7 @@ class ChallengeDetailsBloc
     });
 
     // * Challenge accept event
-    // todo: user id should be added to the  accepted challenge's user list
+    // * user id should be added to the  accepted challenge's user list
     on<AcceptChallengeEvent>((event, emit) async {
       emit(ChallengeAccepting());
 
@@ -47,14 +47,25 @@ class ChallengeDetailsBloc
           emit(ChallengeAcceptingError("User not authenticated"));
         }
       } catch (e) {
-        emit(ChallengeAcceptingError("Failed to accept challenge $e"));
+        emit(ChallengeAcceptingError("Failed to accept the challenge: $e"));
       }
     });
 
     // * Challenge submit event
     // todo: submission should be added to the firebase including the challenge id, user id
-    on<SubmitChallengeEvent>((event, emit) {
+    on<SubmitChallengeEvent>((event, emit) async {
       emit(ChallengeSubmitting());
+      try {
+        final User? user = _auth.currentUser;
+        if (user != null) {
+          final userId = user.uid;
+
+          await _challengeRepository.submitChallenge(userId, event.formData);
+          emit(ChallengeSubmitted());
+        }
+      } catch (e) {
+        emit(ChallengeSubmittingError("Failed to submit the challenge: $e"));
+      }
     });
   }
 }

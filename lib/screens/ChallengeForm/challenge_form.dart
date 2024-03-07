@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/models/challenge_category.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
@@ -79,17 +80,20 @@ class _ChallengeFormState extends State<ChallengeForm> {
 
   // * selected image file from the file system (use flutter file picker library)
   Future<void> _getImage() async {
-    FilePickerResult? pickedImage = await FilePicker.platform
-        .pickFiles(allowMultiple: false, type: FileType.image);
+    PermissionStatus status = await Permission.photos.request();
+    if (status.isGranted) {
+      FilePickerResult? pickedImage = await FilePicker.platform
+          .pickFiles(allowMultiple: false, type: FileType.image);
 
-    setState(() {
-      if (pickedImage != null) {
-        _image = File(pickedImage.files.single.path!);
-        _getImageSize();
-        _getImageName();
-        _uploadImageToFirebase();
-      }
-    });
+      setState(() {
+        if (pickedImage != null) {
+          _image = File(pickedImage.files.single.path!);
+          _getImageSize();
+          _getImageName();
+          _uploadImageToFirebase();
+        }
+      });
+    }
   }
 
   //  * getting selected file size from utils file

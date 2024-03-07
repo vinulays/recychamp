@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -9,8 +9,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:recychamp/models/challenge.dart';
-import 'package:recychamp/ui/form_input_field.dart';
 import 'package:recychamp/ui/form_text_area.dart';
 
 class ChallengeSubmission extends StatefulWidget {
@@ -23,24 +23,52 @@ class ChallengeSubmission extends StatefulWidget {
 
 class _ChallengeSubmissionState extends State<ChallengeSubmission> {
   final _formKey = GlobalKey<FormBuilderState>();
-  String? imageURL;
-  File? _image;
+  List<String> imagePaths = [];
 
-  Future<void> _getImage() async {
-    FilePickerResult? pickedImage = await FilePicker.platform
-        .pickFiles(allowMultiple: false, type: FileType.image);
+  // * getting selected image file paths and adding to the imagePaths array
+  // * for sdkVersion > 32 Permission.photos (currently using sdkVersion 34)
+  // * for sdkVersion < 32 Permission.storage
+  Future<void> _getImages() async {
+    PermissionStatus status = await Permission.photos.request();
 
-    setState(() {
-      if (pickedImage != null) {
-        _image = File(pickedImage.files.single.path!);
+    if (status.isGranted) {
+      FilePickerResult? result = await FilePicker.platform
+          .pickFiles(allowMultiple: true, type: FileType.image);
 
-        // todo: upload selected images before submission
-        // _getImageSize();
-        // _getImageName();
-        // _uploadImageToFirebase();
-      }
-    });
+      setState(() {
+        if (result != null) {
+          for (PlatformFile file in result.files) {
+            String imagePath = file.path!;
+            setState(() {
+              imagePaths.add(imagePath);
+              _formKey.currentState!.fields["imageURLs"]!.didChange(imagePaths);
+            });
+          }
+
+          // todo: upload selected images with submission
+        }
+      });
+    } else {
+      debugPrint("access not granted");
+    }
   }
+
+  // Future<void> _deleteImageFromFirebase() async {
+  //   Reference imageRef = FirebaseStorage.instance.refFromURL(imageURL!);
+  //   await imageRef.delete();
+
+  //   if (mounted) {
+  //     setState(() {
+  //       _image = null;
+  //       imageURL = null;
+
+  //       // * resetting the imageURL field
+  //       _formKey.currentState?.setInternalFieldValue("imageURL", null);
+  //       _formKey.currentState?.fields["imageURL"]
+  //           ?.invalidate("Cover photo is required");
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +114,7 @@ class _ChallengeSubmissionState extends State<ChallengeSubmission> {
                                   )),
                               TextButton(
                                   onPressed: () async {
-                                    // * deleting the uploaded image if go back without submitting
+                                    // todo: deleting the uploaded image if go back without submitting
 
                                     Navigator.of(context).pop();
                                     Navigator.of(context).pop();
@@ -243,6 +271,7 @@ class _ChallengeSubmissionState extends State<ChallengeSubmission> {
                         const SizedBox(
                           height: 20,
                         ),
+                        // * challenge submit form
                         FormBuilder(
                           key: _formKey,
                           child: Column(
@@ -295,118 +324,111 @@ class _ChallengeSubmissionState extends State<ChallengeSubmission> {
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    if (imageURL == null)
-                                      Container(
-                                        margin:
-                                            const EdgeInsets.only(bottom: 8),
-                                        height: 200,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: ((_formKey
-                                                                .currentState !=
-                                                            null &&
-                                                        _formKey
-                                                                .currentState
-                                                                ?.fields[
-                                                                    "imageURL"]
-                                                                ?.value ==
-                                                            null))
-                                                    ? const Color(0xffba000d)
-                                                    : const Color(0xFF75A488),
-                                                width: 2),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(Icons.upload),
-                                            const SizedBox(
-                                              height: 5,
+                                    // if (imageURL == null)
+                                    // * submission photos upload button
+                                    Container(
+                                      margin: const EdgeInsets.only(bottom: 8),
+                                      height: 200,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: ((_formKey.currentState !=
+                                                          null &&
+                                                      _formKey
+                                                              .currentState
+                                                              ?.fields[
+                                                                  "imageURLs"]
+                                                              ?.value ==
+                                                          null))
+                                                  ? const Color(0xffba000d)
+                                                  : const Color(0xFF75A488),
+                                              width: 2),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(Icons.upload),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            "Upload photos",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 16),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            "JPG, PNG, SVG",
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 14,
+                                              color: Colors.black.withOpacity(
+                                                  0.6000000238418579),
                                             ),
-                                            Text(
-                                              "Upload photos",
-                                              style: GoogleFonts.poppins(
-                                                  fontSize: 16),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              "JPG, PNG, SVG",
-                                              style: GoogleFonts.poppins(
-                                                fontSize: 14,
-                                                color: Colors.black.withOpacity(
-                                                    0.6000000238418579),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            FormBuilderField(
-                                                name: "imageURL",
-                                                builder:
-                                                    (FormFieldState<dynamic>
-                                                        field) {
-                                                  return TextButton(
-                                                    style: ButtonStyle(
-                                                      shape: MaterialStateProperty
-                                                          .all<
-                                                              RoundedRectangleBorder>(
-                                                        RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                        ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          FormBuilderField(
+                                              name: "imageURLs",
+                                              builder: (FormFieldState<dynamic>
+                                                  field) {
+                                                return TextButton(
+                                                  style: ButtonStyle(
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
                                                       ),
-                                                      padding:
-                                                          MaterialStateProperty
-                                                              .all(const EdgeInsets
-                                                                  .symmetric(
-                                                                  vertical:
-                                                                      10.88,
-                                                                  horizontal:
-                                                                      20)),
-                                                      backgroundColor:
-                                                          MaterialStateProperty.all<
-                                                              Color>(const Color(
-                                                                  0xFF75A488)
-                                                              .withOpacity(
-                                                                  0.6000000238418579)),
                                                     ),
-                                                    onPressed: _image == null
-                                                        ? _getImage
-                                                        : null,
-                                                    child: Text(
-                                                      "Choose files",
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color:
-                                                                  Colors.black),
-                                                    ),
-                                                  );
-                                                },
-                                                autovalidateMode:
-                                                    AutovalidateMode
-                                                        .onUserInteraction,
-                                                validator: (value) {
-                                                  if (_image == null) {
-                                                    return "Cover photo is required";
-                                                  }
-                                                  return null;
-                                                })
-                                          ],
-                                        ),
+                                                    padding:
+                                                        MaterialStateProperty
+                                                            .all(
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    vertical:
+                                                                        10.88,
+                                                                    horizontal:
+                                                                        20)),
+                                                    backgroundColor:
+                                                        MaterialStateProperty.all<
+                                                            Color>(const Color(
+                                                                0xFF75A488)
+                                                            .withOpacity(
+                                                                0.6000000238418579)),
+                                                  ),
+                                                  onPressed: _getImages,
+                                                  child: Text(
+                                                    "Choose files",
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: Colors.black),
+                                                  ),
+                                                );
+                                              },
+                                              autovalidateMode: AutovalidateMode
+                                                  .onUserInteraction,
+                                              validator: (value) {
+                                                if (imagePaths.isEmpty) {
+                                                  return "Cover photo is required";
+                                                }
+                                                return null;
+                                              })
+                                        ],
                                       ),
+                                    ),
 
-                                    // * checking whether the form contains any errros related to the imageURL
+                                    // * checking whether the form contains any errros related to the imageURLs
                                     if (_formKey.currentState != null &&
                                         _formKey.currentState
-                                                ?.fields["imageURL"]?.value ==
+                                                ?.fields["imageURLs"]?.value ==
                                             null)
                                       Container(
                                         margin:
@@ -421,59 +443,75 @@ class _ChallengeSubmissionState extends State<ChallengeSubmission> {
                                   ],
                                 ),
                                 // * Uploaded submission images
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                      top: 10, bottom: 10),
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      SizedBox(
-                                        width: 120,
-                                        height: 120,
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              "https://firebasestorage.googleapis.com/v0/b/recychamp.appspot.com/o/challengeThumbnails%2F1709211636709.jpg?alt=media&token=7ce24606-fa27-409b-827a-e13cd7fa2659",
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover),
-                                            ),
-                                          ),
-                                          placeholder: (context, url) =>
-                                              const Center(
-                                                  child:
-                                                      CircularProgressIndicator()),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                        ),
-                                      ),
-                                      Positioned(
-                                          top: -12,
-                                          right: -8,
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              // _deleteImageFromFirebase();
-                                            },
-                                            child: Container(
-                                              height: 34,
-                                              width: 34,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.red,
+                                Wrap(
+                                  spacing: 20,
+                                  children: List.generate(
+                                    imagePaths.length,
+                                    (index) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 10, bottom: 10),
+                                        child: Stack(
+                                          clipBehavior: Clip.none,
+                                          children: [
+                                            SizedBox(
+                                              width: 120,
+                                              height: 120,
+                                              child: Container(
+                                                decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          100)),
-                                              child: const Icon(
-                                                Icons.delete,
-                                                color: Colors.white,
+                                                      BorderRadius.circular(10),
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: FileImage(
+                                                      File(imagePaths[index]),
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                // imageBuilder:
+                                                //     (context, imageProvider) =>
+                                                //         Container(
+                                                //   decoration: BoxDecoration(
+                                                //     borderRadius:
+                                                //         BorderRadius.circular(
+                                                //             10),
+                                                //     image: DecorationImage(
+                                                //         image: imageProvider,
+                                                //         fit: BoxFit.cover),
+                                                //   ),
+                                                // ),
                                               ),
                                             ),
-                                          ))
-                                    ],
+                                            Positioned(
+                                                top: -12,
+                                                right: -8,
+                                                child: GestureDetector(
+                                                  // * removing the image from image paths array when clicked the basket icon
+                                                  onTap: () {
+                                                    setState(() {
+                                                      imagePaths
+                                                          .removeAt(index);
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    height: 34,
+                                                    width: 34,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.red,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(100)),
+                                                    child: const Icon(
+                                                      Icons.delete,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ))
+                                          ],
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
 
@@ -509,20 +547,28 @@ class _ChallengeSubmissionState extends State<ChallengeSubmission> {
                                   height: 10,
                                 ),
 
-                                RatingBar.builder(
-                                  initialRating: 3,
-                                  minRating: 1,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  itemCount: 5,
-                                  itemPadding:
-                                      const EdgeInsets.only(right: 4.0),
-                                  itemBuilder: (context, _) => const Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
-                                  onRatingUpdate: (rating) {
-                                    print(rating);
+                                // * registering rating bar in form builder using formbuilderfield
+                                FormBuilderField(
+                                  name: "rating",
+                                  builder: (FormFieldState<dynamic> field) {
+                                    return RatingBar.builder(
+                                      initialRating: 0,
+                                      minRating: 1,
+                                      direction: Axis.horizontal,
+                                      allowHalfRating: false,
+                                      itemCount: 5,
+                                      itemPadding:
+                                          const EdgeInsets.only(right: 4.0),
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      onRatingUpdate: (rating) {
+                                        _formKey.currentState!
+                                            .setInternalFieldValue(
+                                                "rating", rating);
+                                      },
+                                    );
                                   },
                                 ),
                                 const SizedBox(
@@ -535,8 +581,6 @@ class _ChallengeSubmissionState extends State<ChallengeSubmission> {
                                   formBuilderName: "experiance",
                                   maxLines: 4,
                                   validators: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(
-                                        errorText: "Description is required"),
                                     FormBuilderValidators.minLength(100,
                                         errorText:
                                             "Description should have at least 100 letters"),
@@ -549,7 +593,10 @@ class _ChallengeSubmissionState extends State<ChallengeSubmission> {
                                       margin: const EdgeInsets.only(
                                           top: 5, bottom: 10),
                                       child: TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          _formKey.currentState!.save();
+                                          print(_formKey.currentState!.value);
+                                        },
                                         style: ButtonStyle(
                                           shape: MaterialStateProperty.all<
                                               RoundedRectangleBorder>(

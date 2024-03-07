@@ -30,4 +30,9 @@ class ChallengeRepository {
   Future<void> acceptChallenge(String challengeId, String userId) async {
     await _challengeService.acceptChallenge(challengeId, userId);
   }
+
+  Future<void> submitChallenge(
+      String userId, Map<String, dynamic> formData) async {
+    await _challengeService.submitChallenge(userId, formData);
+  }
 }

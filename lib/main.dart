@@ -28,7 +28,9 @@ void main() async {
 
 Future<void> signInManually() async {
   try {
-    String email = 'vinula@gmail.com';
+    // * admin = ubetatta
+    // * organizer = vinula
+    String email = 'ubetatta@gmail.com';
     String password = '12345678';
 
     UserCredential userCredential =

@@ -192,4 +192,21 @@ class ChallengeService {
       throw Exception("Failed to accept challenge $e");
     }
   }
+
+  // * submit challenge to firebase
+  Future<void> submitChallenge(
+      String userId, Map<String, dynamic> formData) async {
+    try {
+      await _firestore.collection("submissions").add({
+        "challengeId": formData["challengeId"],
+        "userId": userId,
+        "description": formData["description"],
+        "imageURLs": formData["imageURLs"],
+        "rating": formData["rating"],
+        "experience": formData["experience"]!
+      });
+    } catch (e) {
+      throw Exception("Failed to submit challenge: $e");
+    }
+  }
 }

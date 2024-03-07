@@ -37,6 +37,8 @@ class ChallengeService {
             maximumParticipants: data['maximumParticipants'],
             acceptedParticipants: List<String>.from(data[
                 "acceptedParticipants"]), // * converting dynamic array to string array
+            submittedParticipants: List<String>.from(data[
+                "submittedParticipants"]), // * converting dynamic array to string array
             difficulty: data['difficulty'],
             imageURL: data['imageURL'],
             type: data['type'],
@@ -73,6 +75,8 @@ class ChallengeService {
             maximumParticipants: data['maximumParticipants'],
             acceptedParticipants: List<String>.from(data[
                 "acceptedParticipants"]), // * converting dynamic array to string array
+            submittedParticipants: List<String>.from(data[
+                "submittedParticipants"]), // * converting dynamic array to string array
             difficulty: data['difficulty'],
             imageURL: data['imageURL'],
             type: data['type'],
@@ -115,6 +119,8 @@ class ChallengeService {
         "completedPercentage": 0,
         "maximumParticipants": int.parse(
             formData["maximumParticipants"]), // * converting string to integer
+        "acceptedParticipants": [],
+        "submittedParticipants": [],
         "difficulty": formData["difficulty"],
         "imageURL": formData["imageURL"],
         "rating": 0,
@@ -154,7 +160,6 @@ class ChallengeService {
             formData["endTime"].minute),
         "maximumParticipants": int.parse(
             formData["maximumParticipants"]), // * converting string to integer
-        "acceptedParticipants": [],
         "difficulty": formData["difficulty"],
         "imageURL": formData["imageURL"],
         "categoryId": formData["categoryId"],
@@ -204,6 +209,9 @@ class ChallengeService {
     List<String> imageURLs = [];
 
     try {
+      DocumentReference challengeRef =
+          _firestore.collection("challenges").doc(challengeId);
+
       // * uploading images to firestore and getting the URLs
       for (String imagePath in formData["imageURLs"]) {
         String fileExtension = imagePath.split(".").last;
@@ -229,6 +237,10 @@ class ChallengeService {
         "imageURLs": imageURLs,
         "rating": formData["rating"],
         "experience": formData["experience"] ?? "Not Given"
+      });
+
+      await challengeRef.update({
+        'submittedParticipants': FieldValue.arrayUnion([userId]),
       });
     } catch (e) {
       throw Exception("Failed to submit challenge: $e");

@@ -10,6 +10,7 @@ class Challenge {
   int completedPercentage;
   int maximumParticipants;
   List<String> acceptedParticipants;
+  List<String> submittedParticipants;
   String difficulty;
   String imageURL;
   String? type;
@@ -29,6 +30,7 @@ class Challenge {
       required this.completedPercentage,
       required this.maximumParticipants,
       required this.acceptedParticipants,
+      required this.submittedParticipants,
       required this.difficulty,
       required this.imageURL,
       this.type,

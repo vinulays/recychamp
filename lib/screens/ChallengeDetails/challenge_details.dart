@@ -591,6 +591,7 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           child: TextButton(
                             onPressed: () {
                               // * If not accepteed, Parent agreement form (open in a fullscreen dialog). Otherwise submit form
+                              // todo: if submitted, view the submission
                               if (!isAccepted!) {
                                 showGeneralDialog(
                                     context: context,

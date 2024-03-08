@@ -62,9 +62,9 @@ class _MyWidgetState extends State<CalendarEvent> {
             difficulty: data['difficulty'],
             imageURL: data['imageURL'],
             type: data['type'],
-            rating: double.parse(data['rating']
-                .toString()), // * converting firebase number format to double format
-            categoryId: data["categoryId"]);
+            rating: double.parse(data['rating'].toString()), // * converting firebase number format to double format
+            categoryId: data["categoryId"],
+            submittedParticipants: ['submittedParticipants']);
 
         challengesResult.add(challenge);
       }

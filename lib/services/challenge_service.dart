@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:recychamp/models/challenge.dart';
+import 'package:recychamp/models/submission.dart';
 
 class ChallengeService {
   final FirebaseFirestore _firestore;
@@ -239,11 +240,44 @@ class ChallengeService {
         "experience": formData["experience"] ?? "Not Given"
       });
 
+      // * adding user id to the submiitted participants array in the submitted challenge
       await challengeRef.update({
         'submittedParticipants': FieldValue.arrayUnion([userId]),
       });
     } catch (e) {
       throw Exception("Failed to submit challenge: $e");
+    }
+  }
+
+  // * getting submission using user id and challenge id from firebase
+  Future<Submission?> getSubmission(String userId, String challengeId) async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('submissions')
+          .where('userId', isEqualTo: userId)
+          .where('challengeId', isEqualTo: challengeId)
+          .limit(1) // * Limiting the query to retrieve only one document
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot submissionSnapshot = querySnapshot.docs.first;
+        Map<String, dynamic> data =
+            submissionSnapshot.data() as Map<String, dynamic>;
+
+        Submission submission = Submission(
+            id: submissionSnapshot.id,
+            challengeId: challengeId,
+            userId: userId,
+            description: data["description"],
+            imageURLs: data["imageURLs"],
+            rating: data["rating"]);
+
+        return submission;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch the submission: $e");
     }
   }
 }

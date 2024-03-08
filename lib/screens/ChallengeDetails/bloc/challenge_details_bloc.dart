@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart' show Bloc;
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
 
@@ -20,8 +20,8 @@ class ChallengeDetailsBloc
     on<FetchChallengeDetailsEvent>((event, emit) async {
       emit(ChallengeLoading());
       try {
-        final Challenge challenge = await _challengeRepository
-            .getChallengeById(event.challengeID);
+        final Challenge challenge =
+            await _challengeRepository.getChallengeById(event.challengeID);
         emit(ChallengeLoaded(challenge));
       } catch (e) {
         emit(ChallengeLoadingError("Failed to fetch the challenge $e"));

@@ -12,7 +12,8 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ChallengeForm/challenge_form.dart';
-import 'package:recychamp/screens/ChallengeSubmission/challenge_submission.dart';
+import 'package:recychamp/screens/ChallengeSubmissionForm/challenge_submission_form.dart';
+import 'package:recychamp/screens/ChallengeSubmissionView/challenge_submission_view.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/ParentAgreement/parent_agreement.dart';
 import 'package:recychamp/ui/challenge_details_row.dart';
@@ -607,12 +608,20 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                         },
                                       );
                                     });
-                              } else if (isAccepted!) {
+                              } else if (isAccepted! && !isSubmitted!) {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             ChallengeSubmission(
+                                              challenge: state.challenge,
+                                            )));
+                              } else if (isSubmitted!) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChallengeSubmissionView(
                                               challenge: state.challenge,
                                             )));
                               }

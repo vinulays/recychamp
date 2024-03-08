@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart' show Bloc;
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
 

@@ -42,7 +42,7 @@ class _ShopState extends State<Shop> {
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 25)),
-                  const SizedBox(width: 180),
+                  const SizedBox(width: 215),
                   const Icon(Icons.settings)
                 ],
               ),
@@ -100,6 +100,217 @@ class _ShopState extends State<Shop> {
                         fontSize: 17, color: const Color(0xff75A488)),
                     hintText: "Search Items"),
               ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        color: const Color.fromRGBO(117, 164, 136,
+                            1), // Set your desired background color here
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Image.network(
+                            "https://image.similarpng.com/very-thumbnail/2021/06/Men's-black-blank-T-shirt-template-on-transparent-background-PNG.png",
+                            width: 143,
+                            height: 143.258,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const Text("Eco T-shirt"),
+                      const Text("LKR 1450"),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        color: const Color.fromRGBO(117, 164, 136,
+                            1), // Set your desired background color here
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Image.network(
+                            "https://image.similarpng.com/very-thumbnail/2021/06/Men's-black-blank-T-shirt-template-on-transparent-background-PNG.png",
+                            width: 143,
+                            height: 143.258,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const Text("Eco T-shirt"),
+                      const Text("LKR 1450"),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        color: const Color.fromRGBO(117, 164, 136,
+                            1), // Set your desired background color here
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Image.network(
+                            "https://image.similarpng.com/very-thumbnail/2021/06/Men's-black-blank-T-shirt-template-on-transparent-background-PNG.png",
+                            width: 143,
+                            height: 143.258,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const Text("Eco T-shirt"),
+                      const Text("LKR 1450"),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        color: const Color.fromRGBO(117, 164, 136,
+                            1), // Set your desired background color here
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Image.network(
+                            "https://image.similarpng.com/very-thumbnail/2021/06/Men's-black-blank-T-shirt-template-on-transparent-background-PNG.png",
+                            width: 143,
+                            height: 143.258,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const Text("Eco T-shirt"),
+                      const Text("LKR 1450"),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        color: const Color.fromRGBO(117, 164, 136,
+                            1), // Set your desired background color here
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Image.network(
+                            "https://image.similarpng.com/very-thumbnail/2021/06/Men's-black-blank-T-shirt-template-on-transparent-background-PNG.png",
+                            width: 143,
+                            height: 143.258,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const Text("Eco T-shirt"),
+                      const Text("LKR 1450"),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        color: const Color.fromRGBO(117, 164, 136,
+                            1), // Set your desired background color here
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Image.network(
+                            "https://image.similarpng.com/very-thumbnail/2021/06/Men's-black-blank-T-shirt-template-on-transparent-background-PNG.png",
+                            width: 143,
+                            height: 143.258,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const Text("Eco T-shirt"),
+                      const Text("LKR 1450"),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        color: const Color.fromRGBO(117, 164, 136,
+                            1), // Set your desired background color here
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Image.network(
+                            "https://image.similarpng.com/very-thumbnail/2021/06/Men's-black-blank-T-shirt-template-on-transparent-background-PNG.png",
+                            width: 143,
+                            height: 143.258,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const Text("Eco T-shirt"),
+                      const Text("LKR 1450"),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        color: const Color.fromRGBO(117, 164, 136,
+                            1), // Set your desired background color here
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Image.network(
+                            "https://image.similarpng.com/very-thumbnail/2021/06/Men's-black-blank-T-shirt-template-on-transparent-background-PNG.png",
+                            width: 143,
+                            height: 143.258,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const Text("Eco T-shirt"),
+                      const Text("LKR 1450"),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
             ),
           ],
         ),

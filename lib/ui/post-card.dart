@@ -1,12 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
 import 'package:recychamp/ui/challenge_filters_bottom_sheet.dart';
 
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
   const PostCard({super.key});
 
+  @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
@@ -156,26 +162,120 @@ class PostCard extends StatelessWidget {
                         builder: (context) {
                           return FractionallySizedBox(
                             heightFactor: 0.9,
-                            child: Container(
-                              margin: const EdgeInsets.all(20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 46,
-                                        height: 46,
-                                        child: const CircleAvatar(
-                                          backgroundImage: NetworkImage(
-                                              "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww"),
-                                          backgroundColor: Colors.transparent,
-                                        ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: ListView(children: [
+                                    Container(
+                                      margin: const EdgeInsets.all(20),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                width: 46,
+                                                height: 46,
+                                                child: CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww"),
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Expanded(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: Colors.black
+                                                          .withOpacity(0.15)),
+                                                  child: Container(
+                                                    margin: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 5,
+                                                        horizontal: 7),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "Chamoth Mendis",
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700),
+                                                        ),
+                                                        Text(
+                                                          "gshkjkl  jjblbljknlknklnlk lknlknlknklnknk sdhardkkkdbnbjkbsajkbcjk asguiguisgdui ashjdbj",
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 14),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
+                                  ]),
+                                ),
+                                Container(
+                                  height: 60,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: deviceData.size.width * 0.05),
+                                  child: TextField(
+                                    onSubmitted: (query) {},
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 17,
+                                    ),
+                                    decoration: InputDecoration(
+                                        contentPadding:
+                                            const EdgeInsets.all(14),
+                                        suffixIconConstraints:
+                                            const BoxConstraints(
+                                                maxHeight: 26, minWidth: 26),
+                                        suffixIcon: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 20),
+                                          child: InkWell(
+                                            onTap: () {},
+                                            child: const Icon(Icons.send),
+                                          ),
+                                        ),
+                                        filled: true,
+                                        fillColor: const Color(0xffE6EEEA),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(12.62),
+                                        ),
+                                        hintStyle: GoogleFonts.poppins(
+                                            fontSize: 17,
+                                            color: const Color(0xff75A488)),
+                                        hintText: "Comment as Chamoth Mendis"),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           );
                         });

@@ -57,6 +57,8 @@ class _MyWidgetState extends State<CalendarEvent> {
             maximumParticipants: data['maximumParticipants'],
             acceptedParticipants: List<String>.from(data[
                 "acceptedParticipants"]), // * converting dynamic array to string array
+            submittedParticipants: List<String>.from(data[
+                "submittedParticipants"]), // * converting dynamic array to string array
             difficulty: data['difficulty'],
             imageURL: data['imageURL'],
             type: data['type'],

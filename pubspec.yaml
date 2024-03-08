@@ -53,7 +53,7 @@ dependencies:
   readmore: ^2.2.0
   avatar_glow: ^3.0.1
   bloc: ^8.1.2
-  meta: 1.11.0
+  meta: 1.10.0
   equatable: ^2.0.5
   flutter_form_builder: ^9.2.0
   path: ^1.8.3

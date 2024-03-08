@@ -20,8 +20,8 @@ class ChallengeDetailsBloc
     on<FetchChallengeDetailsEvent>((event, emit) async {
       emit(ChallengeLoading());
       try {
-        final Challenge challenge =
-            await _challengeRepository.getChallengeById(event.challengeID);
+        final Challenge challenge = await _challengeRepository
+            .getChallengeById(event.challengeID);
         emit(ChallengeLoaded(challenge));
       } catch (e) {
         emit(ChallengeLoadingError("Failed to fetch the challenge $e"));

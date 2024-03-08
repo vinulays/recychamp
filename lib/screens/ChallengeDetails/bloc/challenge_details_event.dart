@@ -20,5 +20,6 @@ class AcceptChallengeEvent extends ChallengeDetailsEvent {
 
 class SubmitChallengeEvent extends ChallengeDetailsEvent {
   final Map<String, dynamic> formData;
-  SubmitChallengeEvent(this.formData);
+  final String challengeId;
+  SubmitChallengeEvent(this.formData, this.challengeId);
 }

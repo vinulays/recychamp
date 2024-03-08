@@ -1,18 +1,19 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
-Future<File?> pickImage() async {
-  File? image;
-  final picker = ImagePicker();
-  final file = await picker.pickImage(
-    source: ImageSource.gallery,
-    maxHeight: 720,
-    maxWidth: 720,
-  );
+Future<List<int>?> ImagePick(ImageSource source) async {
+  final ImagePicker imagePicker = ImagePicker();
+  final XFile? file;
 
-  if (file != null) {
-    image = File(file.path);
+  try {
+    final pickedFile = await imagePicker.pickImage(source: source);
+    if (pickedFile != null) {
+      file = File(pickedFile.path) as XFile?;
+      return await file?.readAsBytes();
+    }
+  } catch (e) {
+    print('Error picking image: $e');
   }
 
-  return image;
+  return null;
 }

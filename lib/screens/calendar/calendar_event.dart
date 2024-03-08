@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:recychamp/models/challenge.dart';
@@ -7,6 +8,7 @@ import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.d
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import 'package:recychamp/screens/Challenges/challenges.dart';
+import 'package:recychamp/services/challenge_service.dart';
 import 'package:recychamp/utils/event_data.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,21 +22,57 @@ class CalendarEvent extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<CalendarEvent> {
+  List<Challenge> challenges = [];
+  List<Challenge> _selectedEvents = [];
   late DateTime _selectedDay;
-  late Map<DateTime, List<dynamic>> _events;
-  late List<dynamic> _selectedEvents;
-  late Challenge? _selectedEvent;
 
   @override
   void initState() {
     super.initState();
     _selectedDay = DateTime.now();
-    _events = {
-      DateTime(2024, 3, 7): ['1', '2'],
-      DateTime(2024, 3, 8): ['3'],
-    };
-    _selectedEvents = _events[_selectedDay] ?? [];
-    _selectedEvent = null;
+    getChallenges();
+  }
+
+  Future<void> getChallenges() async {
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('challenges').get();
+
+      // Convert the document snapshots to Challenge objects
+      List<Challenge> challengesResult = [];
+
+      for (var doc in querySnapshot.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        Challenge challenge = Challenge(
+            id: doc.id,
+            title: data['title'],
+            description: data['description'],
+            location: data['location'],
+            country: data['country'],
+            rules: data['rules'],
+            startDateTime: data['startDateTime'].toDate(),
+            endDateTime: data['endDateTime'].toDate(),
+            completedPercentage: data['completedPercentage'],
+            maximumParticipants: data['maximumParticipants'],
+            acceptedParticipants: List<String>.from(data[
+                "acceptedParticipants"]), // * converting dynamic array to string array
+            difficulty: data['difficulty'],
+            imageURL: data['imageURL'],
+            type: data['type'],
+            rating: double.parse(data['rating']
+                .toString()), // * converting firebase number format to double format
+            categoryId: data["categoryId"]);
+
+        challengesResult.add(challenge);
+      }
+
+      setState(() {
+        challenges = challengesResult;
+      });
+    } catch (e) {
+      throw Exception("Failed to get challenges: $e");
+    }
   }
 
   @override
@@ -108,7 +146,7 @@ class _MyWidgetState extends State<CalendarEvent> {
                 color: const Color(0XFF75A488),
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      right: 29, left: 29, top: 15, bottom: 30),
+                      right: 29, left: 29, top: 15, bottom: 5),
                   child: Center(
                     child: Column(
                       children: [
@@ -120,15 +158,19 @@ class _MyWidgetState extends State<CalendarEvent> {
                           onFormatChanged: (format) {},
                           onDaySelected: (selectedDay, focusedDay) {
                             setState(() {
-                              if (state is ChallengesLoaded) {
-                                state.challenges;
-                              }
+                              // assigning the selected date
                               _selectedDay = selectedDay;
-                              _selectedEvents = _events[selectedDay] ?? [];
+
+                              // assigning selected challenge to the selected challenges array
+                              _selectedEvents = challenges
+                                  .where((challenge) => (_selectedDay.month ==
+                                          challenge.startDateTime.month &&
+                                      _selectedDay.day ==
+                                          challenge.startDateTime.day &&
+                                      _selectedDay.year ==
+                                          challenge.startDateTime.year))
+                                  .toList();
                             });
-                          },
-                          eventLoader: (day) {
-                            return _events[day] ?? [];
                           },
                           headerStyle: HeaderStyle(
                             titleTextStyle: const TextStyle(fontSize: 0),
@@ -151,7 +193,7 @@ class _MyWidgetState extends State<CalendarEvent> {
                                 color: Colors.black,
                                 shape: BoxShape.rectangle,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(6.0))),
+                                    BorderRadius.all(Radius.circular(7.0))),
                             selectedDecoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
@@ -168,7 +210,7 @@ class _MyWidgetState extends State<CalendarEvent> {
               Expanded(
                 child: FractionallySizedBox(
                   //rounded corner box
-                  // heightFactor: 0.4,
+
                   child: Container(
                     width: double.infinity,
                     // height: double.infinity,
@@ -181,7 +223,7 @@ class _MyWidgetState extends State<CalendarEvent> {
                         ),
                       ),
                     ),
-                    child: _buildChallengeDetails(state),
+                    child: _buildChallengeDetails(_selectedEvents),
                   ),
                 ),
               )
@@ -192,54 +234,40 @@ class _MyWidgetState extends State<CalendarEvent> {
     );
   }
 
-  Widget _buildChallengeDetails(ChallengesState state) {
-    if (state is ChallengesLoaded) {
-      final List<Challenge> challenges = state.challenges;
-      final selectedDateChallenges = challenges
-          .where((challenge) =>
-              (_events[_selectedDay] ?? []).contains(challenge.categoryId))
-          .toList();
-      print('Selected Day: $_selectedDay');
-      print('Events Map: $_events');
-
-      if (selectedDateChallenges.isNotEmpty) {
-        return ListView.builder(
-          itemCount: selectedDateChallenges.length,
-          itemBuilder: (context, index) {
-            return eventDetails(eventDetails_: selectedDateChallenges[index]);
-          },
-        );
-      } else {
-        return Center(
-          child: Text(
-            'No challenges for selected date',
-            style: kFontFamily(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        );
-      }
+  Widget _buildChallengeDetails(List<Challenge> selectedChallenges) {
+    if (selectedChallenges.isNotEmpty) {
+      return ListView.builder(
+        itemCount: selectedChallenges.length,
+        itemBuilder: (context, index) {
+          return eventDetails(eventDetails_: selectedChallenges[index]);
+        },
+      );
     } else {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return Center(
+        child: Text(
+          'No challenges for selected date',
+          style: kFontFamily(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       );
     }
   }
 
   Widget eventDetails({required Challenge eventDetails_}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 42.1),
+      padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 0.1),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(42.07),
+            borderRadius: BorderRadius.circular(42.1),
             child: Image.network(
               eventDetails_.imageURL,
               width: 822.4,
-              height: 368,
+              height: 300,
               fit: BoxFit.cover,
             ),
           ),
@@ -253,28 +281,52 @@ class _MyWidgetState extends State<CalendarEvent> {
             ),
           ),
           Text(
-            'Date: ${DateFormat('MMMM d, y').format(eventDetails_.startDateTime)}',
+            eventDetails_.location,
             style: kFontFamily(
               color: const Color.fromARGB(116, 116, 116, 1),
               fontSize: 14,
               fontWeight: FontWeight.w400,
             ),
           ),
+          const SizedBox(
+            height: 10,
+          ),
           Text(
-            'Description: ${eventDetails_.description}',
+            eventDetails_.description,
             style: kFontFamily(
-              color: Colors.black,
+              color: Colors.grey[600],
               fontSize: 14,
               fontWeight: FontWeight.w300,
             ),
+            textAlign: TextAlign.justify,
           ),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               // Handle join button click
             },
-            child: const Text("Join Now"),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              minimumSize: MaterialStateProperty.all<Size>(const Size(368, 63)),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(7.829),
+              ),
+              child: Text(
+                "Join Now",
+                style: kFontFamily(
+                  color: Colors.white,
+                  fontSize: 19,
+                  fontWeight: FontWeight.w700,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
+          const SizedBox(
+            height: 20,
+          )
         ],
       ),
     );

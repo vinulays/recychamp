@@ -1,22 +1,25 @@
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:recychamp/models/comment.dart';
 
 @immutable
 class Post {
-  final String postId;
+  final String? postId;
   final String postUserId;
+  final String title;
   final String description;
-  final String postUrl;
+  final String photoUrl;
   final DateTime createdAt;
-  final List<String> likesList;
-  final List<String> commentList;
+  final int likesCount;
+  final List<Comment> commentList;
 
   const Post(
-      {required this.postId,
+      {this.postId,
+      required this.title,
       required this.postUserId,
       required this.description,
-      required this.postUrl,
+      required this.photoUrl,
       required this.createdAt,
-      required this.likesList,
+      required this.likesCount,
       required this.commentList});
 
   // Map<String, dynamic> toMap() {

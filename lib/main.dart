@@ -7,10 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recychamp/firebase_options.dart';
 import 'package:recychamp/models/chip_label_color.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
+import 'package:recychamp/repositories/posts%20repository/post_repo.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
+import 'package:recychamp/screens/Community/bloc/posts_bloc.dart';
 import 'package:recychamp/screens/Home/home.dart';
 import 'package:recychamp/services/challenge_service.dart';
+import 'package:recychamp/services/post_service.dart';
 // import 'package:recychamp/screens/Welcome/welcome.dart';
 
 void main() async {
@@ -88,7 +91,18 @@ class MyApp extends StatelessWidget {
           )..add(
               FetchChallengesEvent(),
             ),
-        )
+        ),
+        BlocProvider<PostBloc>(
+          create: (context) => PostBloc(
+            repository: PostRepository(
+              postService:
+                  // * adding current firebase instance to the challenge service
+                  PostService(
+                      firestore: FirebaseFirestore.instance,
+                      storage: FirebaseStorage.instance),
+            ),
+          ),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

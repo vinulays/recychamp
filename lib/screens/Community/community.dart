@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:recychamp/screens/Community/createpost.dart';
+import 'package:recychamp/screens/CreatePost/createpost.dart';
 import 'package:recychamp/ui/post-card.dart';
 
 class Community extends StatefulWidget {

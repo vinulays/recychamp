@@ -1,7 +1,6 @@
 part of 'challenge_details_bloc.dart';
 
 sealed class ChallengeDetailsState extends Equatable {
-  // final bool isAccepted;
   @override
   List<Object?> get props => [];
 }

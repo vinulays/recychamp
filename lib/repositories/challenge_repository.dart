@@ -1,4 +1,5 @@
 import 'package:recychamp/models/challenge.dart';
+import 'package:recychamp/models/submission.dart';
 import 'package:recychamp/services/challenge_service.dart';
 
 class ChallengeRepository {
@@ -34,5 +35,9 @@ class ChallengeRepository {
   Future<void> submitChallenge(
       String userId, Map<String, dynamic> formData, String challengeId) async {
     await _challengeService.submitChallenge(userId, formData, challengeId);
+  }
+
+  Future<Submission?> getSubmission(String userId, String challengeId) async {
+    return _challengeService.getSubmission(userId, challengeId);
   }
 }

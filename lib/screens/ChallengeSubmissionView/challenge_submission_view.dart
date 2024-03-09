@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:recychamp/models/challenge.dart';
-import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ChallengeSubmissionView/bloc/submission_view_bloc.dart';
 
 class ChallengeSubmissionView extends StatefulWidget {
@@ -137,7 +136,7 @@ class _ChallengeSubmissionViewState extends State<ChallengeSubmissionView> {
                                       TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: "Due Date: ",
+                                            text: "Due Date & Time: ",
                                             style: GoogleFonts.poppins(
                                               color: Colors.black,
                                               fontSize: 16,
@@ -150,7 +149,8 @@ class _ChallengeSubmissionViewState extends State<ChallengeSubmissionView> {
                                                     .challenge.endDateTime
                                                     .toString())
                                                 .format(
-                                                    pattern: "do MMMM yyyy"),
+                                                    pattern:
+                                                        "do MMMM yyyy hh:mm a"),
                                             style: GoogleFonts.poppins(
                                               color: Colors.black
                                                   .withOpacity(0.50),
@@ -169,7 +169,7 @@ class _ChallengeSubmissionViewState extends State<ChallengeSubmissionView> {
                                       TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: "Submitted Date: ",
+                                            text: "Submitted Date & Time: ",
                                             style: GoogleFonts.poppins(
                                               color: Colors.black,
                                               fontSize: 16,
@@ -182,7 +182,8 @@ class _ChallengeSubmissionViewState extends State<ChallengeSubmissionView> {
                                                     .submission.submittedAt
                                                     .toString())
                                                 .format(
-                                                    pattern: "do MMMM yyyy"),
+                                                    pattern:
+                                                        "do MMMM yyyy hh:mm:ss a"),
                                             style: GoogleFonts.poppins(
                                               color: Colors.black
                                                   .withOpacity(0.50),

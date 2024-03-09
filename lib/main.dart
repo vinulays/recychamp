@@ -8,6 +8,7 @@ import 'package:recychamp/firebase_options.dart';
 import 'package:recychamp/models/chip_label_color.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
+import 'package:recychamp/screens/ChallengeSubmissionView/bloc/submission_view_bloc.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Home/home.dart';
 import 'package:recychamp/services/challenge_service.dart';
@@ -88,7 +89,19 @@ class MyApp extends StatelessWidget {
           )..add(
               FetchChallengesEvent(),
             ),
-        )
+        ),
+        // * submittion state provider
+        BlocProvider<SubmissionViewBloc>(
+          create: (context) => SubmissionViewBloc(
+            repository: ChallengeRepository(
+              challengeService:
+                  // * adding current firebase instance to the challenge service
+                  ChallengeService(
+                      firestore: FirebaseFirestore.instance,
+                      storage: FirebaseStorage.instance),
+            ),
+          ),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

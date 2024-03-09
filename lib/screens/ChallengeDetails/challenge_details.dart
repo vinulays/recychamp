@@ -13,6 +13,7 @@ import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ChallengeForm/challenge_form.dart';
 import 'package:recychamp/screens/ChallengeSubmissionForm/challenge_submission_form.dart';
+import 'package:recychamp/screens/ChallengeSubmissionView/bloc/submission_view_bloc.dart';
 import 'package:recychamp/screens/ChallengeSubmissionView/challenge_submission_view.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/ParentAgreement/parent_agreement.dart';
@@ -617,6 +618,9 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                               challenge: state.challenge,
                                             )));
                               } else if (isSubmitted!) {
+                                context.read<SubmissionViewBloc>().add(
+                                    FetchSubmissionEvent(state.challenge.id!));
+
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

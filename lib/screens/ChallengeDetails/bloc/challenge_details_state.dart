@@ -1,6 +1,5 @@
 part of 'challenge_details_bloc.dart';
 
-@immutable
 sealed class ChallengeDetailsState extends Equatable {
   // final bool isAccepted;
   @override

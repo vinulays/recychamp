@@ -1,4 +1,4 @@
-import 'package:recychamp/screens/EducationalResources/article_model.dart';
+import 'package:recychamp/models/article_model.dart';
 
 final List<Article> articlelNature = [
   Article(
@@ -8,6 +8,16 @@ final List<Article> articlelNature = [
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.',
     modifiedDate: DateTime(2022, 3, 4),
+    content: ''' Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
+ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
+Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
+''',
   ),
   Article(
     articleImage:
@@ -16,6 +26,18 @@ final List<Article> articlelNature = [
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
     modifiedDate: DateTime(2020, 10, 4),
+    content: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, 
+justo quam consequat 
+ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
+Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
+''',
   ),
   Article(
     articleImage:
@@ -24,6 +46,17 @@ final List<Article> articlelNature = [
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.',
     modifiedDate: DateTime(2012, 3, 14),
+    content: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
+ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
+Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
+''',
   )
 ];
 
@@ -35,6 +68,17 @@ List<Article> articlePlants = [
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
     modifiedDate: DateTime(2020, 8, 10),
+    content: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
+ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
+Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
+''',
   ),
   Article(
     articleImage:
@@ -43,6 +87,17 @@ List<Article> articlePlants = [
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
     modifiedDate: DateTime(2022, 5, 4),
+    content: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
+ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
+Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
+''',
   ),
   Article(
     articleImage:
@@ -51,6 +106,17 @@ List<Article> articlePlants = [
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
     modifiedDate: DateTime(2022, 3, 4),
+    content: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
+ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
+Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
+''',
   ),
 ];
 
@@ -62,6 +128,17 @@ List<Article> articleTrees = [
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
     modifiedDate: DateTime(2022, 3, 4),
+    content: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
+ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
+Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
+''',
   ),
   Article(
     articleImage:
@@ -70,6 +147,17 @@ List<Article> articleTrees = [
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
     modifiedDate: DateTime(2022, 3, 4),
+    content: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
+ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
+Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
+''',
   ),
   Article(
     articleImage:
@@ -78,5 +166,16 @@ List<Article> articleTrees = [
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
     modifiedDate: DateTime(2022, 10, 4),
+    content: '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
+ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
+Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
+''',
   ),
 ];

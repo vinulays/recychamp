@@ -1,6 +1,5 @@
 part of 'challenge_details_bloc.dart';
 
-@immutable
 sealed class ChallengeDetailsEvent extends Equatable {
   @override
   List<Object?> get props => [];

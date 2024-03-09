@@ -1,6 +1,5 @@
 part of 'challenges_bloc.dart';
 
-@immutable
 sealed class ChallengesState extends Equatable {
   @override
   List<Object?> get props => [];

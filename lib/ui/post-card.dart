@@ -7,12 +7,8 @@ import 'package:like_button/like_button.dart';
 import 'package:recychamp/models/post.dart';
 
 class PostCard extends StatefulWidget {
-
   final Post post;
   const PostCard({super.key, required this.post});
-
-  const PostCard({super.key});
-
 
   @override
   State<PostCard> createState() => _PostCardState();

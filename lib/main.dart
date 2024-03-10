@@ -99,7 +99,8 @@ class MyApp extends StatelessWidget {
             repository: PostRepository(
               postService:
                   // * adding current firebase instance to the challenge service
-                  PostService(
+                  PostService(firestore: FirebaseFirestore.instance,
+                      storage: FirebaseStorage.instance),
 
         // * submittion state provider
         BlocProvider<SubmissionViewBloc>(

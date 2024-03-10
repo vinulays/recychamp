@@ -237,7 +237,8 @@ class ChallengeService {
         "description": formData["description"],
         "imageURLs": imageURLs,
         "rating": formData["rating"],
-        "experience": formData["experience"] ?? "Not Given"
+        "experience": formData["experience"] ?? "Not Given",
+        "submittedAt": DateTime.now()
       });
 
       // * adding user id to the submiitted participants array in the submitted challenge
@@ -269,8 +270,10 @@ class ChallengeService {
             challengeId: challengeId,
             userId: userId,
             description: data["description"],
-            imageURLs: data["imageURLs"],
-            rating: data["rating"]);
+            imageURLs: List<String>.from(data["imageURLs"]),
+            rating: data["rating"],
+            submittedAt: data["submittedAt"].toDate(),
+            experience: data["experience"]);
 
         return submission;
       } else {

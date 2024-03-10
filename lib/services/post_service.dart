@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:recychamp/models/comment.dart';
+
 import 'package:recychamp/models/post.dart';
 
 class PostService {
@@ -22,11 +24,13 @@ class PostService {
         'createdAt': DateTime.now(),
         'likesCount': 0,
         'commentList': [],
+
       });
     } catch (e) {
       throw Exception('Failed to add post: $e');
     }
   }
+
 
   Future<List<Post>> searchPosts(String query) async {
     try {
@@ -161,36 +165,7 @@ class PostService {
 //     }
 //   }
 
-//   Future<List<Post>> applyFilters(Set<String> filters) async {
-//     try {
-//       List<QuerySnapshot<Map<String, dynamic>>> snapshots = await Future.wait([
-//         for (var filter in filters)
-//           _firestore
-//               .collection('posts')
-//               .where('category', isEqualTo: filter)
-//               .get()
-//       ]);
 
-//       List<Post> posts = [];
-//       for (var snapshot in snapshots) {
-//         for (var doc in snapshot.docs) {
-//           Map<String, dynamic> data = doc.data();
-//           Post post = Post(
-//             postId: doc.id,
-//             postUserId: data['postUserId'],
-//             description: data['description'],
-//             postUrl: data['postUrl'],
-//             createdAt: data['createdAt'].toDate(),
-//             likesList: List<String>.from(data['likesList']),
-//             commentList: List<String>.from(data['commentList']),
-//           );
-//           posts.add(post);
-//         }
-//       }
-//       return posts;
-//     } catch (e) {
-//       throw Exception('Failed to apply filters: $e');
-//     }
-//   }
-// }
+
+
 }

@@ -131,6 +131,28 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                   SizedBox(
                     child: TextField(
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        hintText: "Title.....",
+                        hintMaxLines: 8,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color(0xFF75A488), width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color(0xFF75A488), width: 2.0),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    child: TextField(
                       maxLines: 5,
                       decoration: InputDecoration(
                         hintText: "Description.....",

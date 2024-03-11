@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:like_button/like_button.dart';
+import 'package:recychamp/models/comment.dart';
 import 'package:recychamp/models/post.dart';
 
 class PostCard extends StatefulWidget {
@@ -17,6 +18,7 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
+    bool _showComments = false;
 
     return Container(
       margin: EdgeInsets.only(
@@ -152,6 +154,9 @@ class _PostCardState extends State<PostCard> {
                 ),
                 GestureDetector(
                   onTap: () {
+                    setState(() {
+                      _showComments = true;
+                    });
                     showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
@@ -216,14 +221,29 @@ class _PostCardState extends State<PostCard> {
                                                                       FontWeight
                                                                           .w700),
                                                         ),
-                                                        Text(
-                                                          "gshkjkl  jjblbljknlknklnlk lknlknlknklnknk sdhardkkkdbnbjkbsajkbcjk asguiguisgdui ashjdbj",
-                                                          style: GoogleFonts
-                                                              .poppins(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontSize: 14),
-                                                        ),
+                                                        if (_showComments) ...[
+                                                          const SizedBox(
+                                                              height: 10),
+                                                          ListView.builder(
+                                                            shrinkWrap: true,
+                                                            itemCount: widget
+                                                                .post
+                                                                .commentList
+                                                                .length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              Comment comment =
+                                                                  widget.post
+                                                                          .commentList[
+                                                                      index];
+                                                              return ListTile(
+                                                                title: Text(comment
+                                                                    .description),
+                                                              );
+                                                            },
+                                                          )
+                                                        ]
                                                       ],
                                                     ),
                                                   ),

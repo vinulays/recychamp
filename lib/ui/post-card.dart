@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:like_button/like_button.dart';
-import 'package:recychamp/ui/challenge_filters_bottom_sheet.dart';
+import 'package:recychamp/models/post.dart';
 
 class PostCard extends StatefulWidget {
-  const PostCard({super.key});
+  final Post post;
+  const PostCard({super.key, required this.post});
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -64,12 +66,11 @@ class _PostCardState extends State<PostCard> {
                         letterSpacing: -0.32,
                       ),
                     ),
-                    const Text(
-                      'Posted Jan 7',
-                      style: TextStyle(
+                    Text(
+                      'Posted ${Jiffy.parse(widget.post.createdAt.toString()).format(pattern: "MMMM do")}',
+                      style: GoogleFonts.poppins(
                         color: Color(0xFF747474),
                         fontSize: 11,
-                        fontFamily: 'Almarai',
                         fontWeight: FontWeight.w400,
                         letterSpacing: -0.22,
                       ),
@@ -81,12 +82,11 @@ class _PostCardState extends State<PostCard> {
             const SizedBox(
               height: 20,
             ),
-            const Text(
-              'I  completed this challenge! omg!',
-              style: TextStyle(
+            Text(
+              widget.post.title,
+              style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 20,
-                fontFamily: 'Almarai',
                 fontWeight: FontWeight.w700,
                 letterSpacing: -0.40,
               ),
@@ -96,9 +96,8 @@ class _PostCardState extends State<PostCard> {
               width: double.infinity,
               height: 200,
               decoration: ShapeDecoration(
-                  image: const DecorationImage(
-                      image: NetworkImage(
-                          "https://plus.unsplash.com/premium_photo-1677756430573-b48460510e0e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZWNvZnJpZW5kbHl8ZW58MHx8MHx8fDA%3D"),
+                  image: DecorationImage(
+                      image: NetworkImage(widget.post.photoUrl),
                       fit: BoxFit.cover),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.83))),
@@ -106,12 +105,11 @@ class _PostCardState extends State<PostCard> {
             const SizedBox(
               height: 10,
             ),
-            const Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante',
-              style: TextStyle(
-                color: Color(0xFF1E1E1E),
+            Text(
+              widget.post.description,
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF1E1E1E),
                 fontSize: 14,
-                fontFamily: 'Almarai',
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -136,7 +134,7 @@ class _PostCardState extends State<PostCard> {
                       size: 30,
                     );
                   },
-                  likeCount: 665,
+                  likeCount: widget.post.likesCount,
                   // countBuilder: (int count, bool isLiked, String text) {
                   //   var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
                   //   Widget result;
@@ -290,7 +288,7 @@ class _PostCardState extends State<PostCard> {
                         width: 5,
                       ),
                       Text(
-                        "Comments (57)",
+                        "Comments (${widget.post.commentList.length})",
                         style: GoogleFonts.poppins(fontSize: 14),
                       )
                     ],

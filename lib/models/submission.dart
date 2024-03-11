@@ -5,7 +5,8 @@ class Submission {
   String description;
   List<String> imageURLs;
   double rating;
-  String? experiance;
+  String? experience;
+  DateTime submittedAt;
 
   Submission(
       {this.id,
@@ -13,6 +14,7 @@ class Submission {
       required this.userId,
       required this.description,
       required this.imageURLs,
-      this.experiance,
-      required this.rating});
+      this.experience,
+      required this.rating,
+      required this.submittedAt});
 }

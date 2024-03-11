@@ -45,26 +45,27 @@ class _MyWidgetState extends State<CalendarEvent> {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
         Challenge challenge = Challenge(
-            id: doc.id,
-            title: data['title'],
-            description: data['description'],
-            location: data['location'],
-            country: data['country'],
-            rules: data['rules'],
-            startDateTime: data['startDateTime'].toDate(),
-            endDateTime: data['endDateTime'].toDate(),
-            completedPercentage: data['completedPercentage'],
-            maximumParticipants: data['maximumParticipants'],
-            acceptedParticipants: List<String>.from(data[
-                "acceptedParticipants"]), // * converting dynamic array to string array
-            submittedParticipants: List<String>.from(data[
-                "submittedParticipants"]), // * converting dynamic array to string array
-            difficulty: data['difficulty'],
-            imageURL: data['imageURL'],
-            type: data['type'],
-            rating: double.parse(data['rating'].toString()), // * converting firebase number format to double format
-            categoryId: data["categoryId"],
-            submittedParticipants: ['submittedParticipants']);
+          id: doc.id,
+          title: data['title'],
+          description: data['description'],
+          location: data['location'],
+          country: data['country'],
+          rules: data['rules'],
+          startDateTime: data['startDateTime'].toDate(),
+          endDateTime: data['endDateTime'].toDate(),
+          completedPercentage: data['completedPercentage'],
+          maximumParticipants: data['maximumParticipants'],
+          acceptedParticipants: List<String>.from(data[
+              "acceptedParticipants"]), // * converting dynamic array to string array
+          submittedParticipants: List<String>.from(data[
+              "submittedParticipants"]), // * converting dynamic array to string array
+          difficulty: data['difficulty'],
+          imageURL: data['imageURL'],
+          type: data['type'],
+          rating: double.parse(data['rating']
+              .toString()), // * converting firebase number format to double format
+          categoryId: data["categoryId"],
+        );
 
         challengesResult.add(challenge);
       }

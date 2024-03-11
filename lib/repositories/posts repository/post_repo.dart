@@ -11,6 +11,7 @@ class PostRepository {
     await _postService.addPost(post);
   }
 
+
   // Future<Post?> getPostById(String postId) async {
   //   return _postService.getPostById(postId);
   // }
@@ -37,7 +38,19 @@ class PostRepository {
     } catch (e) {
       throw Exception('Failed to search posts: $e');
     }
-  }
+
+//   Future<Post?> getPostById(String postId) async {
+//     return _postService.getPostById(postId);
+//   }
+
+//   Future<void> updatePost(Post post) async {
+//     await _postService.updatePost(post);
+//   }
+
+//   Future<void> deletePost(String postId) async {
+//     await _postService.deletePost(postId);
+
+//   }
 
   // Future<List<Post>> applyFilters(Set<String> filters) async {
   //   try {

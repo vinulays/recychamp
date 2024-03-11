@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:recychamp/screens/Community/bloc/posts_bloc.dart';
 import 'package:recychamp/screens/Community/bloc/posts_event.dart';
 import 'package:recychamp/screens/Community/bloc/posts_state.dart';
+
 import 'package:recychamp/screens/CreatePost/createpost.dart';
 import 'package:recychamp/ui/post-card.dart';
 

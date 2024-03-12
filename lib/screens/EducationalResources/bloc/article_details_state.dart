@@ -5,6 +5,7 @@ sealed class ArticleDetailsState extends Equatable {
 
   @override
   List<Object> get props => [];
+  
 }
 
 final class ArticleDetailsInitial extends ArticleDetailsState {}
@@ -37,4 +38,13 @@ class ArticleDetailsAddingError extends ArticleDetailsState {
   final String errorMessage;
 
   ArticleDetailsAddingError(this.errorMessage);
+}
+class ArticleUpdating extends ArticleDetailsState {}
+
+class ArticleUpdated extends ArticleDetailsState {}
+
+class ArticleUpdatingError extends ArticleDetailsState {
+  final String errorMessage;
+
+  ArticleUpdatingError(this.errorMessage);
 }

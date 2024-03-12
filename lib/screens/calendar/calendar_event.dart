@@ -30,6 +30,7 @@ class _MyWidgetState extends State<CalendarEvent> {
   void initState() {
     super.initState();
     _selectedDay = DateTime.now();
+
     getChallenges();
   }
 
@@ -109,7 +110,7 @@ class _MyWidgetState extends State<CalendarEvent> {
                               Colors.white, BlendMode.srcIn),
                         ),
                       ),
-                      const SizedBox(width: 280),
+                      const SizedBox(width: 270),
                       const Icon(
                         Icons.settings,
                         color: Colors.white,
@@ -134,10 +135,13 @@ class _MyWidgetState extends State<CalendarEvent> {
                           fontSize: 25,
                         ),
                       ),
-                      const SizedBox(width: 140),
-                      const Text(
-                        "Jan 2024",
-                        style: TextStyle(color: kFontColor, fontSize: 12),
+                      const SizedBox(width: 110),
+                      Text(
+                        DateFormat('MMM yyyy').format(_selectedDay),
+                        style: kFontFamily(
+                            color: kFontColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
                       ),
                     ],
                   ),
@@ -155,26 +159,39 @@ class _MyWidgetState extends State<CalendarEvent> {
                       children: [
                         TableCalendar(
                           focusedDay: _selectedDay,
-                          firstDay: DateTime.utc(2024, 1, 1),
-                          lastDay: DateTime.utc(2024, 12, 31),
+                          firstDay: DateTime.utc(2020, 1, 1),
+                          lastDay: DateTime.utc(2030, 12, 31),
                           calendarFormat: CalendarFormat.week,
                           onFormatChanged: (format) {},
                           onDaySelected: (selectedDay, focusedDay) {
                             setState(() {
-                              // assigning the selected date
-                              _selectedDay = selectedDay;
+                              // Check if selectedDay is not null
+                              if (selectedDay != null) {
+                                // Check if selectedDay is equal to firstDay or lastDay
 
-                              // assigning selected challenge to the selected challenges array
-                              _selectedEvents = challenges
-                                  .where((challenge) => (_selectedDay.month ==
-                                          challenge.startDateTime.month &&
-                                      _selectedDay.day ==
-                                          challenge.startDateTime.day &&
-                                      _selectedDay.year ==
-                                          challenge.startDateTime.year))
-                                  .toList();
+                                // assigning the selected date
+                                _selectedDay = selectedDay;
+
+                                // assigning selected challenge to the selected challenges array
+                                _selectedEvents = challenges
+                                    .where((challenge) =>
+                                        challenge.startDateTime != null &&
+                                        challenge.endDateTime != null &&
+                                        (challenge.startDateTime
+                                                .isBefore(selectedDay) ||
+                                            challenge.startDateTime
+                                                .isAtSameMomentAs(
+                                                    selectedDay)) &&
+                                        (challenge.endDateTime
+                                                .isAfter(selectedDay) ||
+                                            challenge.endDateTime
+                                                .isAtSameMomentAs(selectedDay)))
+                                    .toList();
+                              }
                             });
                           },
+                          selectedDayPredicate: (day) =>
+                              isSameDay(day, _selectedDay),
                           headerStyle: HeaderStyle(
                             titleTextStyle: const TextStyle(fontSize: 0),
                             formatButtonTextStyle:
@@ -192,18 +209,44 @@ class _MyWidgetState extends State<CalendarEvent> {
                             weekendStyle: TextStyle(color: Colors.white),
                           ),
                           calendarStyle: const CalendarStyle(
+                            isTodayHighlighted: true,
+                            selectedDecoration: BoxDecoration(
+                                color: Colors.grey,
+                                shape: BoxShape.rectangle,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(7.0))),
                             todayDecoration: BoxDecoration(
                                 color: Colors.black,
                                 shape: BoxShape.rectangle,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(7.0))),
-                            selectedDecoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
+                            weekendTextStyle: TextStyle(color: Colors.white),
+                            weekendDecoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(7.0))),
+                            holidayDecoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(7.0))),
+                            rangeStartDecoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.rectangle,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(7.0))),
+                            rangeEndDecoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.rectangle,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(7.0))),
+                            defaultDecoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(7.0)),
                             ),
                             selectedTextStyle: TextStyle(color: Colors.white),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -266,7 +309,7 @@ class _MyWidgetState extends State<CalendarEvent> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(42.1),
+            borderRadius: BorderRadius.circular(40.1),
             child: Image.network(
               eventDetails_.imageURL,
               width: 822.4,

@@ -132,7 +132,7 @@ class _AricleForm extends State<AricleForms> {
                       ),
                       const SizedBox(height: 10),
                       Container(
-                        margin: const EdgeInsets.only(bottom: 20),
+                        margin: const EdgeInsets.only(bottom: 2),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

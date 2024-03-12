@@ -53,7 +53,6 @@ class _MyWidgetState extends State<CalendarEvent> {
           rules: data['rules'],
           startDateTime: data['startDateTime'].toDate(),
           endDateTime: data['endDateTime'].toDate(),
-          completedPercentage: data['completedPercentage'],
           maximumParticipants: data['maximumParticipants'],
           acceptedParticipants: List<String>.from(data[
               "acceptedParticipants"]), // * converting dynamic array to string array
@@ -304,26 +303,34 @@ class _MyWidgetState extends State<CalendarEvent> {
             textAlign: TextAlign.justify,
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              // Handle join button click
-            },
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-              minimumSize: MaterialStateProperty.all<Size>(const Size(368, 63)),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(7.829),
-              ),
-              child: Text(
-                "Join Now",
-                style: kFontFamily(
-                  color: Colors.white,
-                  fontSize: 19,
-                  fontWeight: FontWeight.w700,
+          Container(
+            margin: const EdgeInsets.only(bottom: 15, top: 10),
+            child: SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () {
+                  // Handle join button click
+                },
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.8),
+                    ),
+                  ),
+                  padding: MaterialStateProperty.all(
+                      const EdgeInsets.symmetric(vertical: 17.88)),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.black),
                 ),
-                textAlign: TextAlign.center,
+                child: Text(
+                  "Join Now",
+                  style: kFontFamily(
+                    color: Colors.white,
+                    fontSize: 19,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

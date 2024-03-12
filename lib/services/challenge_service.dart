@@ -34,7 +34,6 @@ class ChallengeService {
             rules: data['rules'],
             startDateTime: data['startDateTime'].toDate(),
             endDateTime: data['endDateTime'].toDate(),
-            completedPercentage: data['completedPercentage'],
             maximumParticipants: data['maximumParticipants'],
             acceptedParticipants: List<String>.from(data[
                 "acceptedParticipants"]), // * converting dynamic array to string array
@@ -72,7 +71,6 @@ class ChallengeService {
             rules: data['rules'],
             startDateTime: data['startDateTime'].toDate(),
             endDateTime: data['endDateTime'].toDate(),
-            completedPercentage: data['completedPercentage'],
             maximumParticipants: data['maximumParticipants'],
             acceptedParticipants: List<String>.from(data[
                 "acceptedParticipants"]), // * converting dynamic array to string array

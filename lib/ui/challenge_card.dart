@@ -97,9 +97,10 @@ class _ChallengeCardState extends State<ChallengeCard> {
                     radius: 35.0,
                     lineWidth: 9.0,
                     circularStrokeCap: CircularStrokeCap.round,
-                    percent: widget.challenge.completedPercentage / 100,
+                    percent: widget.challenge.acceptedParticipants.length /
+                        widget.challenge.maximumParticipants,
                     center: Text(
-                      "${widget.challenge.completedPercentage.toString()}%",
+                      "${((widget.challenge.acceptedParticipants.length / widget.challenge.maximumParticipants) * 100).round()}%",
                       style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
                     ),
                     progressColor: const Color(0xFF75A488),

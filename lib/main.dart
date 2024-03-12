@@ -9,7 +9,6 @@ import 'package:recychamp/models/chip_label_color.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
 import 'package:recychamp/repositories/posts%20repository/post_repo.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
-import 'package:recychamp/screens/ChallengeSubmissionView/bloc/submission_view_bloc.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Community/bloc/posts_bloc.dart';
 import 'package:recychamp/screens/Home/home.dart';
@@ -93,21 +92,12 @@ class MyApp extends StatelessWidget {
               FetchChallengesEvent(),
             ),
         ),
-
         BlocProvider<PostBloc>(
           create: (context) => PostBloc(
             repository: PostRepository(
               postService:
                   // * adding current firebase instance to the challenge service
                   PostService(
-
-        // * submittion state provider
-        BlocProvider<SubmissionViewBloc>(
-          create: (context) => SubmissionViewBloc(
-            repository: ChallengeRepository(
-              challengeService:
-                  // * adding current firebase instance to the challenge service
-                  ChallengeService(
                       firestore: FirebaseFirestore.instance,
                       storage: FirebaseStorage.instance),
             ),

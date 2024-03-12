@@ -1,19 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:like_button/like_button.dart';
 import 'package:recychamp/models/comment.dart';
 import 'package:recychamp/models/post.dart';
+import 'package:recychamp/services/post_service.dart';
 
 class PostCard extends StatefulWidget {
-
   final Post post;
   const PostCard({super.key, required this.post});
-
-  const PostCard({super.key});
-
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -24,6 +22,54 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
     bool _showComments = false;
+    late final PostService _postService;
+
+    @override
+    void initState() {
+      super.initState();
+      // Initialize PostService with Firestore and FirebaseStorage instances
+      _postService = PostService(
+        firestore: FirebaseFirestore.instance,
+        storage: FirebaseStorage.instance,
+      );
+    }
+
+    void deletePost() {
+      // Display a dialog box to confirm deletion
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Delete Post"),
+            content: const Text("Are you sure you want to delete this post?"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: const Text("No"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  // Delete the post from Firestore
+                  try {
+                    // Call the deletePost method from your PostService
+                    await _postService.deletePost(widget.post.postId!);
+                    Navigator.of(context).pop(); // Close the dialog
+                  } catch (e) {
+                    // Handle any errors
+                    print("Failed to delete post: $e");
+                    // Optionally, display an error message
+                    // You can also handle this error in a more user-friendly way
+                  }
+                },
+                child: const Text("Yes"),
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     return Container(
       margin: EdgeInsets.only(
@@ -82,7 +128,24 @@ class _PostCardState extends State<PostCard> {
                       ),
                     )
                   ],
-                )
+                ),
+                Column(children: [
+                  PopupMenuButton(
+                    itemBuilder: (context) {
+                      return [
+                        const PopupMenuItem<int>(
+                            value: 0, child: Text("Delete Post")),
+                        const PopupMenuItem<int>(
+                            value: 0, child: Text("Update Post")),
+                      ];
+                    },
+                    onSelected: (value) {
+                      if (value == 0) {
+                        deletePost();
+                      } else if (value == 1) {}
+                    },
+                  ),
+                ]),
               ],
             ),
             const SizedBox(

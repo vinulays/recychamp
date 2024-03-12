@@ -11,7 +11,6 @@ class PostRepository {
     await _postService.addPost(post);
   }
 
-
   // Future<Post?> getPostById(String postId) async {
   //   return _postService.getPostById(postId);
   // }
@@ -20,9 +19,9 @@ class PostRepository {
   //   await _postService.updatePost(post);
   // }
 
-  // Future<void> deletePost(String postId) async {
-  //   await _postService.deletePost(postId);
-  // }
+  Future<void> deletePost(String postId) async {
+    await _postService.deletePost(postId);
+  }
 
   Future<List<Post>> getAllPosts() async {
     try {
@@ -52,33 +51,14 @@ class PostRepository {
 
 //   }
 
-  // Future<List<Post>> applyFilters(Set<String> filters) async {
-  //   try {
-  //     return await _postService.applyFilters(filters);
-  //   } catch (e) {
-  //     throw Exception('Failed to apply filters: $e');
-  //   }
-  // }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Future<List<Post>> applyFilters(Set<String> filters) async {
+    //   try {
+    //     return await _postService.applyFilters(filters);
+    //   } catch (e) {
+    //     throw Exception('Failed to apply filters: $e');
+    //   }
+    // }
+  }
 
 // import 'dart:io';
 
@@ -161,3 +141,4 @@ class PostRepository {
 //     }
 //   }
 // }
+}

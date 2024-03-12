@@ -1,10 +1,15 @@
 import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:recychamp/models/post.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
+import 'package:recychamp/services/post_service.dart';
 
 class CreatePost extends StatefulWidget {
   const CreatePost({super.key});
@@ -15,17 +20,129 @@ class CreatePost extends StatefulWidget {
 
 class _CreatePostState extends State<CreatePost> {
   Uint8List? _file;
-  final TextEditingController _PostDescriptionController =
+  final TextEditingController _postTitleController = TextEditingController();
+  final TextEditingController _postDescriptionController =
       TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+  late final PostService _postService;
   bool isLoading = false;
 
-  void _selectImage(BuildContext parentContext, ImageSource source) async {
-    final picker = ImagePicker();
-    Uint8List file = (await picker.pickImage(source: source)) as Uint8List;
-    setState(() {
-      _file = file;
-    });
+  @override
+  void initState() {
+    super.initState();
+    // Initialize PostService with Firestore and FirebaseStorage instances
+    _postService = PostService(
+      firestore: FirebaseFirestore.instance,
+      storage: FirebaseStorage.instance,
+    );
   }
+
+  // void _selectImage(BuildContext parentContext, ImageSource source) async {
+  //   final picker = ImagePicker();
+  //   Uint8List file = (await picker.pickImage(source: source)) as Uint8List;
+  //   setState(() {
+  //     _file = file;
+  //   });
+  // }
+
+  Future<void> _selectImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
+      setState(() {
+        _file = bytes;
+      });
+    }
+  }
+
+  Future<void> _publishPost() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final imageUrl = await _uploadImage();
+
+    final post = Post(
+      postUserId: userId,
+      title: _postTitleController.text,
+      description: _postDescriptionController.text,
+      photoUrl: imageUrl,
+      createdAt: DateTime.now(),
+      likesCount: 0,
+      commentList: [],
+    );
+
+    await _postService.addPost(post);
+
+    // Clear input fields and selected image
+    _postTitleController.clear();
+    _postDescriptionController.clear();
+    setState(() {
+      _file = null;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Post published successfully')),
+    );
+  }
+
+  Future<String> _uploadImage() async {
+    if (_file == null) {
+      return '';
+    }
+
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('images')
+        .child(DateTime.now().toString());
+    final uploadTask = ref.putData(_file!);
+    final snapshot = await uploadTask.whenComplete(() => null);
+    final imageUrl = await snapshot.ref.getDownloadURL();
+
+    return imageUrl;
+  }
+
+  // void _publishPost() async {
+  //   try {
+  //     String imageUrl = '';
+  //     // Upload the image if available
+  //     if (_file != null) {
+  //       imageUrl = await _postService.uploadImage(_file!);
+  //     }
+
+  //     String userId = FirebaseAuth.instance.currentUser!.uid;
+
+  //     // Create a new Post object
+  //     Post post = Post(
+  //       postUserId: userId,
+  //       title: _postTitleController.text,
+  //       description: _PostDescriptionController.text,
+  //       photoUrl: imageUrl,
+  //       createdAt: DateTime.now(),
+  //       likesCount: 0,
+  //       commentList: []
+  //     );
+
+  //     // Add the post to Firestore
+  //     await _postService.addPost(post);
+
+  //     // Show success message
+  //     // ignore: use_build_context_synchronously
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Post published successfully')),
+  //     );
+
+  //     // Clear input fields and selected image
+  //     _postTitleController.clear();
+  //     _PostDescriptionController.clear();
+  //     setState(() {
+  //       _file = null;
+  //     });
+  //   } catch (e) {
+  //     // Show error message if post publishing fails
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Failed to publish post: $e')),
+  //     );
+  //   }
+  // }
 
   // _selectImageFromCamera(BuildContext parentContext) {
   //   _selectImage(parentContext, ImageSource.camera);
@@ -225,7 +342,7 @@ class _CreatePostState extends State<CreatePost> {
                                             .withOpacity(0.6000000238418579)),
                               ),
                               onPressed: () {
-                                _selectImage(context, ImageSource.gallery);
+                                _selectImage();
                               },
                               child: Text(
                                 "Choose file",
@@ -267,7 +384,8 @@ class _CreatePostState extends State<CreatePost> {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () {
-                    // todo add challenge submit form
+                    // post publish
+                    _publishPost();
                   },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(

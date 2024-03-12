@@ -19,18 +19,17 @@ class PostService {
     try {
       await _firestore.collection('posts').doc(post.postId).set({
         'postUserId': post.postUserId,
+        'title': post.title,
         'description': post.description,
         'photoUrl': post.photoUrl,
         'createdAt': DateTime.now(),
         'likesCount': 0,
         'commentList': [],
-
       });
     } catch (e) {
       throw Exception('Failed to add post: $e');
     }
   }
-
 
   Future<List<Post>> searchPosts(String query) async {
     try {
@@ -156,16 +155,12 @@ class PostService {
   //   }
   // }
 
-//   Future<void> deletePost(String postId) async {
-//     try {
-//       await _firestore.collection('posts').doc(postId).delete();
-//       // Also delete associated media from storage if applicable
-//     } catch (e) {
-//       throw Exception('Failed to delete post: $e');
-//     }
-//   }
-
-
-
-
+  Future<void> deletePost(String postId) async {
+    try {
+      await _firestore.collection('posts').doc(postId).delete();
+      // Also delete associated media from storage if applicable
+    } catch (e) {
+      throw Exception('Failed to delete post: $e');
+    }
+  }
 }

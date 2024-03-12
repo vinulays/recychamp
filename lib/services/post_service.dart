@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:recychamp/models/comment.dart';
@@ -8,6 +9,7 @@ import 'package:recychamp/models/post.dart';
 class PostService {
   final FirebaseFirestore _firestore;
   final FirebaseStorage _storage;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   PostService({
     required FirebaseFirestore firestore,
@@ -31,17 +33,51 @@ class PostService {
     }
   }
 
+  Future<void> addCommentToPost(String postId, String comment) async {
+    try {
+      await _firestore.collection('posts').doc(postId).update({
+        'commentList': FieldValue.arrayUnion([await addComment(comment)]),
+      });
+    } catch (e) {
+      print('Error adding comment: $e');
+    }
+  }
+
+  Future<DocumentReference> addComment(String text) async {
+    try {
+      final User? user = _auth.currentUser;
+
+      final userId = user?.uid;
+
+      DocumentReference commentRef =
+          await _firestore.collection('comments').add({
+        'commentUserId': userId,
+        'description': text,
+        // Add any other fields you need for your comment
+      });
+      return commentRef;
+    } catch (e) {
+      print('Error adding comment: $e');
+      throw e;
+    }
+  }
+
   Future<List<Post>> searchPosts(String query) async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection('posts')
-          .where('description', isGreaterThanOrEqualTo: query)
-          .where('description', isLessThan: query + 'z')
+          .where('description', isEqualTo: query)
           .get();
 
       List<Post> posts = [];
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data();
+
+        List<DocumentReference> commentRefs =
+            List<DocumentReference>.from(data['commentList']);
+
+        List<Comment> comments = await getCommentsForPost(commentRefs);
+
         Post post = Post(
           postId: doc.id,
           postUserId: data['postUserId'],
@@ -50,7 +86,7 @@ class PostService {
           photoUrl: data['postUrl'],
           createdAt: data['createdAt'].toDate(),
           likesCount: data['likesCount'],
-          commentList: List<Comment>.from(data['commentList']),
+          commentList: comments,
         );
         posts.add(post);
       }
@@ -72,7 +108,7 @@ class PostService {
         Map<String, dynamic> data = doc.data();
 
         List<DocumentReference> commentRefs =
-            List<DocumentReference>.from(data['commentList'] ?? []);
+            List<DocumentReference>.from(data['commentList']);
 
         List<Comment> comments = await getCommentsForPost(commentRefs);
 
@@ -100,17 +136,22 @@ class PostService {
       List<Comment> comments = [];
 
       for (var ref in commentRefs) {
-        DocumentSnapshot<Map<String, dynamic>> commentSnapshot =
-            await ref.get() as DocumentSnapshot<Map<String, dynamic>>;
+        DocumentSnapshot commentSnapshot = await ref.get();
 
-        Map<String, dynamic> data = commentSnapshot.data() ?? {};
+        if (commentSnapshot.exists) {
+          Map<String, dynamic> data =
+              commentSnapshot.data() as Map<String, dynamic>;
 
-        Comment comment = Comment(
-            commentId: ref.id,
-            commentUserId: data["commentUserId"],
-            description: data["description"]);
+          Comment comment = Comment(
+              commentId: ref.id,
+              commentUserId: data["commentUserId"],
+              description: data["description"]);
 
-        comments.add(comment);
+          comments.add(comment);
+          // print(ref.id);
+          // print(data["commentUserId"]);
+          // print(data["description"]);
+        }
       }
       return comments;
     } catch (e) {
@@ -118,49 +159,55 @@ class PostService {
     }
   }
 
-  // Future<Post?> getPostById(String postId) async {
-  //   try {
-  //     DocumentSnapshot postSnapshot =
-  //         await _firestore.collection('posts').doc(postId).get();
-  //     final Map<String, dynamic>? data =
-  //         postSnapshot.data() as Map<String, dynamic>?;
-  //     if (data != null) {
-  //       return Post(
-  //         postId: data['postId'],
-  //         postUserId: data['postUserId'],
-  //         description: data['description'],
-  //          photoUrl: data['postUrl'],
-  //         createdAt: data['createdAt'].toDate(),
-  //         likesList: List<String>.from(data['likesList']),
-  //         commentList: List<String>.from(data['commentList']),
-  //       );
-  //     } else {
-  //       return null;
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Failed to get post: $e');
-  //   }
-  // }
-
-  // Future<void> updatePost(Post post) async {
-  //   try {
-  //     await _firestore.collection('posts').doc(post.postId).update({
-  //       'description': post.description,
-  //       'postUrl': post.postUrl,
-  //       'likesList': post.likesList,
-  //       'commentList': post.commentList,
-  //     });
-  //   } catch (e) {
-  //     throw Exception('Failed to update post: $e');
-  //   }
-  // }
-
   Future<void> deletePost(String postId) async {
     try {
       await _firestore.collection('posts').doc(postId).delete();
       // Also delete associated media from storage if applicable
     } catch (e) {
       throw Exception('Failed to delete post: $e');
+    }
+  }
+
+  Future<void> updatePost(Post post) async {
+    try {
+      DocumentReference postRef =
+          _firestore.collection("posts").doc(post.postId);
+
+      await postRef.update({
+        "title": post.title,
+        'description': post.description,
+        // 'photoUrl': post.photoUrl,
+        'createdAt': DateTime.now(),
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> likePost(Post post) async {
+    try {
+      DocumentReference postRef =
+          _firestore.collection("posts").doc(post.postId);
+
+      await postRef.update({
+        "likes": post.likesCount! + 1,
+      });
+      return true;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> dislikePost(Post post) async {
+    try {
+      DocumentReference postRef =
+          _firestore.collection("posts").doc(post.postId);
+
+      await postRef.update({
+        "likes": post.likesCount! - 1,
+      });
+    } catch (e) {
+      rethrow;
     }
   }
 }

@@ -7,32 +7,26 @@ import 'package:jiffy/jiffy.dart';
 import 'package:like_button/like_button.dart';
 import 'package:recychamp/models/comment.dart';
 import 'package:recychamp/models/post.dart';
+import 'package:recychamp/screens/CreatePost/createpost.dart';
 import 'package:recychamp/services/post_service.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
-  const PostCard({super.key, required this.post});
+  final PostService postService;
+  const PostCard({super.key, required this.post, required this.postService});
 
   @override
   State<PostCard> createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
+  PostService postService = PostService(
+      firestore: FirebaseFirestore.instance, storage: FirebaseStorage.instance);
+  final TextEditingController _commentController = TextEditingController();
+  List<Comment> comments = [];
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
-    bool _showComments = false;
-    late final PostService _postService;
-
-    @override
-    void initState() {
-      super.initState();
-      // Initialize PostService with Firestore and FirebaseStorage instances
-      _postService = PostService(
-        firestore: FirebaseFirestore.instance,
-        storage: FirebaseStorage.instance,
-      );
-    }
 
     void deletePost() {
       // Display a dialog box to confirm deletion
@@ -54,7 +48,7 @@ class _PostCardState extends State<PostCard> {
                   // Delete the post from Firestore
                   try {
                     // Call the deletePost method from your PostService
-                    await _postService.deletePost(widget.post.postId!);
+                    await widget.postService.deletePost(widget.post.postId!);
                     Navigator.of(context).pop(); // Close the dialog
                   } catch (e) {
                     // Handle any errors
@@ -136,13 +130,23 @@ class _PostCardState extends State<PostCard> {
                         const PopupMenuItem<int>(
                             value: 0, child: Text("Delete Post")),
                         const PopupMenuItem<int>(
-                            value: 0, child: Text("Update Post")),
+                            value: 1, child: Text("Update Post")),
                       ];
                     },
                     onSelected: (value) {
                       if (value == 0) {
                         deletePost();
-                      } else if (value == 1) {}
+                      } else if (value == 1) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CreatePost(
+                              isUpdate: true,
+                              post: widget.post,
+                            ),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ]),
@@ -166,7 +170,7 @@ class _PostCardState extends State<PostCard> {
               height: 200,
               decoration: ShapeDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(widget.post.photoUrl),
+                      image: NetworkImage(widget.post.photoUrl!),
                       fit: BoxFit.cover),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.83))),
@@ -189,6 +193,9 @@ class _PostCardState extends State<PostCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 LikeButton(
+                  onTap: (_) {
+                    return postService.likePost(widget.post);
+                  },
                   size: 30,
                   circleColor:
                       const CircleColor(start: Colors.red, end: Colors.red),
@@ -222,9 +229,6 @@ class _PostCardState extends State<PostCard> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _showComments = true;
-                    });
                     showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
@@ -237,91 +241,90 @@ class _PostCardState extends State<PostCard> {
                               children: [
                                 Expanded(
                                   child: ListView(children: [
-                                    Container(
-                                      margin: const EdgeInsets.all(20),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount:
+                                          widget.post.commentList?.length,
+                                      itemBuilder: (context, index) {
+                                        Comment comment =
+                                            widget.post.commentList![index];
+                                        return Container(
+                                          margin: const EdgeInsets.all(20),
+                                          child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              const SizedBox(
-                                                width: 46,
-                                                height: 46,
-                                                child: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                      "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww"),
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Expanded(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: Colors.black
-                                                          .withOpacity(0.15)),
-                                                  child: Container(
-                                                    margin: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 5,
-                                                        horizontal: 7),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          "Chamoth Mendis",
-                                                          style: GoogleFonts
-                                                              .poppins(
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(
+                                                    width: 46,
+                                                    height: 46,
+                                                    child: CircleAvatar(
+                                                      backgroundImage: NetworkImage(
+                                                          "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww"),
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Expanded(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          color: Colors.black
+                                                              .withOpacity(
+                                                                  0.15)),
+                                                      child: Container(
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            vertical: 5,
+                                                            horizontal: 7),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              "Chamoth Mendis",
+                                                              style: GoogleFonts.poppins(
                                                                   color: Colors
                                                                       .black,
                                                                   fontSize: 14,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700),
+                                                            ),
+                                                            Text(
+                                                              comment
+                                                                  .description,
+                                                              style: GoogleFonts.poppins(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 10),
+                                                          ],
                                                         ),
-                                                        if (_showComments) ...[
-                                                          const SizedBox(
-                                                              height: 10),
-                                                          ListView.builder(
-                                                            shrinkWrap: true,
-                                                            itemCount: widget
-                                                                .post
-                                                                .commentList
-                                                                .length,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              Comment comment =
-                                                                  widget.post
-                                                                          .commentList[
-                                                                      index];
-                                                              return ListTile(
-                                                                title: Text(comment
-                                                                    .description),
-                                                              );
-                                                            },
-                                                          )
-                                                        ]
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                              )
+                                                  )
+                                                ],
+                                              ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
+                                        );
+                                      },
+                                    )
                                   ]),
                                 ),
                                 Container(
@@ -329,6 +332,7 @@ class _PostCardState extends State<PostCard> {
                                   margin: EdgeInsets.symmetric(
                                       horizontal: deviceData.size.width * 0.05),
                                   child: TextField(
+                                    controller: _commentController,
                                     onSubmitted: (query) {},
                                     style: GoogleFonts.poppins(
                                       fontSize: 17,
@@ -343,7 +347,12 @@ class _PostCardState extends State<PostCard> {
                                           padding:
                                               const EdgeInsets.only(right: 20),
                                           child: InkWell(
-                                            onTap: () {},
+                                            onTap: () {
+                                              widget.postService
+                                                  .addCommentToPost(
+                                                      widget.post.postId!,
+                                                      _commentController.text);
+                                            },
                                             child: const Icon(Icons.send),
                                           ),
                                         ),
@@ -375,7 +384,7 @@ class _PostCardState extends State<PostCard> {
                         width: 5,
                       ),
                       Text(
-                        "Comments (${widget.post.commentList.length})",
+                        "Comments (${widget.post.commentList?.length})",
                         style: GoogleFonts.poppins(fontSize: 14),
                       )
                     ],

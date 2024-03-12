@@ -4,23 +4,23 @@ import 'package:recychamp/models/comment.dart';
 @immutable
 class Post {
   final String? postId;
-  final String postUserId;
+  final String? postUserId;
   final String title;
   final String description;
-  final String photoUrl;
+  final String? photoUrl;
   final DateTime createdAt;
-  final int likesCount;
-  final List<Comment> commentList;
+  final int? likesCount;
+  final List<Comment>? commentList;
 
   const Post({
     this.postId,
     required this.title,
-    required this.postUserId,
+    this.postUserId,
     required this.description,
-    required this.photoUrl,
+    this.photoUrl,
     required this.createdAt,
-    required this.likesCount,
-    required this.commentList,
+    this.likesCount,
+    this.commentList,
   });
 
   Map<String, dynamic> toJson() {
@@ -32,7 +32,7 @@ class Post {
       'photoUrl': photoUrl,
       'createdAt': createdAt.toIso8601String(),
       'likesCount': likesCount,
-      'commentList': commentList.map((comment) => comment.toJson()).toList(),
+      'commentList': commentList?.map((comment) => comment.toJson()).toList(),
     };
   }
 

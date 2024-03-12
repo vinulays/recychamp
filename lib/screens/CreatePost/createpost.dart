@@ -12,13 +12,17 @@ import 'package:recychamp/screens/Calendar/constants.dart';
 import 'package:recychamp/services/post_service.dart';
 
 class CreatePost extends StatefulWidget {
-  const CreatePost({super.key});
+  final Post? post;
+  final bool isUpdate;
+  const CreatePost({super.key, this.post, required this.isUpdate});
 
   @override
   State<CreatePost> createState() => _CreatePostState();
 }
 
 class _CreatePostState extends State<CreatePost> {
+  String userImageURL = "";
+
   Uint8List? _file;
   final TextEditingController _postTitleController = TextEditingController();
   final TextEditingController _postDescriptionController =
@@ -35,8 +39,42 @@ class _CreatePostState extends State<CreatePost> {
       firestore: FirebaseFirestore.instance,
       storage: FirebaseStorage.instance,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.isUpdate) {
+        setState(() {
+          _postTitleController.text = widget.post!.title;
+          _postDescriptionController.text = widget.post!.description;
+        });
+        // setState(() {
+        //   imageURL = widget.challenge!.imageURL;
+        // });
+      }
+    });
+
+    getUserImage();
   }
 
+  Future<void> getUserImage() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        String? imageURL = await userSnapshot.get("imageUrl");
+
+        setState(() {
+          userImageURL = imageURL!;
+        });
+      }
+    } catch (error) {
+      throw Exception("Error getting image: $error");
+    }
+  }
   // void _selectImage(BuildContext parentContext, ImageSource source) async {
   //   final picker = ImagePicker();
   //   Uint8List file = (await picker.pickImage(source: source)) as Uint8List;
@@ -84,6 +122,31 @@ class _CreatePostState extends State<CreatePost> {
     );
   }
 
+  Future<void> _updatePost() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final imageUrl = await _uploadImage();
+
+    final post = Post(
+      postId: widget.post?.postId,
+      title: _postTitleController.text,
+      description: _postDescriptionController.text,
+      createdAt: DateTime.now(),
+    );
+
+    await _postService.updatePost(post);
+
+    // Clear input fields and selected image
+    _postTitleController.clear();
+    _postDescriptionController.clear();
+    setState(() {
+      _file = null;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Post updated successfully')),
+    );
+  }
+
   Future<String> _uploadImage() async {
     if (_file == null) {
       return '';
@@ -91,7 +154,7 @@ class _CreatePostState extends State<CreatePost> {
 
     final ref = FirebaseStorage.instance
         .ref()
-        .child('images')
+        .child('postImages')
         .child(DateTime.now().toString());
     final uploadTask = ref.putData(_file!);
     final snapshot = await uploadTask.whenComplete(() => null);
@@ -187,6 +250,7 @@ class _CreatePostState extends State<CreatePost> {
     var deviceData = MediaQuery.of(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: deviceData.size.width * 0.05),
         child: Column(
@@ -227,9 +291,8 @@ class _CreatePostState extends State<CreatePost> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww"),
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(userImageURL),
                       ),
                       const SizedBox(
                         width: 10,
@@ -248,6 +311,7 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                   SizedBox(
                     child: TextField(
+                      controller: _postTitleController,
                       maxLines: 1,
                       decoration: InputDecoration(
                         hintText: "Title.....",
@@ -270,6 +334,7 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                   SizedBox(
                     child: TextField(
+                      controller: _postDescriptionController,
                       maxLines: 5,
                       decoration: InputDecoration(
                         hintText: "Description.....",
@@ -385,7 +450,12 @@ class _CreatePostState extends State<CreatePost> {
                 child: TextButton(
                   onPressed: () {
                     // post publish
-                    _publishPost();
+
+                    if (widget.isUpdate) {
+                      _updatePost();
+                    } else {
+                      _publishPost();
+                    }
                   },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(

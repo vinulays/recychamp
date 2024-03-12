@@ -67,42 +67,42 @@ class ArticleContent extends StatelessWidget {
               ),
             ),
           ]),
-          Row(
-            children: [
-              Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: deviceData.size.width * 0.05),
-                  child: Text(
-                    "${DateFormat('d MMMM yyyy').format(articlels.modifiedDate)}",
-                    style: kFontFamily(
-                        color: const Color.fromRGBO(61, 61, 61, 0.65),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
-                  )),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Container(
+          //         margin: EdgeInsets.symmetric(
+          //             horizontal: deviceData.size.width * 0.05),
+          //         child: Text(
+          //           "${DateFormat('d MMMM yyyy').format(articlels.modifiedDate)}",
+          //           style: kFontFamily(
+          //               color: const Color.fromRGBO(61, 61, 61, 0.65),
+          //               fontSize: 14,
+          //               fontWeight: FontWeight.w400),
+          //         )),
+          //   ],
+          // ),
           const SizedBox(
             height: 20,
           ),
-          Flexible(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: deviceData.size.width * 0.05),
-                child: Text(
-                  articlels.content,
-                  style: kFontFamily(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300,
-                    height: 1.5,
-                  ),
-                  textAlign: TextAlign.justify,
-                ),
-              ),
-            ),
-          ),
+          // Flexible(
+          //   child: SingleChildScrollView(
+          //     scrollDirection: Axis.vertical,
+          //     child: Padding(
+          //       padding: EdgeInsets.symmetric(
+          //           horizontal: deviceData.size.width * 0.05),
+          //       child: Text(
+          //        // articlels.content,
+          //         style: kFontFamily(
+          //           color: Colors.black,
+          //           fontSize: 14,
+          //           fontWeight: FontWeight.w300,
+          //           height: 1.5,
+          //         ),
+          //         textAlign: TextAlign.justify,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

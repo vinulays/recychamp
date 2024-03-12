@@ -1,17 +1,14 @@
-// import 'dart:ffi';
-// import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:recychamp/screens/Calendar/calendar_event.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import "package:google_fonts/google_fonts.dart";
 import 'package:recychamp/screens/EducationalResources/article_content.dart';
 import 'package:recychamp/models/article_model.dart';
 import 'package:recychamp/ui/article_filter.dart';
+import 'package:recychamp/ui/article_form.dart';
 import 'package:recychamp/utils/articles_data.dart';
 
 class EducationalResource extends StatefulWidget {
@@ -27,6 +24,27 @@ class _EducationalResourceState extends State<EducationalResource> {
     var deviceData = MediaQuery.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to the new page where users can add articles
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  const AricleForms(), // Replace with your new page widget
+            ),
+          );
+        },
+        backgroundColor: const Color(0xFF75A488),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 40.0,
+        ),
+      ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(

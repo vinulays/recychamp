@@ -243,9 +243,40 @@ class ChallengeService {
       await challengeRef.update({
         'submittedParticipants': FieldValue.arrayUnion([userId]),
       });
+
+      await updateChallegeRating(challengeId, formData["rating"]);
     } catch (e) {
       throw Exception("Failed to submit challenge: $e");
     }
+  }
+
+  //  * Updating challenge rating based on the submission rating
+  Future<void> updateChallegeRating(
+      String challengeId, double submittedRating) async {
+    double submissionRating = submittedRating;
+    double currentRating = 0;
+    int submissionCount = 0;
+
+    DocumentReference challengeRef =
+        _firestore.collection("challenges").doc(challengeId);
+
+    QuerySnapshot submissionsSnapshot = await _firestore
+        .collection("submissions")
+        .where("challengeId", isEqualTo: challengeId)
+        .get();
+
+    for (var submissionDoc in submissionsSnapshot.docs) {
+      submissionCount++;
+      currentRating += submissionDoc["rating"] ?? 0;
+    }
+
+    // * Calculating average rating
+    double newRating =
+        (currentRating + submissionRating) / (submissionCount + 1);
+
+    await challengeRef.update({
+      'rating': newRating,
+    });
   }
 
   // * getting submission using user id and challenge id from firebase

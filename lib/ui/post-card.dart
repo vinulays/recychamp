@@ -12,8 +12,10 @@ import 'package:recychamp/services/post_service.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
+
   final PostService postService;
   const PostCard({super.key, required this.post, required this.postService});
+
 
   @override
   State<PostCard> createState() => _PostCardState();

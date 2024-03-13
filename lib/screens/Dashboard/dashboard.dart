@@ -247,7 +247,8 @@ class _DashboardState extends State<Dashboard> {
                                           if (state is ChallengesLoaded)
                                             Expanded(
                                               child: ListView.builder(
-                                                itemCount: 4,
+                                                itemCount:
+                                                    state.challenges.length,
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         int index) {

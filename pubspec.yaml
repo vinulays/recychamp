@@ -93,6 +93,10 @@ flutter:
     - assets/images/welcome_girl.png
     - assets/icons/Settings.svg
     - assets/icons/gold-medal.svg
+    - assets/icons/bronze-medal.svg
+    - assets/icons/silver-medal.svg
+    - assets/icons/diamond-medal.svg
+    - assets/icons/ultimate-medal.svg
     - assets/icons/search.svg
     - assets/icons/search-low-opacity.svg
     - assets/icons/filter.svg

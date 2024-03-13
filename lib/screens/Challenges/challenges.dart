@@ -45,7 +45,9 @@ class _ChallengesState extends State<Challenges> {
   @override
   void initState() {
     super.initState();
-    getUserRole();
+    if (mounted) {
+      getUserRole();
+    }
   }
 
   Future<void> getUserRole() async {

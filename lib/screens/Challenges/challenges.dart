@@ -38,7 +38,7 @@ class _ChallengesState extends State<Challenges> {
     final challengesBloc = BlocProvider.of<ChallengesBloc>(context);
 
     // todo: apply filters to the completed status of the challenge (need to have authentication)
-    challengesBloc.add(ApplyFiltersEvent(filters));
+    challengesBloc.add(ApplyFiltersEvent(filters, isCompletedSelected));
   }
 
   // * getting the role of the logged user when initialising the widget

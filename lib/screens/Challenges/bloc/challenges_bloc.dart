@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
 import 'package:recychamp/utils/challenge_categories.dart';
@@ -74,13 +75,25 @@ class ChallengesBloc extends Bloc<ChallengesEvent, ChallengesState> {
     // * filter challenges locally
     on<ApplyFiltersEvent>((event, emit) async {
       try {
+        User? user = FirebaseAuth.instance.currentUser;
+
         List<Challenge> challenges = await _challengeRepository.getChallenges();
 
         List<Challenge> filteredChallenges = challenges.where((challenge) {
-          return (event.filters.isEmpty ||
-              event.filters.contains(challengeCategories
-                  .firstWhere((category) => category.id == challenge.categoryId)
-                  .name));
+          if (event.isCompleted) {
+            return (event.filters.isEmpty ||
+                    event.filters.contains(challengeCategories
+                        .firstWhere(
+                            (category) => category.id == challenge.categoryId)
+                        .name)) &&
+                challenge.submittedParticipants.contains(user?.uid);
+          } else {
+            return (event.filters.isEmpty ||
+                event.filters.contains(challengeCategories
+                    .firstWhere(
+                        (category) => category.id == challenge.categoryId)
+                    .name));
+          }
         }).toList();
 
         emit(ChallengesLoaded(filteredChallenges));

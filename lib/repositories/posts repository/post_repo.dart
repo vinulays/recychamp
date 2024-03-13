@@ -19,9 +19,9 @@ class PostRepository {
   //   await _postService.updatePost(post);
   // }
 
-  // Future<void> deletePost(String postId) async {
-  //   await _postService.deletePost(postId);
-  // }
+  Future<void> deletePost(String postId) async {
+    await _postService.deletePost(postId);
+  }
 
   Future<List<Post>> getAllPosts() async {
     try {

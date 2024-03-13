@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,6 +10,7 @@ import 'package:recychamp/screens/Community/bloc/posts_event.dart';
 import 'package:recychamp/screens/Community/bloc/posts_state.dart';
 
 import 'package:recychamp/screens/CreatePost/createpost.dart';
+import 'package:recychamp/services/post_service.dart';
 import 'package:recychamp/ui/post-card.dart';
 
 class Community extends StatefulWidget {
@@ -18,9 +21,14 @@ class Community extends StatefulWidget {
 }
 
 class _CommunityState extends State<Community> {
+  late final PostService _postService;
+  final TextEditingController _searchController = TextEditingController();
   @override
   void initState() {
     super.initState();
+    _postService = PostService(
+        firestore: FirebaseFirestore.instance,
+        storage: FirebaseStorage.instance);
     context.read<PostBloc>().add(FetchPostsEvent());
   }
 
@@ -30,6 +38,7 @@ class _CommunityState extends State<Community> {
     var deviceData = MediaQuery.of(context);
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
+        final postBloc = BlocProvider.of<PostBloc>(context);
         return (state is PostLoaded)
             ? Scaffold(
                 resizeToAvoidBottomInset: false,
@@ -94,7 +103,10 @@ class _CommunityState extends State<Community> {
                                   const EdgeInsets.only(left: 13, right: 10),
                               child: InkWell(
                                 // * search posts when tapped search icon
-                                onTap: () {},
+                                onTap: () {
+                                  postBloc.add(
+                                      SearchPostsEvent(_searchController.text));
+                                },
                                 child: SvgPicture.asset(
                                   "assets/icons/search.svg",
                                 ),
@@ -152,7 +164,9 @@ class _CommunityState extends State<Community> {
                         physics: const ClampingScrollPhysics(),
                         itemCount: state.posts.length,
                         itemBuilder: (BuildContext context, index) {
-                          return PostCard(post: state.posts[index]);
+                          return PostCard(
+                              post: state.posts[index],
+                              postService: _postService);
                         },
                       ),
                     )
@@ -166,7 +180,9 @@ class _CommunityState extends State<Community> {
                       pageBuilder: (BuildContext buildContext,
                           Animation<double> animation,
                           Animation<double> secondaryAnimation) {
-                        return const CreatePost();
+                        return const CreatePost(
+                          isUpdate: false,
+                        );
                       },
                     );
                   },

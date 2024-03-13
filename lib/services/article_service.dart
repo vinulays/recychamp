@@ -49,4 +49,21 @@ class ArticleService {
       rethrow;
     }
   }
+
+  // * update challenge in firebsae
+  Future<void> updateArticle(Map<String, dynamic> formData) async {
+    try {
+      DocumentReference articleRef =
+          _firestore.collection("articles").doc(formData["id"]);
+
+      await articleRef.update({
+        "articleTitle": formData['articleTitle'],
+        "description": formData["description"],
+        "articleImage": formData["articleImage"],
+        "articleType": formData["articleType"],
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

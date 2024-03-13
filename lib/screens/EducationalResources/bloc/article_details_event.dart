@@ -14,3 +14,9 @@ class AddArticleEvent extends ArticleDetailsEvent {
 
   AddArticleEvent(this.formData);
 }
+
+class UpdateArticleEvent extends ArticleDetailsEvent {
+  final Map<String, dynamic> formData;
+
+  UpdateArticleEvent(this.formData);
+}

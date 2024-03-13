@@ -14,4 +14,8 @@ class ArticleRepo {
   Future<void> addArticle(Map<String, dynamic> formData) async {
     await _articleServise.addArticle(formData);
   }
+
+  Future<void> updateArticle(Map<String, dynamic> formData) async {
+    await _articleServise.updateArticle(formData);
+  }
 }

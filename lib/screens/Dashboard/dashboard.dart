@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
+import 'package:recychamp/screens/Dashboard/bloc/badge_bloc.dart';
 import 'package:recychamp/screens/Shop/shop.dart';
 import 'package:recychamp/screens/Calendar/calendar_event.dart';
 import 'package:recychamp/screens/EducationalResources/articles.dart';
@@ -19,6 +21,11 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
@@ -96,33 +103,37 @@ class _DashboardState extends State<Dashboard> {
                       alignment: Alignment.center,
                       children: [
                         // * Profile picture frame
+                        // todo: replace with signed user photo url
                         Positioned(
                           height: 84.15,
                           top: -84.15 / 2,
-                          child: Container(
-                            width: 84.15,
-                            height: 84.15,
-                            decoration: ShapeDecoration(
-                              gradient: const LinearGradient(
-                                begin: Alignment(0.00, 1.00),
-                                end: Alignment(0, -1),
-                                colors: [
-                                  Color(0xFFFEAA42),
-                                  Color(0xFFFBA33F),
-                                  Color(0xFFF59838),
-                                  Color(0xFFF29135),
-                                  Color(0xFFF18F34),
-                                  Color(0xFFF28F3E),
-                                  Color(0xFFF38E5A),
-                                  Color(0xFFF68D88),
-                                  Color(0xFFF78C9B),
-                                  Color(0xFFF08672)
-                                ],
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.83),
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                "https://images.unsplash.com/photo-1582887122254-f271875d0594?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzB8fGtpZHxlbnwwfHwwfHx8MA%3D%3D",
+                            imageBuilder: (context, imageProvider) => Container(
+                              height: 84.15,
+                              width: 84.15,
+                              decoration: ShapeDecoration(
+                                  image: DecorationImage(
+                                      image: imageProvider, fit: BoxFit.cover),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(16.83))),
+                            ),
+                            placeholder: (context, url) => Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16.83)),
+                              height: 84.15,
+                              width: 84.15,
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [CircularProgressIndicator()],
                               ),
                             ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
                         ),
                         // * remaining content
@@ -133,10 +144,25 @@ class _DashboardState extends State<Dashboard> {
                                 margin: const EdgeInsets.only(top: 50),
                                 child: Column(
                                   children: [
-                                    SvgPicture.asset(
-                                      "assets/icons/gold-medal.svg",
-                                      height: 32.08,
-                                      width: 32.08,
+                                    BlocBuilder<BadgeBloc, BadgeState>(
+                                      builder: (context, state) {
+                                        if (state is BadgeLoading) {
+                                          return Center(
+                                              child: SizedBox(
+                                                  height: 32,
+                                                  width: 32,
+                                                  child: Container()));
+                                        } else if (state is BadgeLoaded) {
+                                          return SvgPicture.asset(
+                                            "assets/icons/${state.badge}-medal.svg",
+                                            height: 32.08,
+                                            width: 32.08,
+                                          );
+                                        } else {
+                                          return const Center(
+                                              child: Icon(Icons.error));
+                                        }
+                                      },
                                     ),
                                     Expanded(
                                       child: Column(

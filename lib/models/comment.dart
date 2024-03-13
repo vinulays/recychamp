@@ -8,4 +8,12 @@ class Comment {
     required this.commentUserId,
     required this.description,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'commentId': commentId,
+      'commentUserId': commentUserId,
+      'description': description,
+    };
+  }
 }

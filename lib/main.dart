@@ -10,7 +10,6 @@ import 'package:recychamp/repositories/article_repository.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
 import 'package:recychamp/repositories/posts%20repository/post_repo.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
-import 'package:recychamp/screens/ChallengeSubmissionView/bloc/submission_view_bloc.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Community/bloc/posts_bloc.dart';
 import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
@@ -96,7 +95,6 @@ class MyApp extends StatelessWidget {
               FetchChallengesEvent(),
             ),
         ),
-
         BlocProvider<PostBloc>(
           create: (context) => PostBloc(
             repository: PostRepository(
@@ -127,6 +125,7 @@ class MyApp extends StatelessWidget {
               challengeService:
                   // * adding current firebase instance to the challenge service
                   ChallengeService(
+
                       firestore: FirebaseFirestore.instance,
                       storage: FirebaseStorage.instance),
             ),

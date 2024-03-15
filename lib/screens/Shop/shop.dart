@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import "package:google_fonts/google_fonts.dart";
+import 'package:recychamp/screens/Shop/bloc/shop_bloc.dart';
+import 'package:recychamp/models/product.dart';
 import 'package:recychamp/ui/shop_filter.dart';
 
 class Shop extends StatefulWidget {
@@ -12,10 +14,58 @@ class Shop extends StatefulWidget {
 
 class _ShopState extends State<Shop> {
   @override
+  void initState() {
+    super.initState();
+    //fetchProducts();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
+      //   appBar: AppBar(
+      //     title: const Text('Shop'),
+      //     actions: [
+      //       IconButton(
+      //         onPressed: (){
+      //           //cart func
+      //         },
+      //         icon: const Icon(Icons.shopping_cart)
+      //         )
+      //     ],
+      //   ),
+      //   body: StreamBuilder<List<Product>>(
+      //     stream: widget.bloc.productsStream,
+      //     builder: (context, snapshot) {
+      //       if (snapshot.hasData){
+      //         final List<Product> products = snapshot.data!;
+      //         return GridView.builder(
+      //           padding: const EdgeInsets.all(8),
+      //           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      //             crossAxisCount: 2,
+      //             mainAxisSpacing: 8,
+      //             crossAxisSpacing: 8,
+      //             childAspectRatio: 0.75,
+      //           ),
+      //           itemCount: products.length,
+      //           itemBuilder: (context, index) {
+      //             return _buildProductCard(products[index]);
+      //           },
+      //         );
+      //         } else if (snapshot.hasError) {
+      //         return const Center(
+      //           child: Text('Error fetching data'),
+      //         );
+      //       } else {
+      //         return const Center(
+      //           child: CircularProgressIndicator(),
+      //         );
+      //       }
+      //     },
+      //   ),
+      // );
+
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -43,7 +93,7 @@ class _ShopState extends State<Shop> {
                           fontWeight: FontWeight.bold,
                           fontSize: 25)),
                   const SizedBox(width: 215),
-                  const Icon(Icons.settings)
+                  const Icon(Icons.shopping_cart)
                 ],
               ),
             ),
@@ -317,4 +367,63 @@ class _ShopState extends State<Shop> {
       ),
     );
   }
+
+  // Widget _buildProductCard(Product product) {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => ProductDetailsPage(product: product),
+  //         ),
+  //       );
+  //     },
+  //     child: Card(
+  //       elevation: 2,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(8),
+  //       ),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Expanded(
+  //             child: ClipRRect(
+  //               borderRadius: const BorderRadius.only(
+  //                 topLeft: Radius.circular(8),
+  //                 topRight: Radius.circular(8),
+  //               ),
+  //               child: Image.network(
+  //                 product.imageUrl,
+  //                 width: double.infinity,
+  //                 fit: BoxFit.cover,
+  //               ),
+  //             ),
+  //           ),
+  //           Padding(
+  //             padding: const EdgeInsets.all(8),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   product.name,
+  //                   style: const TextStyle(
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 4),
+  //                 Text(
+  //                   '\$${product.price.toStringAsFixed(2)}',
+  //                   style: const TextStyle(
+  //                     color: Colors.green,
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }

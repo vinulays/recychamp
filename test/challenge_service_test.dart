@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:recychamp/models/submission.dart';
 import 'package:recychamp/services/challenge_service.dart';
 import 'package:path/path.dart' as path;
 
@@ -10,6 +11,7 @@ void main() {
   late ChallengeService challengeService;
   late FakeFirebaseFirestore fakeFirebaseFirestore;
   late MockFirebaseStorage mockFirebaseStorage;
+
   Map<String, dynamic> formData = {
     "title": "Beach Clean Challenge",
     "description": "Hi description",
@@ -197,5 +199,122 @@ void main() {
     final challenges = await challengeService.getChallenges();
 
     expect(challenges.length, 0);
+  });
+
+  test("accept a challenge", () async {
+    const challengeId = "123";
+    const userId = "1";
+
+    await fakeFirebaseFirestore.collection("challenges").doc(challengeId).set({
+      "title": formData['title'],
+      "description": formData["description"],
+      "location": formData["location"],
+      "country": formData["country"],
+      "rules": formData["rules"],
+      "startDateTime": DateTime(
+          formData["startDate"]
+              .year, // * combining selected dates and times to create the timestamp
+          formData["startDate"].month,
+          formData["startDate"].day,
+          formData["startTime"].hour,
+          formData["startTime"].minute),
+      "endDateTime": DateTime(
+          formData["endDate"].year,
+          formData["endDate"].month,
+          formData["endDate"].day,
+          formData["endTime"].hour,
+          formData["endTime"].minute),
+      "completedPercentage": 0,
+      "maximumParticipants": int.parse(
+          formData["maximumParticipants"]), // * converting string to integer
+      "acceptedParticipants": [],
+      "submittedParticipants": [],
+      "difficulty": formData["difficulty"],
+      "imageURL": "https://hi-image.png",
+      "rating": 0,
+      "categoryId": formData["categoryId"],
+      "createdAt": DateTime.now(),
+      "type": formData["type"]
+    });
+
+    await challengeService.acceptChallenge(challengeId, userId);
+
+    final challengeSnapshot = await fakeFirebaseFirestore
+        .collection('challenges')
+        .doc(challengeId)
+        .get();
+
+    final acceptedParticipants =
+        challengeSnapshot.data()!['acceptedParticipants'] as List;
+
+    // * checking whether accpetedParicipants list contains the user id.
+    expect(acceptedParticipants.contains(userId), isTrue);
+  });
+
+  test("submit a challenge", () async {
+    const challengeId = "123";
+    const userId = "1";
+
+    final submissonData = {
+      'description': 'Challenge description',
+      'imageURLs': [],
+      'rating': 5.0, // Rating example
+      'experience': 'Great experience',
+    };
+
+    await fakeFirebaseFirestore.collection("challenges").doc(challengeId).set({
+      "title": formData['title'],
+      "description": formData["description"],
+      "location": formData["location"],
+      "country": formData["country"],
+      "rules": formData["rules"],
+      "startDateTime": DateTime(
+          formData["startDate"]
+              .year, // * combining selected dates and times to create the timestamp
+          formData["startDate"].month,
+          formData["startDate"].day,
+          formData["startTime"].hour,
+          formData["startTime"].minute),
+      "endDateTime": DateTime(
+          formData["endDate"].year,
+          formData["endDate"].month,
+          formData["endDate"].day,
+          formData["endTime"].hour,
+          formData["endTime"].minute),
+      "completedPercentage": 0,
+      "maximumParticipants": int.parse(
+          formData["maximumParticipants"]), // * converting string to integer
+      "acceptedParticipants": [],
+      "submittedParticipants": [],
+      "difficulty": formData["difficulty"],
+      "imageURL": "https://hi-image.png",
+      "rating": 0,
+      "categoryId": formData["categoryId"],
+      "createdAt": DateTime.now(),
+      "type": formData["type"]
+    });
+
+    await challengeService.submitChallenge(userId, submissonData, challengeId);
+
+    final challengeSnapshot = await fakeFirebaseFirestore
+        .collection('challenges')
+        .doc(challengeId)
+        .get();
+
+    final submittedParticipants =
+        challengeSnapshot.data()!['submittedParticipants'] as List;
+    final rating = challengeSnapshot.data()!['rating'];
+
+    Submission? submission =
+        await challengeService.getSubmission(userId, challengeId);
+
+    // * checking the submission is saved in firebase
+    expect(submission != null, isTrue);
+
+    // * checking the user id is added to the submitted participants list in the submitted challenge
+    expect(submittedParticipants.contains(userId), isTrue);
+
+    // * checking the updated rating of the submitted challenge
+    expect(rating, 5.0);
   });
 }

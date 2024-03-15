@@ -21,6 +21,7 @@ class ChallengeService {
           .collection('challenges')
           .orderBy("createdAt", descending: true)
           .get(const GetOptions(source: Source.server));
+
       List<Challenge> challenges = [];
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data();
@@ -181,7 +182,7 @@ class ChallengeService {
       await challengeRef.delete();
 
       // * deleting the image associated with the challenge
-      Reference imageRef = FirebaseStorage.instance.refFromURL(imageURL);
+      Reference imageRef = _storage.refFromURL(imageURL);
       await imageRef.delete();
     } catch (e) {
       throw Exception('Failed to delete the challenge: $e');

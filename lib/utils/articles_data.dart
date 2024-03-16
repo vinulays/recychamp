@@ -7,17 +7,18 @@ final List<Article> articlelNature = [
     articleTitle: "The Wonders of Geology",
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.',
-    modifiedDate: DateTime(2022, 3, 4),
-    content: ''' Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
-ante
+    // modifiedDate: DateTime(2022, 3, 4),
+    articleType: "ssds",
+//     content: ''' Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+// Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat
+// ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
-Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.
+// Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
-d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
-''',
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+// d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit.
+// ''',
   ),
   Article(
     articleImage:
@@ -25,19 +26,20 @@ d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsu
     articleTitle: "Photographing Nature",
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
-    modifiedDate: DateTime(2020, 10, 4),
-    content: '''
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, 
-justo quam consequat 
-ante
+    // modifiedDate: DateTime(2020, 10, 4),
+//     content: '''
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+// Sed et est libero. Sed posuere, tortor sit amet cursus dignissim,
+// justo quam consequat
+// ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
-Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.
+// Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
-d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
-''',
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+// d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit.
+// ''',
+    articleType: "ssds",
   ),
   Article(
     articleImage:
@@ -45,18 +47,19 @@ d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsu
     articleTitle: "The Wonders of Geology",
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.',
-    modifiedDate: DateTime(2012, 3, 14),
-    content: '''
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
-ante
+//     modifiedDate: DateTime(2012, 3, 14),
+//     content: '''
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+// Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat
+// ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
-Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.
+// Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
-d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
-''',
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+// d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit.
+// ''',
+    articleType: "ssds",
   )
 ];
 
@@ -67,18 +70,19 @@ List<Article> articlePlants = [
     articleTitle: "The Wonders of Geology",
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
-    modifiedDate: DateTime(2020, 8, 10),
-    content: '''
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
-ante
+//     modifiedDate: DateTime(2020, 8, 10),
+//     content: '''
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+// Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat
+// ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
-Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.
+// Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
-d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
-''',
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+// d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit.
+// ''',
+    articleType: "ssds",
   ),
   Article(
     articleImage:
@@ -86,18 +90,19 @@ d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsu
     articleTitle: "The Wonders of Geology",
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
-    modifiedDate: DateTime(2022, 5, 4),
-    content: '''
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
-ante
+//     modifiedDate: DateTime(2022, 5, 4),
+//     content: '''
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+// Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat
+// ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
-Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.
+// Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
-d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
-''',
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+// d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit.
+// ''',
+    articleType: "ssds",
   ),
   Article(
     articleImage:
@@ -105,18 +110,19 @@ d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsu
     articleTitle: "The Wonders of Geology",
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
-    modifiedDate: DateTime(2022, 3, 4),
-    content: '''
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
-ante
+//     modifiedDate: DateTime(2022, 3, 4),
+//     content: '''
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+// Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat
+// ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
-Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.
+// Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
-d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
-''',
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+// d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit.
+// ''',
+    articleType: "ssds",
   ),
 ];
 
@@ -127,18 +133,19 @@ List<Article> articleTrees = [
     articleTitle: "The Wonders of Geology",
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
-    modifiedDate: DateTime(2022, 3, 4),
-    content: '''
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
-ante
+//     modifiedDate: DateTime(2022, 3, 4),
+//     content: '''
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+// Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat
+// ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
-Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.
+// Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
-d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
-''',
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+// d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit.
+// ''',
+    articleType: "ssds",
   ),
   Article(
     articleImage:
@@ -146,18 +153,20 @@ d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsu
     articleTitle: "The Wonders of Geology",
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
-    modifiedDate: DateTime(2022, 3, 4),
-    content: '''
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
-ante
+//     modifiedDate: DateTime(2022, 3, 4),
+//     content: '''
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+// Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat
+// ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
-Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.
+// Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet,
+// consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
-d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
-''',
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+// d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit.
+// ''',
+    articleType: 'aaa',
   ),
   Article(
     articleImage:
@@ -165,17 +174,18 @@ d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsu
     articleTitle: "The Wonders of Geology",
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. ddddddd',
-    modifiedDate: DateTime(2022, 10, 4),
-    content: '''
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat 
-ante
+//     modifiedDate: DateTime(2022, 10, 4),
+//     content: '''
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+// Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat
+// ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. 
-Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero.
+// Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
-d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. 
-''',
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Se
+// d posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat anteLorem ipsum dolor sit amet, consectetur adipiscing elit.
+// ''',
+    articleType: "ssds",
   ),
 ];

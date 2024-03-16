@@ -27,8 +27,9 @@ class DeleteChallengeEvent extends ChallengesEvent {
 
 class ApplyFiltersEvent extends ChallengesEvent {
   final Set<String> filters;
+  final bool isCompleted;
 
-  ApplyFiltersEvent(this.filters);
+  ApplyFiltersEvent(this.filters, this.isCompleted);
 }
 
 class ResetChallengesEvent extends ChallengesEvent {}

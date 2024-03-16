@@ -77,6 +77,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.1
+  fake_cloud_firestore: ^2.4.8
+  firebase_storage_mocks: ^0.6.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -93,6 +95,10 @@ flutter:
     - assets/images/welcome_girl.png
     - assets/icons/Settings.svg
     - assets/icons/gold-medal.svg
+    - assets/icons/bronze-medal.svg
+    - assets/icons/silver-medal.svg
+    - assets/icons/diamond-medal.svg
+    - assets/icons/ultimate-medal.svg
     - assets/icons/search.svg
     - assets/icons/search-low-opacity.svg
     - assets/icons/filter.svg

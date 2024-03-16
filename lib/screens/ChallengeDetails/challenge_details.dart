@@ -13,6 +13,7 @@ import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ChallengeForm/challenge_form.dart';
 import 'package:recychamp/screens/ChallengeSubmissionForm/challenge_submission_form.dart';
+import 'package:recychamp/screens/ChallengeSubmissionView/bloc/submission_view_bloc.dart';
 import 'package:recychamp/screens/ChallengeSubmissionView/challenge_submission_view.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/ParentAgreement/parent_agreement.dart';
@@ -228,64 +229,62 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                             child: SvgPicture.asset("assets/icons/go_back.svg"),
                           ),
                         ),
-                        //  * offline / online badge (if only the type is a challenge)
-                        if (challengeType == "challenge")
-                          Positioned(
-                            top: 41.86,
-                            left: 300,
-                            child: Container(
-                              width: 75,
-                              height: 25,
-                              decoration: ShapeDecoration(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.83),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  AvatarGlow(
-                                    glowColor: ((currentDateTime.isAfter(
-                                                challenge!.startDateTime)) &&
-                                            currentDateTime.isBefore(
-                                                state.challenge.endDateTime))
-                                        ? Colors.green
-                                        : Colors.red,
-                                    child: Container(
-                                      height: 10,
-                                      width: 10,
-                                      decoration: BoxDecoration(
-                                        color: ((currentDateTime.isAfter(
-                                                    challenge!
-                                                        .startDateTime)) &&
-                                                currentDateTime.isBefore(
-                                                    challenge!.endDateTime))
-                                            ? Colors.green
-                                            : Colors.red,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    ((currentDateTime.isAfter(
-                                                challenge!.startDateTime)) &&
-                                            currentDateTime.isBefore(
-                                                state.challenge.endDateTime))
-                                        ? "online"
-                                        : "offline",
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ],
+                        //  * offline / online badge
+                        Positioned(
+                          top: 41.86,
+                          left: 300,
+                          child: Container(
+                            width: 75,
+                            height: 25,
+                            decoration: ShapeDecoration(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.83),
                               ),
                             ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                AvatarGlow(
+                                  glowColor: ((currentDateTime.isAfter(
+                                              challenge!.startDateTime)) &&
+                                          currentDateTime.isBefore(
+                                              state.challenge.endDateTime))
+                                      ? Colors.green
+                                      : Colors.red,
+                                  child: Container(
+                                    height: 10,
+                                    width: 10,
+                                    decoration: BoxDecoration(
+                                      color: ((currentDateTime.isAfter(
+                                                  challenge!.startDateTime)) &&
+                                              currentDateTime.isBefore(
+                                                  challenge!.endDateTime))
+                                          ? Colors.green
+                                          : Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  ((currentDateTime.isAfter(
+                                              challenge!.startDateTime)) &&
+                                          currentDateTime.isBefore(
+                                              state.challenge.endDateTime))
+                                      ? "online"
+                                      : "offline",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ],
+                            ),
                           ),
+                        ),
                         // * category badge
                         Positioned(
                           top: 192,
@@ -336,7 +335,6 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                     ),
 
                     // * If challenge/event is accepted, display the progress bar
-                    // todo: check the logged user has accepted the challenge
                     if (isAccepted!)
                       Column(
                         children: [
@@ -375,7 +373,8 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                           (Text(
                                             "You have completed this ${challengeType == "challenge" ? "challenge" : "event"}",
                                             style: GoogleFonts.poppins(
-                                                fontSize: 14),
+                                                fontSize: 14,
+                                                color: Colors.black),
                                           )),
                                           const SizedBox(
                                             width: 7,
@@ -391,68 +390,118 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                 : Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
-                                      const SizedBox(
-                                        height: 12,
-                                      ),
-                                      Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: 'You have ',
-                                              style: GoogleFonts.poppins(
-                                                color: Colors.black.withOpacity(
-                                                    0.6499999761581421),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                height: 0,
+                                      (currentDateTime.isAfter(
+                                                  challenge!.startDateTime) &&
+                                              currentDateTime.isBefore(
+                                                  challenge!.endDateTime))
+                                          ? Container(
+                                              margin:
+                                                  const EdgeInsets.only(top: 5),
+                                              child: Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: 'You have ',
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        color: Colors.black
+                                                            .withOpacity(
+                                                                0.6499999761581421),
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        height: 0,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          '${Jiffy.parse(endDateTime!).diff(Jiffy.parse(currentDateTime.toString()), unit: Unit.day).toString()} days',
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        color: Colors.black
+                                                            .withOpacity(
+                                                                0.6499999761581421),
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        height: 0,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          ' to complete the challenge !',
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        color: Colors.black
+                                                            .withOpacity(
+                                                                0.6499999761581421),
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        height: 0,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                textAlign: TextAlign.center,
                                               ),
-                                            ),
-                                            TextSpan(
-                                              text: '3 days',
-                                              style: GoogleFonts.poppins(
-                                                color: Colors.black.withOpacity(
-                                                    0.6499999761581421),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700,
-                                                height: 0,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text:
-                                                  ' to complete the challenge !',
-                                              style: GoogleFonts.poppins(
-                                                color: Colors.black.withOpacity(
-                                                    0.6499999761581421),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                height: 0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      const SizedBox(
-                                        height: 12,
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal:
-                                                deviceSize.width * 0.01),
-                                        child: LinearPercentIndicator(
-                                          barRadius:
-                                              const Radius.circular(16.83),
-                                          lineHeight: 20.0,
-                                          percent: 0.35,
-                                          animation: true,
-                                          animationDuration: 1000,
-                                          backgroundColor:
-                                              const Color(0xffC8E8D5),
-                                          progressColor:
-                                              const Color(0xff75A488),
-                                        ),
-                                      )
+                                            )
+                                          : (currentDateTime.isAfter(
+                                                  challenge!.endDateTime))
+                                              ? (Text(
+                                                  "Challenge is ended :(",
+                                                  style: GoogleFonts.poppins(
+                                                      fontSize: 14,
+                                                      color: Colors.black),
+                                                ))
+                                              : (Text(
+                                                  "Challenge is not started yet :(",
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                  ),
+                                                )),
+
+                                      // * Displaying the progress bar only if the current date is in between start date and end date
+                                      if (currentDateTime.isAfter(
+                                              challenge!.startDateTime) &&
+                                          currentDateTime
+                                              .isBefore(challenge!.endDateTime))
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: deviceSize.width * 0.01,
+                                              right: deviceSize.width * 0.01,
+                                              bottom: 5),
+                                          child: LinearPercentIndicator(
+                                            barRadius:
+                                                const Radius.circular(16.83),
+                                            lineHeight: 20.0,
+                                            // * (totalDays - remainingDays) / totalDays
+                                            percent: (Jiffy.parse(endDateTime!)
+                                                        .diff(
+                                                            Jiffy.parse(
+                                                                startDateTime!),
+                                                            unit: Unit.day) -
+                                                    Jiffy.parse(endDateTime!)
+                                                        .diff(
+                                                            Jiffy.parse(
+                                                                currentDateTime
+                                                                    .toString()),
+                                                            unit: Unit.day)) /
+                                                Jiffy.parse(endDateTime!).diff(
+                                                    Jiffy.parse(startDateTime!),
+                                                    unit: Unit.day),
+                                            animation: true,
+                                            animationDuration: 1000,
+                                            backgroundColor:
+                                                const Color(0xffC8E8D5),
+                                            progressColor:
+                                                const Color(0xff75A488),
+                                          ),
+                                        )
                                     ],
                                   ),
                           ),
@@ -584,7 +633,11 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                       ),
                     ),
                     // * displaying the accept/submit button only if the signed user role is parent
-                    if (userRole == "parent")
+                    // * current date should be after the challenge start date
+                    if ((userRole == "parent" &&
+                            currentDateTime.isAfter(challenge!.startDateTime) &&
+                            currentDateTime.isBefore(challenge!.endDateTime)) ||
+                        isSubmitted!)
                       Container(
                         margin: EdgeInsets.all(deviceSize.width * 0.05),
                         child: SizedBox(
@@ -592,7 +645,6 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                           child: TextButton(
                             onPressed: () {
                               // * If not accepteed, Parent agreement form (open in a fullscreen dialog). Otherwise submit form
-                              // todo: if submitted, view the submission
                               if (!isAccepted!) {
                                 showGeneralDialog(
                                     context: context,
@@ -617,6 +669,9 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                                               challenge: state.challenge,
                                             )));
                               } else if (isSubmitted!) {
+                                context.read<SubmissionViewBloc>().add(
+                                    FetchSubmissionEvent(state.challenge.id!));
+
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

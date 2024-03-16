@@ -1,17 +1,18 @@
-// import 'dart:ffi';
-// import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:recychamp/screens/Calendar/calendar_event.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import "package:google_fonts/google_fonts.dart";
 import 'package:recychamp/screens/EducationalResources/article_content.dart';
 import 'package:recychamp/models/article_model.dart';
+import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
+import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/ui/article_filter.dart';
+import 'package:recychamp/ui/article_form.dart';
 import 'package:recychamp/utils/articles_data.dart';
 
 class EducationalResource extends StatefulWidget {
@@ -22,11 +23,55 @@ class EducationalResource extends StatefulWidget {
 }
 
 class _EducationalResourceState extends State<EducationalResource> {
+  late List<Article> allArticles = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchArticles();
+  }
+
+  void fetchArticles() async {
+    try {
+      List<Article> articles = await ArticleService(
+        firestore: FirebaseFirestore.instance,
+        storage: FirebaseStorage.instance,
+      ).getArticles();
+      print('Fetched Articles: $articles');
+      setState(() {
+        allArticles = articles;
+      });
+    } catch (e) {
+      print('Error fetching articles: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to the new page where users can add articles
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  const AricleForms(), // Replace with your new page widget
+            ),
+          );
+        },
+        backgroundColor: const Color(0xFF75A488),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 40.0,
+        ),
+      ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -131,12 +176,18 @@ class _EducationalResourceState extends State<EducationalResource> {
               height: 250,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                separatorBuilder: (context, _) => const SizedBox(
-                  width: 12,
-                ),
-                itemBuilder: (context, index) =>
-                    articleCard(articleData: articlelNature[index]),
+                itemCount: allArticles.length,
+                separatorBuilder: (context, _) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  Article article = allArticles[index];
+                  print(
+                      'Article: ${article.articleTitle}'); // Check if articles are being printed
+                  if (article.articleType == "Nature") {
+                    return articleCard(articleData: article);
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
             Container(

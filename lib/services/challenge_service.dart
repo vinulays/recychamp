@@ -21,6 +21,7 @@ class ChallengeService {
           .collection('challenges')
           .orderBy("createdAt", descending: true)
           .get(const GetOptions(source: Source.server));
+
       List<Challenge> challenges = [];
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data();
@@ -34,7 +35,6 @@ class ChallengeService {
             rules: data['rules'],
             startDateTime: data['startDateTime'].toDate(),
             endDateTime: data['endDateTime'].toDate(),
-            completedPercentage: data['completedPercentage'],
             maximumParticipants: data['maximumParticipants'],
             acceptedParticipants: List<String>.from(data[
                 "acceptedParticipants"]), // * converting dynamic array to string array
@@ -72,7 +72,6 @@ class ChallengeService {
             rules: data['rules'],
             startDateTime: data['startDateTime'].toDate(),
             endDateTime: data['endDateTime'].toDate(),
-            completedPercentage: data['completedPercentage'],
             maximumParticipants: data['maximumParticipants'],
             acceptedParticipants: List<String>.from(data[
                 "acceptedParticipants"]), // * converting dynamic array to string array
@@ -183,7 +182,7 @@ class ChallengeService {
       await challengeRef.delete();
 
       // * deleting the image associated with the challenge
-      Reference imageRef = FirebaseStorage.instance.refFromURL(imageURL);
+      Reference imageRef = _storage.refFromURL(imageURL);
       await imageRef.delete();
     } catch (e) {
       throw Exception('Failed to delete the challenge: $e');
@@ -237,16 +236,48 @@ class ChallengeService {
         "description": formData["description"],
         "imageURLs": imageURLs,
         "rating": formData["rating"],
-        "experience": formData["experience"] ?? "Not Given"
+        "experience": formData["experience"] ?? "Not Given",
+        "submittedAt": DateTime.now()
       });
 
       // * adding user id to the submiitted participants array in the submitted challenge
       await challengeRef.update({
         'submittedParticipants': FieldValue.arrayUnion([userId]),
       });
+
+      await updateChallegeRating(challengeId, formData["rating"]);
     } catch (e) {
       throw Exception("Failed to submit challenge: $e");
     }
+  }
+
+  //  * Updating challenge rating based on the submission rating
+  Future<void> updateChallegeRating(
+      String challengeId, double submittedRating) async {
+    double submissionRating = submittedRating;
+    double currentRating = 0;
+    int submissionCount = 0;
+
+    DocumentReference challengeRef =
+        _firestore.collection("challenges").doc(challengeId);
+
+    QuerySnapshot submissionsSnapshot = await _firestore
+        .collection("submissions")
+        .where("challengeId", isEqualTo: challengeId)
+        .get();
+
+    for (var submissionDoc in submissionsSnapshot.docs) {
+      submissionCount++;
+      currentRating += submissionDoc["rating"] ?? 0;
+    }
+
+    // * Calculating average rating
+    double newRating =
+        (currentRating + submissionRating) / (submissionCount + 1);
+
+    await challengeRef.update({
+      'rating': newRating,
+    });
   }
 
   // * getting submission using user id and challenge id from firebase
@@ -269,8 +300,10 @@ class ChallengeService {
             challengeId: challengeId,
             userId: userId,
             description: data["description"],
-            imageURLs: data["imageURLs"],
-            rating: data["rating"]);
+            imageURLs: List<String>.from(data["imageURLs"]),
+            rating: data["rating"],
+            submittedAt: data["submittedAt"].toDate(),
+            experience: data["experience"]);
 
         return submission;
       } else {

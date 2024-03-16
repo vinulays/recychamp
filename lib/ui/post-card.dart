@@ -1,21 +1,71 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:like_button/like_button.dart';
-import 'package:recychamp/ui/challenge_filters_bottom_sheet.dart';
+import 'package:recychamp/models/comment.dart';
+import 'package:recychamp/models/post.dart';
+import 'package:recychamp/screens/CreatePost/createpost.dart';
+import 'package:recychamp/services/post_service.dart';
 
 class PostCard extends StatefulWidget {
-  const PostCard({super.key});
+  final Post post;
+
+  final PostService postService;
+  const PostCard({super.key, required this.post, required this.postService});
+
 
   @override
   State<PostCard> createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
+  PostService postService = PostService(
+      firestore: FirebaseFirestore.instance, storage: FirebaseStorage.instance);
+  final TextEditingController _commentController = TextEditingController();
+  List<Comment> comments = [];
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
+
+    void deletePost() {
+      // Display a dialog box to confirm deletion
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Delete Post"),
+            content: const Text("Are you sure you want to delete this post?"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: const Text("No"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  // Delete the post from Firestore
+                  try {
+                    // Call the deletePost method from your PostService
+                    await widget.postService.deletePost(widget.post.postId!);
+                    Navigator.of(context).pop(); // Close the dialog
+                  } catch (e) {
+                    // Handle any errors
+                    print("Failed to delete post: $e");
+                    // Optionally, display an error message
+                    // You can also handle this error in a more user-friendly way
+                  }
+                },
+                child: const Text("Yes"),
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     return Container(
       margin: EdgeInsets.only(
@@ -64,29 +114,54 @@ class _PostCardState extends State<PostCard> {
                         letterSpacing: -0.32,
                       ),
                     ),
-                    const Text(
-                      'Posted Jan 7',
-                      style: TextStyle(
+                    Text(
+                      'Posted ${Jiffy.parse(widget.post.createdAt.toString()).format(pattern: "MMMM do")}',
+                      style: GoogleFonts.poppins(
                         color: Color(0xFF747474),
                         fontSize: 11,
-                        fontFamily: 'Almarai',
                         fontWeight: FontWeight.w400,
                         letterSpacing: -0.22,
                       ),
                     )
                   ],
-                )
+                ),
+                Column(children: [
+                  PopupMenuButton(
+                    itemBuilder: (context) {
+                      return [
+                        const PopupMenuItem<int>(
+                            value: 0, child: Text("Delete Post")),
+                        const PopupMenuItem<int>(
+                            value: 1, child: Text("Update Post")),
+                      ];
+                    },
+                    onSelected: (value) {
+                      if (value == 0) {
+                        deletePost();
+                      } else if (value == 1) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CreatePost(
+                              isUpdate: true,
+                              post: widget.post,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ]),
               ],
             ),
             const SizedBox(
               height: 20,
             ),
-            const Text(
-              'I  completed this challenge! omg!',
-              style: TextStyle(
+            Text(
+              widget.post.title,
+              style: GoogleFonts.poppins(
                 color: Colors.black,
                 fontSize: 20,
-                fontFamily: 'Almarai',
                 fontWeight: FontWeight.w700,
                 letterSpacing: -0.40,
               ),
@@ -96,9 +171,8 @@ class _PostCardState extends State<PostCard> {
               width: double.infinity,
               height: 200,
               decoration: ShapeDecoration(
-                  image: const DecorationImage(
-                      image: NetworkImage(
-                          "https://plus.unsplash.com/premium_photo-1677756430573-b48460510e0e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZWNvZnJpZW5kbHl8ZW58MHx8MHx8fDA%3D"),
+                  image: DecorationImage(
+                      image: NetworkImage(widget.post.photoUrl!),
                       fit: BoxFit.cover),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.83))),
@@ -106,12 +180,11 @@ class _PostCardState extends State<PostCard> {
             const SizedBox(
               height: 10,
             ),
-            const Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit Sed et est libero. Sed posuere, tortor sit amet cursus dignissim, justo quam consequat ante',
-              style: TextStyle(
-                color: Color(0xFF1E1E1E),
+            Text(
+              widget.post.description,
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF1E1E1E),
                 fontSize: 14,
-                fontFamily: 'Almarai',
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -122,6 +195,9 @@ class _PostCardState extends State<PostCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 LikeButton(
+                  onTap: (_) {
+                    return postService.likePost(widget.post);
+                  },
                   size: 30,
                   circleColor:
                       const CircleColor(start: Colors.red, end: Colors.red),
@@ -136,7 +212,7 @@ class _PostCardState extends State<PostCard> {
                       size: 30,
                     );
                   },
-                  likeCount: 665,
+                  likeCount: widget.post.likesCount,
                   // countBuilder: (int count, bool isLiked, String text) {
                   //   var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
                   //   Widget result;
@@ -167,76 +243,90 @@ class _PostCardState extends State<PostCard> {
                               children: [
                                 Expanded(
                                   child: ListView(children: [
-                                    Container(
-                                      margin: const EdgeInsets.all(20),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount:
+                                          widget.post.commentList?.length,
+                                      itemBuilder: (context, index) {
+                                        Comment comment =
+                                            widget.post.commentList![index];
+                                        return Container(
+                                          margin: const EdgeInsets.all(20),
+                                          child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              const SizedBox(
-                                                width: 46,
-                                                height: 46,
-                                                child: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                      "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww"),
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Expanded(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: Colors.black
-                                                          .withOpacity(0.15)),
-                                                  child: Container(
-                                                    margin: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 5,
-                                                        horizontal: 7),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          "Chamoth Mendis",
-                                                          style: GoogleFonts
-                                                              .poppins(
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(
+                                                    width: 46,
+                                                    height: 46,
+                                                    child: CircleAvatar(
+                                                      backgroundImage: NetworkImage(
+                                                          "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww"),
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Expanded(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          color: Colors.black
+                                                              .withOpacity(
+                                                                  0.15)),
+                                                      child: Container(
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            vertical: 5,
+                                                            horizontal: 7),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              "Chamoth Mendis",
+                                                              style: GoogleFonts.poppins(
                                                                   color: Colors
                                                                       .black,
                                                                   fontSize: 14,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700),
-                                                        ),
-                                                        Text(
-                                                          "gshkjkl  jjblbljknlknklnlk lknlknlknklnknk sdhardkkkdbnbjkbsajkbcjk asguiguisgdui ashjdbj",
-                                                          style: GoogleFonts
-                                                              .poppins(
+                                                            ),
+                                                            Text(
+                                                              comment
+                                                                  .description,
+                                                              style: GoogleFonts.poppins(
                                                                   color: Colors
                                                                       .black,
-                                                                  fontSize: 14),
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 10),
+                                                          ],
                                                         ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                              )
+                                                  )
+                                                ],
+                                              ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
+                                        );
+                                      },
+                                    )
                                   ]),
                                 ),
                                 Container(
@@ -244,6 +334,7 @@ class _PostCardState extends State<PostCard> {
                                   margin: EdgeInsets.symmetric(
                                       horizontal: deviceData.size.width * 0.05),
                                   child: TextField(
+                                    controller: _commentController,
                                     onSubmitted: (query) {},
                                     style: GoogleFonts.poppins(
                                       fontSize: 17,
@@ -258,7 +349,12 @@ class _PostCardState extends State<PostCard> {
                                           padding:
                                               const EdgeInsets.only(right: 20),
                                           child: InkWell(
-                                            onTap: () {},
+                                            onTap: () {
+                                              widget.postService
+                                                  .addCommentToPost(
+                                                      widget.post.postId!,
+                                                      _commentController.text);
+                                            },
                                             child: const Icon(Icons.send),
                                           ),
                                         ),
@@ -290,7 +386,7 @@ class _PostCardState extends State<PostCard> {
                         width: 5,
                       ),
                       Text(
-                        "Comments (57)",
+                        "Comments (${widget.post.commentList?.length})",
                         style: GoogleFonts.poppins(fontSize: 14),
                       )
                     ],

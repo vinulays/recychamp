@@ -11,37 +11,54 @@ class PostRepository {
     await _postService.addPost(post);
   }
 
-  Future<Post?> getPostById(String postId) async {
-    return _postService.getPostById(postId);
-  }
+  // Future<Post?> getPostById(String postId) async {
+  //   return _postService.getPostById(postId);
+  // }
 
-  Future<void> updatePost(Post post) async {
-    await _postService.updatePost(post);
-  }
+  // Future<void> updatePost(Post post) async {
+  //   await _postService.updatePost(post);
+  // }
 
   Future<void> deletePost(String postId) async {
     await _postService.deletePost(postId);
   }
-}
 
+  Future<List<Post>> getAllPosts() async {
+    try {
+      return await _postService.getAllPosts();
+    } catch (e) {
+      throw Exception('Failed to fetch posts: $e');
+    }
+  }
 
+  Future<List<Post>> searchPosts(String query) async {
+    try {
+      return await _postService.searchPosts(query);
+    } catch (e) {
+      throw Exception('Failed to search posts: $e');
+    }
 
+//   Future<Post?> getPostById(String postId) async {
+//     return _postService.getPostById(postId);
+//   }
 
+//   Future<void> updatePost(Post post) async {
+//     await _postService.updatePost(post);
+//   }
 
+//   Future<void> deletePost(String postId) async {
+//     await _postService.deletePost(postId);
 
+//   }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    // Future<List<Post>> applyFilters(Set<String> filters) async {
+    //   try {
+    //     return await _postService.applyFilters(filters);
+    //   } catch (e) {
+    //     throw Exception('Failed to apply filters: $e');
+    //   }
+    // }
+  }
 
 // import 'dart:io';
 
@@ -124,3 +141,4 @@ class PostRepository {
 //     }
 //   }
 // }
+}

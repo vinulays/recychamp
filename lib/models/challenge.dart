@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Challenge {
   String? id;
   String title;
@@ -9,7 +7,6 @@ class Challenge {
   String rules;
   DateTime startDateTime;
   DateTime endDateTime;
-  int completedPercentage;
   int maximumParticipants;
   List<String> acceptedParticipants;
   List<String> submittedParticipants;
@@ -29,7 +26,6 @@ class Challenge {
       required this.rules,
       required this.startDateTime,
       required this.endDateTime,
-      required this.completedPercentage,
       required this.maximumParticipants,
       required this.acceptedParticipants,
       required this.submittedParticipants,

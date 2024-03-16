@@ -6,11 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recychamp/firebase_options.dart';
 import 'package:recychamp/models/chip_label_color.dart';
+import 'package:recychamp/repositories/article_repository.dart';
+import 'package:recychamp/repositories/badge_repository.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
+import 'package:recychamp/repositories/posts%20repository/post_repo.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
+import 'package:recychamp/screens/ChallengeSubmissionView/bloc/submission_view_bloc.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
+import 'package:recychamp/screens/Community/bloc/posts_bloc.dart';
+import 'package:recychamp/screens/Dashboard/bloc/badge_bloc.dart';
+import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
 import 'package:recychamp/screens/Home/home.dart';
+import 'package:recychamp/services/article_service.dart';
+import 'package:recychamp/services/badge_service.dart';
 import 'package:recychamp/services/challenge_service.dart';
+import 'package:recychamp/services/post_service.dart';
 // import 'package:recychamp/screens/Welcome/welcome.dart';
 
 void main() async {
@@ -32,7 +42,7 @@ Future<void> signInManually() async {
     // * admin = ubetatta@gmail.com
     // * organizer = vinula@gmail.com
     // * parent = parent@gmail.com
-    String email = 'parent@gmail.com';
+    String email = 'ubetatta@gmail.com';
     String password = '12345678';
 
     UserCredential userCredential =
@@ -88,6 +98,50 @@ class MyApp extends StatelessWidget {
           )..add(
               FetchChallengesEvent(),
             ),
+        ),
+        BlocProvider<PostBloc>(
+          create: (context) => PostBloc(
+            repository: PostRepository(
+              postService:
+                  // * adding current firebase instance to the challenge service
+                  PostService(
+                      firestore: FirebaseFirestore.instance,
+                      storage: FirebaseStorage.instance),
+            ),
+          ),
+        ),
+        BlocProvider<ArticleDetailsBloc>(
+          create: (context) => ArticleDetailsBloc(
+            repository: ArticleRepo(
+              articleServise: ArticleService(
+                  firestore: FirebaseFirestore.instance,
+                  storage: FirebaseStorage
+                      .instance // Replace YourRepo with your actual repository
+                  ),
+            ),
+          ),
+        ),
+        // * submittion state provider
+        BlocProvider<SubmissionViewBloc>(
+          create: (context) => SubmissionViewBloc(
+            repository: ChallengeRepository(
+              challengeService:
+                  // * adding current firebase instance to the challenge service
+                  ChallengeService(
+                      firestore: FirebaseFirestore.instance,
+                      storage: FirebaseStorage.instance),
+            ),
+          ),
+        ),
+        // * badge state provider
+        BlocProvider<BadgeBloc>(
+          create: (context) => BadgeBloc(
+            badgeRepository: BadgeRepository(
+              badgeService: BadgeService(
+                firestore: FirebaseFirestore.instance,
+              ),
+            ),
+          )..add(SetBadgeEvent()),
         )
       ],
       child: MaterialApp(

@@ -33,7 +33,7 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-        #5 run test
+        #5 run test - setup later
       - name: Test flutter app
         run: flutter test
 
@@ -45,18 +45,23 @@ jobs:
       - name: Build appBundle
         run: flutter build appbundle
 
-        #8 build Runner.app
-      - name: Build Runner.app file
-        run: flutter build ios --release --no-codesign
+        #8 build ipa
+      - name: Build Runner.app
+        run: flutter build ios --release
 
-      # - name: Compress Archives and IPAs
-      #   run: zip -r ios_build.zip build/ios/iphoneos
-      #9 Build IPA file
-      - name: Build IPA file
-        run: |
-          xcodebuild -exportArchive SKIP_INSTALL=NO -archivePath "build/ios/iphoneos/Runner.app" -exportOptionsPlist "ExportOptions.plist" -exportPath "build/ipa"
+      - name: Create Archive
+        run: xcodebuild -create-archive \
+          -archivePath "build/ios/Runner.app.xcarchive" \
+          -organizerPath "build/ios" \
+          -scheme "Runner"
 
-        #10 get those build to be available to download
+        #10 Export IPA (unsigned)
+      - name: Export IPA (unsigned)
+        run: xcodebuild -exportArchive \
+          -archivePath "build/ios/Runner.app.xcarchive" \
+          -exportPath "build/ipa"
+
+        #11 get those build to be available to download
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -64,13 +69,13 @@ jobs:
           path: |
             build/app/outputs/flutter-apk/app-release.apk
             build/app/outputs/bundle/release/app-release.aab
-            build/ios/iphoneos/Runner.app
+            build/ios/Runner.app
             build/ipa/*.ipa
 
-        #11 create release with those builds
+        #12 create release with those builds
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/flutter-apk/app-release.apk,build/app/outputs/bundle/release/app-release.aab,build/ios/iphoneos/Runner.app,build/ipa/*.ipa"
+          artifacts: "build/app/outputs/flutter-apk/app-release.apk,build/app/outputs/bundle/release/app-release.aab,build/ios/Runner.app,build/ipa/*.ipa"
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.PAT_TOKEN }}

@@ -54,7 +54,7 @@ jobs:
       #9 Build IPA file
       - name: Build IPA file
         run: |
-          xcodebuild -exportArchive -archivePath "build/ios/iphoneos/Runner.app" -exportOptionsPlist "ExportOptions.plist" -exportPath "build/ipa"
+          xcodebuild -exportArchive SKIP_INSTALL=YES -archivePath "build/ios/iphoneos/Runner.app" -exportOptionsPlist "ExportOptions.plist" -exportPath "build/ipa"
 
         #10 get those build to be available to download
       - name: Upload Artifacts

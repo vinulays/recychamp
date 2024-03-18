@@ -6,3 +6,17 @@ sealed class ArticleDetailsEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class FetchArticleEvent extends ArticleDetailsEvent {}
+
+class AddArticleEvent extends ArticleDetailsEvent {
+  final Map<String, dynamic> formData;
+
+  AddArticleEvent(this.formData);
+}
+
+class UpdateArticleEvent extends ArticleDetailsEvent {
+  final Map<String, dynamic> formData;
+
+  UpdateArticleEvent(this.formData);
+}

@@ -227,7 +227,10 @@ class _ChallengeSubmissionState extends State<ChallengeSubmission> {
                                             .toString())
                                         .format(pattern: "do MMMM yyyy"),
                                     style: GoogleFonts.poppins(
-                                      color: Colors.black.withOpacity(0.50),
+                                      color: DateTime.now().isBefore(
+                                              widget.challenge.endDateTime)
+                                          ? Colors.black.withOpacity(0.50)
+                                          : Colors.red,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
                                       height: 0,

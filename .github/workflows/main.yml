@@ -45,23 +45,7 @@ jobs:
       - name: Build appBundle
         run: flutter build appbundle
 
-        #8 build ipa
-      - name: Build Runner.app
-        run: flutter build ios --release
-
-      - name: Create Archive
-        run: xcodebuild -create-archive \
-          -archivePath "build/ios/Runner.app.xcarchive" \
-          -organizerPath "build/ios" \
-          -scheme "Runner"
-
-        #10 Export IPA (unsigned)
-      - name: Export IPA (unsigned)
-        run: xcodebuild -exportArchive \
-          -archivePath "build/ios/Runner.app.xcarchive" \
-          -exportPath "build/ipa"
-
-        #11 get those build to be available to download
+        #8 get those build to be available to download
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -69,13 +53,11 @@ jobs:
           path: |
             build/app/outputs/flutter-apk/app-release.apk
             build/app/outputs/bundle/release/app-release.aab
-            build/ios/Runner.app
-            build/ipa/*.ipa
 
-        #12 create release with those builds
+        #9 create release with those builds
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/flutter-apk/app-release.apk,build/app/outputs/bundle/release/app-release.aab,build/ios/Runner.app,build/ipa/*.ipa"
+          artifacts: "build/app/outputs/flutter-apk/app-release.apk,build/app/outputs/bundle/release/app-release.aab"
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.PAT_TOKEN }}

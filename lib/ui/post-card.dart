@@ -65,6 +65,48 @@ class _PostCardState extends State<PostCard> {
       );
     }
 
+    void deleteComment(int index) {
+      // Display a dialog box to confirm deletion
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Delete Comment"),
+            content:
+                const Text("Are you sure you want to delete this comment?"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: const Text("No"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  try {
+                    // Delete the comment from the post
+                    widget.post.commentList!.removeAt(index);
+                    setState(() {}); // Update the UI to reflect the change
+
+                    // Call the deleteComment method from your PostService
+                    await widget.postService
+                        .deleteComment(widget.post.postId!, index);
+
+                    Navigator.of(context).pop(); // Close the dialog
+                  } catch (e) {
+                    // Handle any errors
+                    print("Failed to delete comment: $e");
+                    // Optionally, display an error message
+                  }
+                },
+                child: const Text("Yes"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return Container(
       margin: EdgeInsets.only(
           left: deviceData.size.width * 0.05,
@@ -317,7 +359,22 @@ class _PostCardState extends State<PostCard> {
                                                         ),
                                                       ),
                                                     ),
-                                                  )
+                                                  ),
+                                                  PopupMenuButton(
+                                                    itemBuilder: (context) {
+                                                      return [
+                                                        PopupMenuItem(
+                                                          value: index,
+                                                          child: Text("Delete"),
+                                                        ),
+                                                      ];
+                                                    },
+                                                    onSelected:
+                                                        (int selectedIndex) {
+                                                      deleteComment(
+                                                          selectedIndex);
+                                                    },
+                                                  ),
                                                 ],
                                               ),
                                             ],
@@ -352,6 +409,7 @@ class _PostCardState extends State<PostCard> {
                                                   .addCommentToPost(
                                                       widget.post.postId!,
                                                       _commentController.text);
+                                              _commentController.clear();
                                             },
                                             child: const Icon(Icons.send),
                                           ),

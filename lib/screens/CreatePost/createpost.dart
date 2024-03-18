@@ -95,6 +95,18 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   Future<void> _publishPost() async {
+    // Check if any of the required fields are empty
+    if (_postTitleController.text.isEmpty ||
+        _postDescriptionController.text.isEmpty ||
+        _file == null) {
+      // Display a message to the user indicating that a field is missing
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Please fill in all fields and choose a photo')),
+      );
+      return; // Exit the method without publishing the post
+    }
+
     final userId = FirebaseAuth.instance.currentUser!.uid;
     final imageUrl = await _uploadImage();
 

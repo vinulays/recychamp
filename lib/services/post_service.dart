@@ -190,7 +190,7 @@ class PostService {
           _firestore.collection("posts").doc(post.postId);
 
       await postRef.update({
-        "likes": post.likesCount! + 1,
+        "likesCount": post.likesCount! + 1,
       });
       return true;
     } catch (e) {
@@ -204,10 +204,30 @@ class PostService {
           _firestore.collection("posts").doc(post.postId);
 
       await postRef.update({
-        "likes": post.likesCount! - 1,
+        "likesCount": post.likesCount! - 1,
       });
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<void> deleteComment(String postId, int commentIndex) async {
+    try {
+      // Get the reference to the post document
+      DocumentReference postRef = _firestore.collection('posts').doc(postId);
+
+      // Fetch the current comments array
+      DocumentSnapshot postSnapshot = await postRef.get();
+      Map<String, dynamic> data = postSnapshot.data() as Map<String, dynamic>;
+      List<dynamic> comments = List.from(data['commentList']);
+
+      // Remove the comment at the specified index
+      comments.removeAt(commentIndex);
+
+      // Update the post document with the modified comments array
+      await postRef.update({'commentList': comments});
+    } catch (e) {
+      throw Exception('Failed to delete comment: $e');
     }
   }
 }

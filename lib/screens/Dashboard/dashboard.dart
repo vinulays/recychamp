@@ -29,6 +29,23 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
+    final currentTime = DateTime.now();
+
+    const morningTime = TimeOfDay(hour: 0, minute: 0);
+    const noonTime = TimeOfDay(hour: 12, minute: 0);
+    const eveningTime = TimeOfDay(hour: 18, minute: 0);
+
+    // * creating the greeting message based on the current time of the day
+    String greeting = '';
+    if (currentTime.hour >= morningTime.hour &&
+        currentTime.hour < noonTime.hour) {
+      greeting = 'Good Morning';
+    } else if (currentTime.hour >= noonTime.hour &&
+        currentTime.hour < eveningTime.hour) {
+      greeting = 'Good Afternoon';
+    } else {
+      greeting = 'Good Evening';
+    }
 
     return BlocBuilder<ChallengesBloc, ChallengesState>(
       builder: (context, state) {
@@ -53,7 +70,7 @@ class _DashboardState extends State<Dashboard> {
                       children: [
                         // todo greeting must change according to the time of the day
                         Text(
-                          "Good Morning",
+                          greeting,
                           style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontSize: 25,

@@ -66,6 +66,15 @@ dependencies:
   provider: ^6.1.2
   like_button: ^2.0.5
   permission_handler: ^11.3.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/launcher_icon.png"
+  adaptive_icon_background: "assets/images/ic_launcher_background.png"
+  adaptive_icon_foreground: "assets/images/ic_launcher_foreground.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
 
 dev_dependencies:
   flutter_test:
@@ -125,6 +134,9 @@ flutter:
     - assets/images/Rectangle.png
     - assets/icons/calendar.svg
     - assets/images/profile.jpg
+    - assets/images/launcher_icon.png
+    - assets/images/ic_launcher_foreground.png
+    - assets/images/ic_launcher_background.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

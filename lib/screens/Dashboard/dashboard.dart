@@ -68,7 +68,6 @@ class _DashboardState extends State<Dashboard> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // todo greeting must change according to the time of the day
                         Text(
                           greeting,
                           style: GoogleFonts.poppins(

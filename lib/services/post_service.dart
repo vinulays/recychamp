@@ -34,32 +34,34 @@ class PostService {
     }
   }
 
-  Future<void> addCommentToPost(String postId, String comment) async {
-    try {
-      await _firestore.collection('posts').doc(postId).update({
-        'commentList': FieldValue.arrayUnion([await addComment(comment)]),
-      });
-    } catch (e) {
-      print('Error adding comment: $e');
-    }
-  }
+  // Future<void> addCommentToPost(String postId, String comment) async {
+  //   try {
+  //     await _firestore.collection('posts').doc(postId).update({
+  //       'commentList': FieldValue.arrayUnion([await addComment(comment)]),
+  //     });
+  //   } catch (e) {
+  //     print('Error adding comment: $e');
+  //   }
+  // }
 
-  Future<DocumentReference> addComment(String text) async {
+  Future<void> addComment(String postId, String text) async {
     try {
       final User? user = _auth.currentUser;
-
       final userId = user?.uid;
 
-      DocumentReference commentRef =
-          await _firestore.collection('comments').add({
-        'commentUserId': userId,
-        'description': text,
-        // Add any other fields you need for your comment
-      });
-      return commentRef;
+      await _firestore.collection('comments').add(
+          {'commentUserId': userId, 'description': text, "postId": postId});
+
+      final postRef = _firestore.collection('posts').doc(postId);
+      final postDoc = await postRef.get();
+
+      final currentCommentCount = postDoc['commentCount'] ?? 0;
+      final newCommentCount = currentCommentCount + 1;
+
+      // Update the post document with the new comment count
+      await postRef.update({'commentCount': newCommentCount});
     } catch (e) {
-      print('Error adding comment: $e');
-      throw e;
+      throw Exception('Error adding comment: $e');
     }
   }
 
@@ -79,11 +81,6 @@ class PostService {
       List<Post> posts = [];
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data();
-
-        List<DocumentReference> commentRefs =
-            List<DocumentReference>.from(data['commentList']);
-
-        // List<Comment> comments = await getCommentsForPost(commentRefs);
 
         Post post = Post(
             postId: doc.id,
@@ -115,11 +112,6 @@ class PostService {
       for (var doc in querySnapshot.docs) {
         Map<String, dynamic> data = doc.data();
 
-        List<DocumentReference> commentRefs =
-            List<DocumentReference>.from(data['commentList']);
-
-        // List<Comment> comments = await getCommentsForPost(commentRefs);
-
         Post post = Post(
           postId: doc.id,
           postUserId: data['postUserId'],
@@ -129,6 +121,7 @@ class PostService {
           createdAt: data['createdAt'].toDate(),
           likesCount: data['likesCount'],
           // commentList: comments,
+          commentCount: data["commentCount"],
           likesList: List<String>.from(data["likesList"]),
         );
         posts.add(post);
@@ -245,21 +238,21 @@ class PostService {
     return snapshot.exists;
   }
 
-  Future<void> deleteComment(String postId, int commentIndex) async {
+  Future<void> deleteComment(String commentId, String postId) async {
     try {
-      // Get the reference to the post document
-      DocumentReference postRef = _firestore.collection('posts').doc(postId);
+      DocumentReference commentRef =
+          _firestore.collection("comments").doc(commentId);
 
-      // Fetch the current comments array
-      DocumentSnapshot postSnapshot = await postRef.get();
-      Map<String, dynamic> data = postSnapshot.data() as Map<String, dynamic>;
-      List<dynamic> comments = List.from(data['commentList']);
+      await commentRef.delete();
 
-      // Remove the comment at the specified index
-      comments.removeAt(commentIndex);
+      final postRef = _firestore.collection('posts').doc(postId);
+      final postDoc = await postRef.get();
 
-      // Update the post document with the modified comments array
-      await postRef.update({'commentList': comments});
+      final currentCommentCount = postDoc['commentCount'] ?? 0;
+      final newCommentCount = currentCommentCount - 1;
+
+      // Update the post document with the new comment count
+      await postRef.update({'commentCount': newCommentCount});
     } catch (e) {
       throw Exception('Failed to delete comment: $e');
     }

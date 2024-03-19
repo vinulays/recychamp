@@ -22,17 +22,27 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
         emit(CommentsError("Failed to fetch comments: $e"));
       }
     });
-  }
 
-  // Future<void> _mapAddPostEventToState(
-  //     AddCommentEvent event, Emitter<CommentState> emit) async {
-  //   emit(PostAdding());
-  //   try {
-  //     await _postRepository.addPost(event.formData as Post);
-  //     emit(PostAdded());
-  //     add(FetchPostsEvent()); // Fetch updated posts
-  //   } catch (e) {
-  //     emit(PostAddingError("Failed to add post: $e"));
-  //   }
-  // }
+    on<AddCommentEvent>((event, emit) async {
+      emit(CommentAdding());
+      try {
+        await _postRepository.addComment(event.postId, event.text);
+
+        add(FetchCommentsEvent(event.postId));
+      } catch (e) {
+        emit(CommentsError("Failed to add comment: $e"));
+      }
+    });
+
+    on<DeleteCommentEvent>((event, emit) async {
+      emit(CommentDeleting());
+      try {
+        await _postRepository.deleteComment(event.commentId, event.postId);
+
+        add(FetchCommentsEvent(event.postId));
+      } catch (e) {
+        emit(CommentsError("Failed to delete comment: $e"));
+      }
+    });
+  }
 }

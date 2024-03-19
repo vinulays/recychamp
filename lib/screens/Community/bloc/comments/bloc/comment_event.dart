@@ -12,19 +12,21 @@ class FetchCommentsEvent extends CommentEvent {
 }
 
 class AddCommentEvent extends CommentEvent {
-  final Map<String, dynamic> formData;
+  final String postId;
+  final String text;
 
-  AddCommentEvent(this.formData);
+  AddCommentEvent(this.postId, this.text);
 
   @override
-  List<Object?> get props => [formData];
+  List<Object?> get props => [];
 }
 
 class DeleteCommentEvent extends CommentEvent {
   final String commentId;
+  final String postId;
 
-  DeleteCommentEvent(this.commentId);
+  DeleteCommentEvent(this.commentId, this.postId);
 
   @override
-  List<Object?> get props => [commentId];
+  List<Object?> get props => [];
 }

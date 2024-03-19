@@ -39,3 +39,16 @@ class CommentAddingError extends CommentState {
   @override
   List<Object?> get props => [errorMessage];
 }
+
+class CommentDeleting extends CommentState {}
+
+class CommentDeleted extends CommentState {}
+
+class CommentDeletingError extends CommentState {
+  final String errorMessage;
+
+  CommentDeletingError(this.errorMessage);
+
+  @override
+  List<Object?> get props => [errorMessage];
+}

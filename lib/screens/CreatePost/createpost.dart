@@ -21,7 +21,7 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-  String userImageURL = "";
+  late String userImageURL = "";
 
   Uint8List? _file;
   final TextEditingController _postTitleController = TextEditingController();
@@ -55,7 +55,7 @@ class _CreatePostState extends State<CreatePost> {
     getUserImage();
   }
 
-  Future<void> getUserImage() async {
+  Future<String?> getUserImage() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
 
@@ -65,16 +65,37 @@ class _CreatePostState extends State<CreatePost> {
             .doc(user.uid)
             .get();
 
-        String? imageURL = await userSnapshot.get("imageUrl");
+        String? imageURL = userSnapshot.get("photoUrl");
 
-        setState(() {
-          userImageURL = imageURL!;
-        });
+        return imageURL; // Return the image URL
       }
     } catch (error) {
       throw Exception("Error getting image: $error");
     }
+    return null; // Return null if no user or image URL is found
   }
+
+  Future<String> getUsername() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        String? username = userSnapshot.get("username");
+
+        return username ??
+            ''; // Return username if not null, otherwise return empty string
+      }
+    } catch (error) {
+      throw Exception("Error getting username: $error");
+    }
+    return ''; // Return empty string if no username is found
+  }
+
   // void _selectImage(BuildContext parentContext, ImageSource source) async {
   //   final picker = ImagePicker();
   //   Uint8List file = (await picker.pickImage(source: source)) as Uint8List;
@@ -303,18 +324,47 @@ class _CreatePostState extends State<CreatePost> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(userImageURL),
+                      FutureBuilder(
+                        future: getUserImage(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.hasError ||
+                              snapshot.data == null) {
+                            return Text("Failed to load photo");
+                          } else {
+                            String imageURL = snapshot.data!;
+                            return CircleAvatar(
+                              backgroundImage: NetworkImage(imageURL),
+                              backgroundColor: Colors.transparent,
+                            );
+                          }
+                        },
                       ),
                       const SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        "Chamoth Mendis",
-                        style: GoogleFonts.poppins(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700),
+                      FutureBuilder(
+                        future: getUsername(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.hasError ||
+                              snapshot.data == null) {
+                            return Text("Failed to load username");
+                          } else {
+                            String userName = snapshot.data!;
+                            return Text(
+                              userName,
+                              style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            );
+                          }
+                        },
                       ),
                     ],
                   ),

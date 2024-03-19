@@ -10,7 +10,6 @@ import 'package:like_button/like_button.dart';
 import 'package:recychamp/models/comment.dart';
 import 'package:recychamp/models/post.dart';
 import 'package:recychamp/screens/Community/bloc/comments/bloc/comment_bloc.dart';
-import 'package:recychamp/screens/Community/bloc/posts_bloc.dart';
 import 'package:recychamp/screens/CreatePost/createpost.dart';
 import 'package:recychamp/services/post_service.dart';
 
@@ -27,6 +26,7 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   String? userId;
   List<Comment> comments = [];
+  String? imageURL;
 
   PostService postService = PostService(
       firestore: FirebaseFirestore.instance, storage: FirebaseStorage.instance);
@@ -37,6 +37,52 @@ class _PostCardState extends State<PostCard> {
   void initState() {
     super.initState();
     getUserRole();
+  }
+
+  Future<String?> getPostUserImageURL() async {
+    try {
+      CollectionReference usersRef =
+          FirebaseFirestore.instance.collection('users');
+
+      DocumentSnapshot userSnapshot =
+          await usersRef.doc(widget.post.postUserId).get();
+
+      if (userSnapshot.exists) {
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+
+        String? userImageURL = userData['photoUrl'] as String?;
+
+        return userImageURL!;
+      } else {
+        // User not found
+        return null;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  Future<String?> getPostUsername() async {
+    try {
+      CollectionReference usersRef =
+          FirebaseFirestore.instance.collection('users');
+
+      DocumentSnapshot userSnapshot =
+          await usersRef.doc(widget.post.postUserId).get();
+
+      if (userSnapshot.exists) {
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+
+        String? userName = userData['username'] as String?;
+
+        return userName!;
+      } else {
+        // User not found
+        return null;
+      }
+    } catch (e) {}
+    return null;
   }
 
   Future<void> getUserRole() async {
@@ -94,7 +140,7 @@ class _PostCardState extends State<PostCard> {
       );
     }
 
-    void deleteComment(int index) {
+    void deleteComment(String commentId) {
       // Display a dialog box to confirm deletion
       showDialog(
         context: context,
@@ -113,17 +159,12 @@ class _PostCardState extends State<PostCard> {
               TextButton(
                 onPressed: () async {
                   try {
-                    // Delete the comment from the post
-                    setState(() {}); // Update the UI to reflect the change
+                    context.read<CommentBloc>().add(
+                        DeleteCommentEvent(commentId, widget.post.postId!));
 
-                    // Call the deleteComment method from your PostService
-                    // await widget.postService
-                    //     .deleteComment(widget.post.postId!, index);
-
-                    Navigator.of(context).pop(); // Close the dialog
+                    Navigator.of(context).pop();
                   } catch (e) {
-                    // Handle any errors
-                    // Optionally, display an error message
+                    throw Exception(e);
                   }
                 },
                 child: const Text("Yes"),
@@ -161,28 +202,60 @@ class _PostCardState extends State<PostCard> {
                 Row(
                   children: [
                     Container(
-                      width: 46,
-                      height: 46,
-                      child: const CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZSUyMHBpY3xlbnwwfHwwfHx8MA%3D%3D"),
-                        backgroundColor: Colors.transparent,
-                      ),
-                    ),
+                        width: 46,
+                        height: 46,
+                        // child: CircleAvatar(
+                        //   backgroundImage: NetworkImage(imageURL!),
+                        //   backgroundColor: Colors.transparent,
+                        // ),
+                        child: FutureBuilder(
+                            future: getPostUserImageURL(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                // Show a loading indicator while fetching the image URL
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError ||
+                                  snapshot.data == null) {
+                                // Show an error message if there's an error or imageURL is null
+                                return Text('Failed to load user image');
+                              } else {
+                                // Use the retrieved imageURL to load the image
+                                String imageURL = snapshot.data!;
+                                return CircleAvatar(
+                                  backgroundImage: NetworkImage(imageURL),
+                                  backgroundColor: Colors.transparent,
+                                );
+                              }
+                            })),
                     const SizedBox(
                       width: 10,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'John Doe',
-                          style: GoogleFonts.poppins(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: -0.32,
-                          ),
+                        FutureBuilder(
+                          future: getPostUsername(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError ||
+                                snapshot.data == null) {
+                              return Text('Failed to load username');
+                            } else {
+                              String userName = snapshot.data!;
+                              return Text(
+                                userName,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: -0.32,
+                                ),
+                              );
+                            }
+                          },
                         ),
                         Text(
                           'Posted ${Jiffy.parse(widget.post.createdAt.toString()).format(pattern: "MMMM do")}',
@@ -198,31 +271,32 @@ class _PostCardState extends State<PostCard> {
                   ],
                 ),
                 Column(children: [
-                  PopupMenuButton(
-                    itemBuilder: (context) {
-                      return [
-                        const PopupMenuItem<int>(
-                            value: 0, child: Text("Delete Post")),
-                        const PopupMenuItem<int>(
-                            value: 1, child: Text("Update Post")),
-                      ];
-                    },
-                    onSelected: (value) {
-                      if (value == 0) {
-                        deletePost();
-                      } else if (value == 1) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CreatePost(
-                              isUpdate: true,
-                              post: widget.post,
+                  if (widget.post.postUserId == userId)
+                    PopupMenuButton(
+                      itemBuilder: (context) {
+                        return [
+                          const PopupMenuItem<int>(
+                              value: 0, child: Text("Delete Post")),
+                          const PopupMenuItem<int>(
+                              value: 1, child: Text("Update Post")),
+                        ];
+                      },
+                      onSelected: (value) {
+                        if (value == 0) {
+                          deletePost();
+                        } else if (value == 1) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreatePost(
+                                isUpdate: true,
+                                post: widget.post,
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
+                          );
+                        }
+                      },
+                    ),
                 ]),
               ],
             ),
@@ -321,6 +395,26 @@ class _PostCardState extends State<PostCard> {
                                           ),
                                         ),
                                       ),
+                                    if (state is CommentAdding)
+                                      const Expanded(
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            strokeCap: StrokeCap.round,
+                                            strokeWidth: 5,
+                                            color: Color(0xff75A488),
+                                          ),
+                                        ),
+                                      ),
+                                    if (state is CommentDeleting)
+                                      const Expanded(
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            strokeCap: StrokeCap.round,
+                                            strokeWidth: 5,
+                                            color: Color(0xff75A488),
+                                          ),
+                                        ),
+                                      ),
                                     if (state is CommentLoaded)
                                       Expanded(
                                         child: ListView(children: [
@@ -410,23 +504,27 @@ class _PostCardState extends State<PostCard> {
                                                             ),
                                                           ),
                                                         ),
-                                                        PopupMenuButton(
-                                                          itemBuilder:
-                                                              (context) {
-                                                            return [
-                                                              PopupMenuItem(
-                                                                value: index,
-                                                                child: const Text(
-                                                                    "Delete"),
-                                                              ),
-                                                            ];
-                                                          },
-                                                          onSelected: (int
-                                                              selectedIndex) {
-                                                            deleteComment(
-                                                                selectedIndex);
-                                                          },
-                                                        ),
+                                                        if (comment
+                                                                .commentUserId ==
+                                                            userId)
+                                                          PopupMenuButton(
+                                                            itemBuilder:
+                                                                (context) {
+                                                              return [
+                                                                PopupMenuItem(
+                                                                  value: index,
+                                                                  child: const Text(
+                                                                      "Delete"),
+                                                                ),
+                                                              ];
+                                                            },
+                                                            onSelected: (int
+                                                                selectedIndex) {
+                                                              deleteComment(
+                                                                  comment
+                                                                      .commentId);
+                                                            },
+                                                          ),
                                                       ],
                                                     ),
                                                   ],
@@ -459,11 +557,18 @@ class _PostCardState extends State<PostCard> {
                                                   right: 20),
                                               child: InkWell(
                                                 onTap: () {
-                                                  widget.postService
-                                                      .addCommentToPost(
+                                                  // widget.postService
+                                                  //     .addCommentToPost(
+                                                  //         widget.post.postId!,
+                                                  //         _commentController
+                                                  //             .text);
+                                                  context
+                                                      .read<CommentBloc>()
+                                                      .add(AddCommentEvent(
                                                           widget.post.postId!,
                                                           _commentController
-                                                              .text);
+                                                              .text));
+
                                                   _commentController.clear();
                                                 },
                                                 child: const Icon(Icons.send),
@@ -500,7 +605,7 @@ class _PostCardState extends State<PostCard> {
                         width: 5,
                       ),
                       Text(
-                        "Comments (10)",
+                        "Comments (${widget.post.commentCount})",
                         style: GoogleFonts.poppins(fontSize: 14),
                       )
                     ],

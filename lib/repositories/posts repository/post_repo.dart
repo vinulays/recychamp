@@ -13,8 +13,16 @@ class PostRepository {
     await _postService.addPost(post);
   }
 
+  Future<void> addComment(String postId, String text) async {
+    await _postService.addComment(postId, text);
+  }
+
   Future<void> deletePost(String postId) async {
     await _postService.deletePost(postId);
+  }
+
+  Future<void> deleteComment(String commentId, String postId) async {
+    await _postService.deleteComment(commentId, postId);
   }
 
   Future<List<Post>> getAllPosts() async {

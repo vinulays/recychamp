@@ -10,17 +10,19 @@ class Post {
   final String? photoUrl;
   final DateTime createdAt;
   final int? likesCount;
-  final List<Comment>? commentList;
+  final List<String>? likesList;
+  // final List<Comment>? commentList;
 
   const Post({
     this.postId,
+    this.likesList,
     required this.title,
     this.postUserId,
     required this.description,
     this.photoUrl,
     required this.createdAt,
     this.likesCount,
-    this.commentList,
+    // this.commentList,
   });
 
   Map<String, dynamic> toJson() {
@@ -32,7 +34,7 @@ class Post {
       'photoUrl': photoUrl,
       'createdAt': createdAt.toIso8601String(),
       'likesCount': likesCount,
-      'commentList': commentList?.map((comment) => comment.toJson()).toList(),
+      // 'commentList': commentList?.map((comment) => comment.toJson()).toList(),
     };
   }
 

@@ -117,7 +117,7 @@ class _CreatePostState extends State<CreatePost> {
       photoUrl: imageUrl,
       createdAt: DateTime.now(),
       likesCount: 0,
-      commentList: [],
+      likesList: [],
     );
 
     await _postService.addPost(post);

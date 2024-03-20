@@ -635,7 +635,9 @@ class _ChallengeDetailsState extends State<ChallengeDetails> {
                     // * displaying the accept/submit button only if the signed user role is parent
                     // * current date should be after the challenge start date
                     if ((userRole == "parent" &&
-                        currentDateTime.isAfter(challenge!.startDateTime)))
+                            currentDateTime.isAfter(challenge!.startDateTime) &&
+                            currentDateTime.isBefore(challenge!.endDateTime)) ||
+                        isSubmitted!)
                       Container(
                         margin: EdgeInsets.all(deviceSize.width * 0.05),
                         child: SizedBox(

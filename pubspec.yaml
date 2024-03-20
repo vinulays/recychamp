@@ -67,6 +67,16 @@ dependencies:
   like_button: ^2.0.5
   permission_handler: ^11.3.0
   test: ^1.24.9
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/launcher_icon.png"
+  adaptive_icon_background: "assets/images/ic_launcher_background.png"
+  adaptive_icon_foreground: "assets/images/ic_launcher_foreground.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +88,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.1
+  fake_cloud_firestore: ^2.4.8
+  firebase_storage_mocks: ^0.6.1
+  bloc_test: ^9.1.6
+  mockito: ^5.4.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -94,6 +108,10 @@ flutter:
     - assets/images/welcome_girl.png
     - assets/icons/Settings.svg
     - assets/icons/gold-medal.svg
+    - assets/icons/bronze-medal.svg
+    - assets/icons/silver-medal.svg
+    - assets/icons/diamond-medal.svg
+    - assets/icons/ultimate-medal.svg
     - assets/icons/search.svg
     - assets/icons/search-low-opacity.svg
     - assets/icons/filter.svg
@@ -118,6 +136,9 @@ flutter:
     - assets/images/Rectangle.png
     - assets/icons/calendar.svg
     - assets/images/profile.jpg
+    - assets/images/launcher_icon.png
+    - assets/images/ic_launcher_foreground.png
+    - assets/images/ic_launcher_background.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

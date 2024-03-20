@@ -21,7 +21,7 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
 
         emit(ShopLoaded(products));
       } catch (e) {
-        emit(ShopLoadedError());
+        emit(ShopLoadedError("Shpo error: $e"));
       }
     });
 
@@ -36,7 +36,7 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
         // * getting updated challenges
         add(FetchShopEvent());
       } catch (e) {
-        emit(ShopAddingError("Challenge adding failed"));
+        emit(ShopAddingError("Challenge adding failed..."));
       }
     });
   }

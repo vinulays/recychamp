@@ -10,6 +10,7 @@ import 'package:recychamp/repositories/article_repository.dart';
 import 'package:recychamp/repositories/badge_repository.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
 import 'package:recychamp/repositories/posts%20repository/post_repo.dart';
+import 'package:recychamp/repositories/shop_repository.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ChallengeSubmissionView/bloc/submission_view_bloc.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
@@ -18,11 +19,13 @@ import 'package:recychamp/screens/Community/bloc/posts_bloc.dart';
 import 'package:recychamp/screens/Dashboard/bloc/badge_bloc.dart';
 import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
 import 'package:recychamp/screens/Home/home.dart';
+import 'package:recychamp/screens/Shop/bloc/shop_bloc.dart';
 import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/services/badge_service.dart';
 import 'package:recychamp/services/challenge_service.dart';
 import 'package:recychamp/services/post_service.dart';
-// import 'package:recychamp/screens/Welcome/welcome.dart';
+import 'package:recychamp/services/shop_service.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -154,6 +157,13 @@ class MyApp extends StatelessWidget {
               ),
             ),
           )..add(SetBadgeEvent()),
+        ),
+        BlocProvider<ShopBloc>(create: (context) => ShopBloc(
+          repository: ShopRepository(shopService: ShopService(
+            firestore:FirebaseFirestore.instance,
+            storage: FirebaseStorage.instance
+          ))
+        )
         )
       ],
       child: MaterialApp(

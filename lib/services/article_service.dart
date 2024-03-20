@@ -15,7 +15,6 @@ class ArticleService {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection('articles')
-          .orderBy("createdAt", descending: true)
           .get(const GetOptions(source: Source.server));
       List<Article> articles = [];
       for (var doc in querySnapshot.docs) {
@@ -26,6 +25,7 @@ class ArticleService {
           description: data['description'],
           articleImage: data['articleImage'],
           articleType: data['articleType'],
+          content: data['content']
         );
 
         articles.add(article);
@@ -43,7 +43,8 @@ class ArticleService {
         "articleTitle": formData['articleTitle'],
         "description": formData["description"],
         "articleImage": formData["articleImage"],
-        "articleType": formData["articleType"]
+        "articleType": formData["articleType"],
+        "content": formData["content"]
       });
     } catch (e) {
       rethrow;
@@ -61,6 +62,7 @@ class ArticleService {
         "description": formData["description"],
         "articleImage": formData["articleImage"],
         "articleType": formData["articleType"],
+         "content": formData["content"]
       });
     } catch (e) {
       rethrow;

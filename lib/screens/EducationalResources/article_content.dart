@@ -54,18 +54,23 @@ class ArticleContent extends StatelessWidget {
             ],
           ),
           Row(children: [
-            Container(
-              margin: EdgeInsets.symmetric(
-                  horizontal: deviceData.size.width * 0.05),
-              child: Text(
-                articlels.articleTitle,
-                style: kFontFamily(
-                  color: Colors.black,
-                  fontSize: 25,
-                  fontWeight: FontWeight.w700,
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: deviceData.size.width * 0.05),
+                child: Text(
+                  articlels.articleTitle,
+                  style: kFontFamily(
+                    color: Colors.black,
+                    fontSize: 25,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  overflow: TextOverflow
+                      .ellipsis, // Handle overflow by truncating the text
+                  maxLines: 2,
                 ),
               ),
-            ),
+            )
           ]),
           // Row(
           //   children: [
@@ -84,25 +89,25 @@ class ArticleContent extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          // Flexible(
-          //   child: SingleChildScrollView(
-          //     scrollDirection: Axis.vertical,
-          //     child: Padding(
-          //       padding: EdgeInsets.symmetric(
-          //           horizontal: deviceData.size.width * 0.05),
-          //       child: Text(
-          //        // articlels.content,
-          //         style: kFontFamily(
-          //           color: Colors.black,
-          //           fontSize: 14,
-          //           fontWeight: FontWeight.w300,
-          //           height: 1.5,
-          //         ),
-          //         textAlign: TextAlign.justify,
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          Flexible(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: deviceData.size.width * 0.05),
+                child: Text(
+                  articlels.content,
+                  style: kFontFamily(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.justify,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

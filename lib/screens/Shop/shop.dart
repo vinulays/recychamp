@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import "package:google_fonts/google_fonts.dart";
+import 'package:recychamp/screens/Cart/cart.dart';
 import 'package:recychamp/screens/ProductDetails/product_details.dart';
 import 'package:recychamp/screens/Shop/bloc/shop_bloc.dart';
 import 'package:recychamp/models/product.dart';
@@ -53,7 +54,17 @@ class _ShopState extends State<Shop> {
                             fontWeight: FontWeight.bold,
                             fontSize: 25)),
                     const SizedBox(width: 215),
-                    const Icon(Icons.shopping_cart)
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Cart(),
+                          ),
+                        );
+                      },
+                      child: const Icon(Icons.shopping_cart),
+                    )
                   ],
                 ),
               ),

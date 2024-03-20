@@ -19,6 +19,14 @@ RecyChamp is a mobile application promoting environmental sustainability by enco
 - Firebase: Provides backend services such as authentication, database, and storage for user data and challenge information.
 - flutter_bloc: Utilized for managing complex application state and data flow.
 
+## Authors
+
+- [@MZ-MUZNI](https://github.com/MZ-MUZNI)
+- [@ChamothMendis](https://github.com/ChamothMendis)
+- [@vinulays](https://github.com/vinulays)
+- [@rashmiNimesha](https://github.com/rashmiNimesha)
+- [@Mezurh](https://github.com/Mezurh)
+
 ## Run Locally
 
 Clone the project

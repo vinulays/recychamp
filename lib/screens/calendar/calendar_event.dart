@@ -352,6 +352,8 @@ class _MyWidgetState extends State<CalendarEvent> {
               width: double.infinity,
               child: TextButton(
                 onPressed: () {
+                 
+
                   // Handle join button click
                 },
                 style: ButtonStyle(

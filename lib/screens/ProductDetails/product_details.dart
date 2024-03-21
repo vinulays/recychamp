@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recychamp/models/cart_item.dart';
 import 'package:recychamp/models/product.dart';
+import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
 
 class ProductDetails extends StatefulWidget {
   final Product product;
@@ -107,7 +110,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                     child: SizedBox(
                       width: double.infinity,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<CartBloc>().add(
+                                AddItemEvent(
+                                  CartItem(
+                                      name: widget.product.name,
+                                      price: widget.product.price,
+                                      imageUrl: widget.product.imageUrl,
+                                      quantity: 1),
+                                ),
+                              );
+                        },
                         style: ButtonStyle(
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(

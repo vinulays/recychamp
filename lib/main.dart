@@ -8,9 +8,11 @@ import 'package:recychamp/firebase_options.dart';
 import 'package:recychamp/models/chip_label_color.dart';
 import 'package:recychamp/repositories/article_repository.dart';
 import 'package:recychamp/repositories/badge_repository.dart';
+import 'package:recychamp/repositories/cart_repository.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
 import 'package:recychamp/repositories/posts%20repository/post_repo.dart';
 import 'package:recychamp/repositories/shop_repository.dart';
+import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ChallengeSubmissionView/bloc/submission_view_bloc.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
@@ -22,6 +24,7 @@ import 'package:recychamp/screens/Home/home.dart';
 import 'package:recychamp/screens/Shop/bloc/shop_bloc.dart';
 import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/services/badge_service.dart';
+import 'package:recychamp/services/cart_service.dart';
 import 'package:recychamp/services/challenge_service.dart';
 import 'package:recychamp/services/post_service.dart';
 import 'package:recychamp/screens/Login/signup.dart';
@@ -189,11 +192,21 @@ class MyApp extends StatelessWidget {
           )..add(SetBadgeEvent()),
         ),
         BlocProvider<ShopBloc>(
-            create: (context) => ShopBloc(
-                repository: ShopRepository(
-                    shopService: ShopService(
-                        firestore: FirebaseFirestore.instance,
-                        storage: FirebaseStorage.instance))))
+          create: (context) => ShopBloc(
+            repository: ShopRepository(
+              shopService: ShopService(
+                  firestore: FirebaseFirestore.instance,
+                  storage: FirebaseStorage.instance),
+            ),
+          ),
+        ),
+        BlocProvider<CartBloc>(
+          create: (context) => CartBloc(
+            cartRepository: CartRepository(
+              cartService: CartService(),
+            ),
+          ),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

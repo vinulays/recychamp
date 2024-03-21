@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc
 import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/ui/article_filter.dart';
 import 'package:recychamp/ui/article_form.dart';
-import 'package:recychamp/utils/articles_data.dart';
+
 
 class EducationalResource extends StatefulWidget {
   const EducationalResource({super.key});
@@ -25,12 +26,37 @@ class EducationalResource extends StatefulWidget {
 class _EducationalResourceState extends State<EducationalResource> {
   late List<Article> allArticles = [];
   bool isExpanded = false;
+   String? userRole;
 
   @override
   void initState() {
     super.initState();
     fetchArticles();
+    if (mounted) {
+      getUserRole();
+    }
   }
+  Future<void> getUserRole() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        String? role = userSnapshot.get("role");
+
+        setState(() {
+          userRole = role;
+        });
+      }
+    } catch (error) {
+      throw Exception("Error getting role: $error");
+    }
+  }
+
 
   void fetchArticles() async {
     try {
@@ -53,27 +79,31 @@ class _EducationalResourceState extends State<EducationalResource> {
     var deviceData = MediaQuery.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to the new page where users can add articles
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  const AricleForms(), // Replace with your new page widget
-            ),
-          );
-        },
-        backgroundColor: const Color(0xFF75A488),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+       floatingActionButton:(userRole == "admin" || userRole == "organizer")
+      ? Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FloatingActionButton(
+          onPressed: () {
+            // Navigate to the new page where users can add articles
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    const AricleForms(), // Replace with your new page widget
+              ),
+            );
+          },
+          backgroundColor: const Color(0xFF75A488),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 40.0,
+          ),
         ),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 40.0,
-        ),
-      ),
+      ): Container(),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(

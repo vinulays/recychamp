@@ -16,11 +16,14 @@ import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Community/bloc/posts_bloc.dart';
 import 'package:recychamp/screens/Dashboard/bloc/badge_bloc.dart';
 import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
-import 'package:recychamp/screens/Home/home.dart';
+// import 'package:recychamp/screens/Home/home.dart';
 import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/services/badge_service.dart';
 import 'package:recychamp/services/challenge_service.dart';
 import 'package:recychamp/services/post_service.dart';
+// import 'package:recychamp/screens/Login/forgot_password.dart';
+// import 'package:recychamp/screens/Login/login.dart';
+import 'package:recychamp/screens/Login/signup.dart';
 // import 'package:recychamp/screens/Welcome/welcome.dart';
 
 void main() async {
@@ -31,36 +34,53 @@ void main() async {
 
   // * Manually sign in to implement challenge submission (roles: admin, organizer, parent)
   // * remove this when implementing authentication
-  signInManually();
+  // signInManually();
 
   // logout();
   runApp(const MyApp());
 }
 
-Future<void> signInManually() async {
-  try {
-    // * admin = ubetatta@gmail.com
-    // * organizer = vinula@gmail.com
-    // * parent = parent@gmail.com
-    String email = 'ubetatta@gmail.com';
-    String password = '12345678';
+// Future<void> signInManually() async {
+//   try {
+//     // * admin = ubetatta@gmail.com
+//     // * organizer = vinula@gmail.com
+//     // * parent = parent@gmail.com
+//     String email = 'ubetatta@gmail.com';
+//     String password = '12345678';
 
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+//     UserCredential userCredential =
+//         await FirebaseAuth.instance.signInWithEmailAndPassword(
+//       email: email,
+//       password: password,
+//     );
 
-    // Access the signed-in user
-    User user = userCredential.user!;
+//     // Access the signed-in user
+//     User user = userCredential.user!;
 
-    // Print user information
-    debugPrint('User signed in: ${user.uid}');
-  } catch (e) {
-    // Handle sign-in errors
-    throw Exception("Sign in error: $e");
-  }
-}
+//     // Print user information
+//     debugPrint('User signed in: ${user.uid}');
+//   } catch (e) {
+//     // Handle sign-in errors
+//     throw Exception("Sign in error: $e");
+//   }
+// }
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Demo',
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+//         useMaterial3: true,
+//       ),
+//       home: Login()
+//     );
+//   }
+// }
 
 Future<void> logout() async {
   FirebaseAuth.instance.signOut();
@@ -155,8 +175,56 @@ class MyApp extends StatelessWidget {
             chipTheme: const ChipThemeData(
                 labelStyle: TextStyle(color: ChipLabelColor()))),
         // * Welcome screen (if not logged in)
-        home: const Home(),
+        // home: const Home(),
+              home: Signup(),
+
       ),
     );
   }
 }
+
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({super.key, required this.title});
+//  final String title;
+
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
+// }
+
+// class _MyHomePageState extends State<MyHomePage> {
+//   int _counter = 0;
+
+//   void _incrementCounter() {
+//     setState(() {
+//       _counter++;
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//   return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+// title: Text(widget.title),
+//       ),
+//       body: Center(
+//     child: Column(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             const Text(
+//               'You have pushed the button this many times:',
+//             ),
+//             Text(
+//               '$_counter',
+//               style: Theme.of(context).textTheme.headlineMedium,
+//             ),
+//           ],
+//         ),
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: _incrementCounter,
+//         tooltip: 'Increment',
+//         child: const Icon(Icons.add),
+//       ),
+//   );
+//   }

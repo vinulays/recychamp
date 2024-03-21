@@ -49,10 +49,11 @@ class _SignupState extends State<Signup> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  child: Image.asset("assets/images/image.jpg",fit: BoxFit.cover,
-                  )),
+                  // child: Image.asset("",fit: BoxFit.cover,
+                  // )
+                  ),
                   SizedBox(
-                    height: 30.0,
+                    height: 20.0,
                     ),
             
             Padding(
@@ -178,19 +179,13 @@ class _SignupState extends State<Signup> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  "images/google.png",
+                  "assets/images/google.png",
                   height: 45,
                   width: 45,
                   fit: BoxFit.cover,
                 ),
                 SizedBox(
                   width: 30.0,
-                ),
-                Image.asset(
-                  "images/apple1.png",
-                  height: 50,
-                  width: 50,
-                  fit: BoxFit.cover,
                 )
               ],
             ),

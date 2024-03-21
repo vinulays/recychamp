@@ -13,7 +13,7 @@ import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc
 import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/ui/article_filter.dart';
 import 'package:recychamp/ui/article_form.dart';
-import 'package:recychamp/utils/articles_data.dart';
+
 
 class EducationalResource extends StatefulWidget {
   const EducationalResource({super.key});

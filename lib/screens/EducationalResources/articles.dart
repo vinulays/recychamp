@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -15,7 +16,6 @@ import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/ui/article_filter.dart';
 import 'package:recychamp/ui/article_form.dart';
 
-
 class EducationalResource extends StatefulWidget {
   const EducationalResource({super.key});
 
@@ -26,7 +26,7 @@ class EducationalResource extends StatefulWidget {
 class _EducationalResourceState extends State<EducationalResource> {
   late List<Article> allArticles = [];
   bool isExpanded = false;
-   String? userRole;
+  String? userRole;
 
   @override
   void initState() {
@@ -36,6 +36,7 @@ class _EducationalResourceState extends State<EducationalResource> {
       getUserRole();
     }
   }
+
   Future<void> getUserRole() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
@@ -56,7 +57,6 @@ class _EducationalResourceState extends State<EducationalResource> {
       throw Exception("Error getting role: $error");
     }
   }
-
 
   void fetchArticles() async {
     try {
@@ -79,8 +79,7 @@ class _EducationalResourceState extends State<EducationalResource> {
     var deviceData = MediaQuery.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
-       floatingActionButton:(userRole == "admin" || userRole == "organizer")
-      ? Padding(
+      floatingActionButton: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FloatingActionButton(
           onPressed: () {
@@ -103,7 +102,8 @@ class _EducationalResourceState extends State<EducationalResource> {
             size: 40.0,
           ),
         ),
-      ): Container(),
+      ),
+      //  : Container(),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -204,22 +204,25 @@ class _EducationalResourceState extends State<EducationalResource> {
                 ],
               ),
             ),
-            Container(
-              height: 280,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: allArticles.length,
-                separatorBuilder: (context, _) => const SizedBox(width: 12),
-                itemBuilder: (context, index) {
-                  Article article = allArticles[index];
-                  print(
-                      'Article: ${article.articleTitle}'); // Check if articles are being printed
-                  if (article.articleType == "Nature") {
-                    return articleCard(articleData: article);
-                  } else {
-                    return Container();
-                  }
-                },
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Container(
+                height: 280,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: allArticles.length,
+                  separatorBuilder: (context, _) => const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    Article article = allArticles[index];
+                    print(
+                        'Article: ${article.articleTitle}'); // Check if articles are being printed
+                    if (article.articleType == "Nature") {
+                      return articleCard(articleData: article);
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
               ),
             ),
             Container(
@@ -228,7 +231,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                   horizontal: deviceData.size.width * 0.05),
               child: Row(
                 children: [
-                  Text("Plants",
+                  Text("Plants and Trees ",
                       style: kFontFamily(
                         color: Colors.black,
                         fontSize: 18,
@@ -237,22 +240,25 @@ class _EducationalResourceState extends State<EducationalResource> {
                 ],
               ),
             ),
-            Container(
-              height: 280,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: allArticles.length,
-                separatorBuilder: (context, _) => const SizedBox(width: 12),
-                itemBuilder: (context, index) {
-                  Article article = allArticles[index];
-                  print(
-                      'Article: ${article.articleTitle}'); // Check if articles are being printed
-                  if (article.articleType == "Plants") {
-                    return articleCard(articleData: article);
-                  } else {
-                    return Container();
-                  }
-                },
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 280,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: allArticles.length,
+                  separatorBuilder: (context, _) => const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    Article article = allArticles[index];
+                    print(
+                        'Article: ${article.articleTitle}'); // Check if articles are being printed
+                    if (article.articleType == "PlantTrees") {
+                      return articleCard(articleData: article);
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
               ),
             ),
             Container(
@@ -261,7 +267,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                   horizontal: deviceData.size.width * 0.05),
               child: Row(
                 children: [
-                  Text("Trees",
+                  Text("Recycling methods",
                       style: kFontFamily(
                         color: Colors.black,
                         fontSize: 18,
@@ -270,22 +276,137 @@ class _EducationalResourceState extends State<EducationalResource> {
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Container(
+                height: 280,
+                // margin: EdgeInsets.symmetric(
+                //     horizontal: deviceData.size.width * 0.05),
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: allArticles.length,
+                  separatorBuilder: (context, _) => const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    Article article = allArticles[index];
+                    print(
+                        'Article: ${article.articleTitle}'); // Check if articles are being printed
+                    if (article.articleType == "Recycling") {
+                      return articleCard(articleData: article);
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+              ),
+            ),
             Container(
-              height: 280,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: allArticles.length,
-                separatorBuilder: (context, _) => const SizedBox(width: 12),
-                itemBuilder: (context, index) {
-                  Article article = allArticles[index];
-                  print(
-                      'Article: ${article.articleTitle}'); // Check if articles are being printed
-                  if (article.articleType == "Trees") {
-                    return articleCard(articleData: article);
-                  } else {
-                    return Container();
-                  }
-                },
+              height: 50,
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: Row(
+                children: [
+                  Text("Eco-Friendly Products",
+                      style: kFontFamily(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      )),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Container(
+                height: 280,
+                margin: EdgeInsets.symmetric(
+                    horizontal: deviceData.size.width * 0.05),
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: allArticles.length,
+                  separatorBuilder: (context, _) => const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    Article article = allArticles[index];
+                    print(
+                        'Article: ${article.articleTitle}'); // Check if articles are being printed
+                    if (article.articleType == "Eco-Friendly-Products") {
+                      return articleCard(articleData: article);
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+              ),
+            ),
+            Container(
+              height: 50,
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: Row(
+                children: [
+                  Text("Recycling Challenges",
+                      style: kFontFamily(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      )),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Container(
+                height: 280,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: allArticles.length,
+                  separatorBuilder: (context, _) => const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    Article article = allArticles[index];
+                    print(
+                        'Article: ${article.articleTitle}'); // Check if articles are being printed
+                    if (article.articleType == "RecyChallenges") {
+                      return articleCard(articleData: article);
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+              ),
+            ),
+            Container(
+              height: 50,
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: Row(
+                children: [
+                  Text("Others",
+                      style: kFontFamily(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      )),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Container(
+                height: 280,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: allArticles.length,
+                  separatorBuilder: (context, _) => const SizedBox(width: 12),
+                  itemBuilder: (context, index) {
+                    Article article = allArticles[index];
+                    print(
+                        'Article: ${article.articleTitle}'); // Check if articles are being printed
+                    if (article.articleType == "Others") {
+                      return articleCard(articleData: article);
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
               ),
             ),
           ],
@@ -327,6 +448,7 @@ class _EducationalResourceState extends State<EducationalResource> {
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 9.0),
                 child: Text(
+                  maxLines: 3,
                   articleData.articleTitle,
                   style: kFontFamily(
                     color: Colors.black,

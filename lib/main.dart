@@ -26,7 +26,6 @@ import 'package:recychamp/services/challenge_service.dart';
 import 'package:recychamp/services/post_service.dart';
 import 'package:recychamp/services/shop_service.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -134,7 +133,7 @@ class MyApp extends StatelessWidget {
                       .instance // Replace YourRepo with your actual repository
                   ),
             ),
-          ),
+          )..add(FetchArticleEvent()),
         ),
         // * submittion state provider
         BlocProvider<SubmissionViewBloc>(
@@ -158,13 +157,12 @@ class MyApp extends StatelessWidget {
             ),
           )..add(SetBadgeEvent()),
         ),
-        BlocProvider<ShopBloc>(create: (context) => ShopBloc(
-          repository: ShopRepository(shopService: ShopService(
-            firestore:FirebaseFirestore.instance,
-            storage: FirebaseStorage.instance
-          ))
-        )
-        )
+        BlocProvider<ShopBloc>(
+            create: (context) => ShopBloc(
+                repository: ShopRepository(
+                    shopService: ShopService(
+                        firestore: FirebaseFirestore.instance,
+                        storage: FirebaseStorage.instance))))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:recychamp/models/comment.dart';
+import 'package:recychamp/models/user.dart';
 
 @immutable
 class Post {
@@ -10,17 +11,23 @@ class Post {
   final String? photoUrl;
   final DateTime createdAt;
   final int? likesCount;
-  final List<Comment>? commentList;
+  final List<String>? likesList;
+  final int? commentCount;
+  User? user;
+  // final List<Comment>? commentList;
 
-  const Post({
+  Post({
+    this.user,
     this.postId,
+    this.likesList,
     required this.title,
     this.postUserId,
     required this.description,
     this.photoUrl,
+    this.commentCount,
     required this.createdAt,
     this.likesCount,
-    this.commentList,
+    // this.commentList,
   });
 
   Map<String, dynamic> toJson() {
@@ -32,7 +39,7 @@ class Post {
       'photoUrl': photoUrl,
       'createdAt': createdAt.toIso8601String(),
       'likesCount': likesCount,
-      'commentList': commentList?.map((comment) => comment.toJson()).toList(),
+      // 'commentList': commentList?.map((comment) => comment.toJson()).toList(),
     };
   }
 

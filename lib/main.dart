@@ -10,21 +10,23 @@ import 'package:recychamp/repositories/article_repository.dart';
 import 'package:recychamp/repositories/badge_repository.dart';
 import 'package:recychamp/repositories/challenge_repository.dart';
 import 'package:recychamp/repositories/posts%20repository/post_repo.dart';
+import 'package:recychamp/repositories/shop_repository.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/screens/ChallengeSubmissionView/bloc/submission_view_bloc.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
+import 'package:recychamp/screens/Community/bloc/comments/bloc/comment_bloc.dart';
 import 'package:recychamp/screens/Community/bloc/posts_bloc.dart';
 import 'package:recychamp/screens/Dashboard/bloc/badge_bloc.dart';
 import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
-// import 'package:recychamp/screens/Home/home.dart';
+import 'package:recychamp/screens/Home/home.dart';
+import 'package:recychamp/screens/Shop/bloc/shop_bloc.dart';
 import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/services/badge_service.dart';
 import 'package:recychamp/services/challenge_service.dart';
 import 'package:recychamp/services/post_service.dart';
-// import 'package:recychamp/screens/Login/forgot_password.dart';
-// import 'package:recychamp/screens/Login/login.dart';
 import 'package:recychamp/screens/Login/signup.dart';
 // import 'package:recychamp/screens/Welcome/welcome.dart';
+import 'package:recychamp/services/shop_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +49,19 @@ void main() async {
 //     // * parent = parent@gmail.com
 //     String email = 'ubetatta@gmail.com';
 //     String password = '12345678';
+Future<void> signInManually() async {
+  try {
+    // * admin = ubetatta@gmail.com
+    // * organizer = vinula@gmail.com
+    // * parent = parent@gmail.com
+    String email = 'parent@gmail.com';
+    String password = '12345678';
 
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
 //     UserCredential userCredential =
 //         await FirebaseAuth.instance.signInWithEmailAndPassword(
 //       email: email,
@@ -130,6 +144,17 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
+        BlocProvider<CommentBloc>(
+          create: (context) => CommentBloc(
+            postRepository: PostRepository(
+              postService:
+                  // * adding current firebase instance to the challenge service
+                  PostService(
+                      firestore: FirebaseFirestore.instance,
+                      storage: FirebaseStorage.instance),
+            ),
+          ),
+        ),
         BlocProvider<ArticleDetailsBloc>(
           create: (context) => ArticleDetailsBloc(
             repository: ArticleRepo(
@@ -139,7 +164,7 @@ class MyApp extends StatelessWidget {
                       .instance // Replace YourRepo with your actual repository
                   ),
             ),
-          ),
+          )..add(FetchArticleEvent()),
         ),
         // * submittion state provider
         BlocProvider<SubmissionViewBloc>(
@@ -162,7 +187,13 @@ class MyApp extends StatelessWidget {
               ),
             ),
           )..add(SetBadgeEvent()),
-        )
+        ),
+        BlocProvider<ShopBloc>(
+            create: (context) => ShopBloc(
+                repository: ShopRepository(
+                    shopService: ShopService(
+                        firestore: FirebaseFirestore.instance,
+                        storage: FirebaseStorage.instance))))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

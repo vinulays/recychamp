@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:like_button/like_button.dart';
 import 'package:recychamp/models/comment.dart';
 import 'package:recychamp/models/post.dart';
+import 'package:recychamp/screens/Community/bloc/comments/bloc/comment_bloc.dart';
 import 'package:recychamp/screens/CreatePost/createpost.dart';
 import 'package:recychamp/services/post_service.dart';
 
@@ -16,16 +19,86 @@ class PostCard extends StatefulWidget {
   final PostService postService;
   const PostCard({super.key, required this.post, required this.postService});
 
-
   @override
   State<PostCard> createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
+  String? userId;
+  List<Comment> comments = [];
+  String? imageURL;
+
   PostService postService = PostService(
       firestore: FirebaseFirestore.instance, storage: FirebaseStorage.instance);
+
   final TextEditingController _commentController = TextEditingController();
-  List<Comment> comments = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
+
+  Future<String?> getPostUserImageURL() async {
+    try {
+      CollectionReference usersRef =
+          FirebaseFirestore.instance.collection('users');
+
+      DocumentSnapshot userSnapshot =
+          await usersRef.doc(widget.post.postUserId).get();
+
+      if (userSnapshot.exists) {
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+
+        String? userImageURL = userData['photoUrl'] as String?;
+
+        return userImageURL!;
+      } else {
+        // User not found
+        return null;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  Future<String?> getPostUsername() async {
+    try {
+      CollectionReference usersRef =
+          FirebaseFirestore.instance.collection('users');
+
+      DocumentSnapshot userSnapshot =
+          await usersRef.doc(widget.post.postUserId).get();
+
+      if (userSnapshot.exists) {
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+
+        String? userName = userData['username'] as String?;
+
+        return userName!;
+      } else {
+        // User not found
+        return null;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  Future<void> getUserRole() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        setState(() {
+          userId = user.uid;
+        });
+      }
+    } catch (error) {
+      throw Exception("Error getting role: $error");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
@@ -67,6 +140,41 @@ class _PostCardState extends State<PostCard> {
       );
     }
 
+    void deleteComment(String commentId) {
+      // Display a dialog box to confirm deletion
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Delete Comment"),
+            content:
+                const Text("Are you sure you want to delete this comment?"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: const Text("No"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  try {
+                    context.read<CommentBloc>().add(
+                        DeleteCommentEvent(commentId, widget.post.postId!));
+
+                    Navigator.of(context).pop();
+                  } catch (e) {
+                    throw Exception(e);
+                  }
+                },
+                child: const Text("Yes"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return Container(
       margin: EdgeInsets.only(
           left: deviceData.size.width * 0.05,
@@ -89,68 +197,106 @@ class _PostCardState extends State<PostCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: 46,
-                  height: 46,
-                  child: const CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZSUyMHBpY3xlbnwwfHwwfHx8MA%3D%3D"),
-                    backgroundColor: Colors.transparent,
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Text(
-                      'John Doe',
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        letterSpacing: -0.32,
-                      ),
+                    Container(
+                        width: 46,
+                        height: 46,
+                        // child: CircleAvatar(
+                        //   backgroundImage: NetworkImage(imageURL!),
+                        //   backgroundColor: Colors.transparent,
+                        // ),
+                        child: FutureBuilder(
+                            future: getPostUserImageURL(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                // Show a loading indicator while fetching the image URL
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError ||
+                                  snapshot.data == null) {
+                                // Show an error message if there's an error or imageURL is null
+                                return Text('Failed to load user image');
+                              } else {
+                                // Use the retrieved imageURL to load the image
+                                String imageURL = snapshot.data!;
+                                return CircleAvatar(
+                                  backgroundImage: NetworkImage(imageURL),
+                                  backgroundColor: Colors.transparent,
+                                );
+                              }
+                            })),
+                    const SizedBox(
+                      width: 10,
                     ),
-                    Text(
-                      'Posted ${Jiffy.parse(widget.post.createdAt.toString()).format(pattern: "MMMM do")}',
-                      style: GoogleFonts.poppins(
-                        color: Color(0xFF747474),
-                        fontSize: 11,
-                        fontWeight: FontWeight.w400,
-                        letterSpacing: -0.22,
-                      ),
-                    )
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FutureBuilder(
+                          future: getPostUsername(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError ||
+                                snapshot.data == null) {
+                              return Text('Failed to load username');
+                            } else {
+                              String userName = snapshot.data!;
+                              return Text(
+                                userName,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: -0.32,
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                        Text(
+                          'Posted ${Jiffy.parse(widget.post.createdAt.toString()).format(pattern: "MMMM do")}',
+                          style: GoogleFonts.poppins(
+                            color: const Color(0xFF747474),
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: -0.22,
+                          ),
+                        )
+                      ],
+                    ),
                   ],
                 ),
                 Column(children: [
-                  PopupMenuButton(
-                    itemBuilder: (context) {
-                      return [
-                        const PopupMenuItem<int>(
-                            value: 0, child: Text("Delete Post")),
-                        const PopupMenuItem<int>(
-                            value: 1, child: Text("Update Post")),
-                      ];
-                    },
-                    onSelected: (value) {
-                      if (value == 0) {
-                        deletePost();
-                      } else if (value == 1) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CreatePost(
-                              isUpdate: true,
-                              post: widget.post,
+                  if (widget.post.postUserId == userId)
+                    PopupMenuButton(
+                      itemBuilder: (context) {
+                        return [
+                          const PopupMenuItem<int>(
+                              value: 0, child: Text("Delete Post")),
+                          const PopupMenuItem<int>(
+                              value: 1, child: Text("Update Post")),
+                        ];
+                      },
+                      onSelected: (value) {
+                        if (value == 0) {
+                          deletePost();
+                        } else if (value == 1) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreatePost(
+                                isUpdate: true,
+                                post: widget.post,
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
+                          );
+                        }
+                      },
+                    ),
                 ]),
               ],
             ),
@@ -195,8 +341,13 @@ class _PostCardState extends State<PostCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 LikeButton(
-                  onTap: (_) {
-                    return postService.likePost(widget.post);
+                  isLiked: widget.post.likesList?.contains(userId),
+                  onTap: (bool isLiked) {
+                    if (!isLiked) {
+                      return postService.likePost(widget.post);
+                    } else {
+                      return postService.dislikePost(widget.post);
+                    }
                   },
                   size: 30,
                   circleColor:
@@ -212,167 +363,235 @@ class _PostCardState extends State<PostCard> {
                       size: 30,
                     );
                   },
-                  likeCount: widget.post.likesCount,
-                  // countBuilder: (int count, bool isLiked, String text) {
-                  //   var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
-                  //   Widget result;
-                  //   if (count == 0) {
-                  //     result = Text(
-                  //       "love",
-                  //       style: TextStyle(color: color),
-                  //     );
-                  //   } else
-                  //     result = Text(
-                  //       text,
-                  //       style: TextStyle(color: color),
-                  //     );
-                  //   return result;
-                  // },
+                  likeCount: widget.post.likesList?.length,
                 ),
                 GestureDetector(
                   onTap: () {
+                    // calling fetch comment event
+                    context
+                        .read<CommentBloc>()
+                        .add(FetchCommentsEvent(widget.post.postId!));
+
                     showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
                         backgroundColor: Colors.white,
                         builder: (context) {
-                          return FractionallySizedBox(
-                            heightFactor: 0.9,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: ListView(children: [
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount:
-                                          widget.post.commentList?.length,
-                                      itemBuilder: (context, index) {
-                                        Comment comment =
-                                            widget.post.commentList![index];
-                                        return Container(
-                                          margin: const EdgeInsets.all(20),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const SizedBox(
-                                                    width: 46,
-                                                    height: 46,
-                                                    child: CircleAvatar(
-                                                      backgroundImage: NetworkImage(
-                                                          "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww"),
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Expanded(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          color: Colors.black
-                                                              .withOpacity(
-                                                                  0.15)),
-                                                      child: Container(
-                                                        margin: const EdgeInsets
-                                                            .symmetric(
-                                                            vertical: 5,
-                                                            horizontal: 7),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              "Chamoth Mendis",
-                                                              style: GoogleFonts.poppins(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700),
-                                                            ),
-                                                            Text(
-                                                              comment
-                                                                  .description,
-                                                              style: GoogleFonts.poppins(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                            ),
-                                                            const SizedBox(
-                                                                height: 10),
-                                                          ],
+                          return BlocBuilder<CommentBloc, CommentState>(
+                            builder: (context, state) {
+                              return FractionallySizedBox(
+                                heightFactor: 0.9,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    if (state is CommentLoading)
+                                      const Expanded(
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            strokeCap: StrokeCap.round,
+                                            strokeWidth: 5,
+                                            color: Color(0xff75A488),
+                                          ),
+                                        ),
+                                      ),
+                                    if (state is CommentAdding)
+                                      const Expanded(
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            strokeCap: StrokeCap.round,
+                                            strokeWidth: 5,
+                                            color: Color(0xff75A488),
+                                          ),
+                                        ),
+                                      ),
+                                    if (state is CommentDeleting)
+                                      const Expanded(
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            strokeCap: StrokeCap.round,
+                                            strokeWidth: 5,
+                                            color: Color(0xff75A488),
+                                          ),
+                                        ),
+                                      ),
+                                    if (state is CommentLoaded)
+                                      Expanded(
+                                        child: ListView(children: [
+                                          ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: state.comments.length,
+                                            itemBuilder: (context, index) {
+                                              Comment comment =
+                                                  state.comments[index];
+                                              return Container(
+                                                margin:
+                                                    const EdgeInsets.all(20),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        const SizedBox(
+                                                          width: 46,
+                                                          height: 46,
+                                                          child: CircleAvatar(
+                                                            backgroundImage:
+                                                                NetworkImage(
+                                                                    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww"),
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                          ),
                                                         ),
-                                                      ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Expanded(
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                color: Colors
+                                                                    .black
+                                                                    .withOpacity(
+                                                                        0.15)),
+                                                            child: Container(
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          5,
+                                                                      horizontal:
+                                                                          7),
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    "Chamoth Mendis",
+                                                                    style: GoogleFonts.poppins(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.w700),
+                                                                  ),
+                                                                  Text(
+                                                                    comment
+                                                                        .description,
+                                                                    style: GoogleFonts.poppins(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.w400),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                      height:
+                                                                          10),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        if (comment
+                                                                .commentUserId ==
+                                                            userId)
+                                                          PopupMenuButton(
+                                                            itemBuilder:
+                                                                (context) {
+                                                              return [
+                                                                PopupMenuItem(
+                                                                  value: index,
+                                                                  child: const Text(
+                                                                      "Delete"),
+                                                                ),
+                                                              ];
+                                                            },
+                                                            onSelected: (int
+                                                                selectedIndex) {
+                                                              deleteComment(
+                                                                  comment
+                                                                      .commentId);
+                                                            },
+                                                          ),
+                                                      ],
                                                     ),
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  ]),
-                                ),
-                                Container(
-                                  height: 60,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: deviceData.size.width * 0.05),
-                                  child: TextField(
-                                    controller: _commentController,
-                                    onSubmitted: (query) {},
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 17,
-                                    ),
-                                    decoration: InputDecoration(
-                                        contentPadding:
-                                            const EdgeInsets.all(14),
-                                        suffixIconConstraints:
-                                            const BoxConstraints(
-                                                maxHeight: 26, minWidth: 26),
-                                        suffixIcon: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 20),
-                                          child: InkWell(
-                                            onTap: () {
-                                              widget.postService
-                                                  .addCommentToPost(
-                                                      widget.post.postId!,
-                                                      _commentController.text);
+                                                  ],
+                                                ),
+                                              );
                                             },
-                                            child: const Icon(Icons.send),
-                                          ),
+                                          )
+                                        ]),
+                                      ),
+                                    Container(
+                                      height: 60,
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal:
+                                              deviceData.size.width * 0.05),
+                                      child: TextField(
+                                        controller: _commentController,
+                                        onSubmitted: (query) {},
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 17,
                                         ),
-                                        filled: true,
-                                        fillColor: const Color(0xffE6EEEA),
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius:
-                                              BorderRadius.circular(12.62),
-                                        ),
-                                        hintStyle: GoogleFonts.poppins(
-                                            fontSize: 17,
-                                            color: const Color(0xff75A488)),
-                                        hintText: "Comment as Chamoth Mendis"),
-                                  ),
+                                        decoration: InputDecoration(
+                                            contentPadding:
+                                                const EdgeInsets.all(14),
+                                            suffixIconConstraints:
+                                                const BoxConstraints(
+                                                    maxHeight: 26,
+                                                    minWidth: 26),
+                                            suffixIcon: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 20),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  // widget.postService
+                                                  //     .addCommentToPost(
+                                                  //         widget.post.postId!,
+                                                  //         _commentController
+                                                  //             .text);
+                                                  context
+                                                      .read<CommentBloc>()
+                                                      .add(AddCommentEvent(
+                                                          widget.post.postId!,
+                                                          _commentController
+                                                              .text));
+
+                                                  _commentController.clear();
+                                                },
+                                                child: const Icon(Icons.send),
+                                              ),
+                                            ),
+                                            filled: true,
+                                            fillColor: const Color(0xffE6EEEA),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.62),
+                                            ),
+                                            hintStyle: GoogleFonts.poppins(
+                                                fontSize: 17,
+                                                color: const Color(0xff75A488)),
+                                            hintText:
+                                                "Comment as Chamoth Mendis"),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           );
                         });
                   },
@@ -386,7 +605,7 @@ class _PostCardState extends State<PostCard> {
                         width: 5,
                       ),
                       Text(
-                        "Comments (${widget.post.commentList?.length})",
+                        "Comments (${widget.post.commentCount})",
                         style: GoogleFonts.poppins(fontSize: 14),
                       )
                     ],

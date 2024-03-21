@@ -4,6 +4,7 @@ import "package:flutter_svg/flutter_svg.dart";
 import "package:recychamp/screens/Challenges/challenges.dart";
 import "package:recychamp/screens/Community/community.dart";
 import "package:recychamp/screens/Dashboard/dashboard.dart";
+import "package:recychamp/screens/Discover/discover.dart";
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,10 +20,10 @@ class _HomeState extends State<Home> {
   static const List<Widget> _widgetOptions = <Widget>[
     // * Add appropriate screens as commented below
     Challenges(), // * Challenges
-    Challenges(), // * Challenges
+    Discover(), // * Discover
     Dashboard(), // * Dashboard
     Community(), // * Community
-    Community(), // * Community
+    Community(), // * Notifications
   ];
 
   void _onItemTapped(int index) {

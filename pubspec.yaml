@@ -143,6 +143,8 @@ flutter:
     - assets/images/launcher_icon.png
     - assets/images/ic_launcher_foreground.png
     - assets/images/ic_launcher_background.png
+    - assets/images/image.jpg
+    - assets/images/google.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

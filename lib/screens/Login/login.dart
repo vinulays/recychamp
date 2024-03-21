@@ -15,8 +15,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
 String email = "", password = "";
 
-  TextEditingController mailcontroller = new TextEditingController();
-  TextEditingController passwordcontroller = new TextEditingController();
+  TextEditingController mailcontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
 
@@ -51,15 +51,30 @@ String email = "", password = "";
       body: Container(
         child: Column(
           children: [
-            Container(
-                width: MediaQuery.of(context).size.width,
-                child: Image.asset(
-                  "assets/images/image.jpg",
-                  fit: BoxFit.cover,
-                )),
-            SizedBox(
-              height: 30.0,
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0, bottom: 20.0),
+              child: Column(
+                children: [
+                  Text(
+                    "Let’s Sign you in.",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Welcome back\nYou’ve been missed!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
             ),
+
             Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: Form(
@@ -178,7 +193,7 @@ String email = "", password = "";
                     AuthMethods().signInWithGoogle(context);
                   },
                   child: Image.asset(
-                    "assets/images/image.jpg",
+                    "assets/images/google.png",
                     height: 45,
                     width: 45,
                     fit: BoxFit.cover,

@@ -20,7 +20,7 @@ import 'package:recychamp/screens/Community/bloc/comments/bloc/comment_bloc.dart
 import 'package:recychamp/screens/Community/bloc/posts_bloc.dart';
 import 'package:recychamp/screens/Dashboard/bloc/badge_bloc.dart';
 import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
-import 'package:recychamp/screens/Home/home.dart';
+// import 'package:recychamp/screens/Home/home.dart';
 import 'package:recychamp/screens/Shop/bloc/shop_bloc.dart';
 import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/services/badge_service.dart';
@@ -52,19 +52,19 @@ void main() async {
 //     // * parent = parent@gmail.com
 //     String email = 'ubetatta@gmail.com';
 //     String password = '12345678';
-Future<void> signInManually() async {
-  try {
-    // * admin = ubetatta@gmail.com
-    // * organizer = vinula@gmail.com
-    // * parent = parent@gmail.com
-    String email = 'parent@gmail.com';
-    String password = '12345678';
+// Future<void> signInManually() async {
+//   try {
+//     // * admin = ubetatta@gmail.com
+//     // * organizer = vinula@gmail.com
+//     // * parent = parent@gmail.com
+//     String email = 'parent@gmail.com';
+//     String password = '12345678';
 
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+//     UserCredential userCredential =
+//         await FirebaseAuth.instance.signInWithEmailAndPassword(
+//       email: email,
+//       password: password,
+//     );
 //     UserCredential userCredential =
 //         await FirebaseAuth.instance.signInWithEmailAndPassword(
 //       email: email,
@@ -226,7 +226,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
+  
 // class MyHomePage extends StatefulWidget {
 //   const MyHomePage({super.key, required this.title});
 //  final String title;

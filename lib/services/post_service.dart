@@ -9,13 +9,15 @@ import 'package:recychamp/models/post.dart';
 class PostService {
   final FirebaseFirestore _firestore;
   final FirebaseStorage _storage;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth? _auth;
 
   PostService({
     required FirebaseFirestore firestore,
     required FirebaseStorage storage,
+    FirebaseAuth? auth,
   })  : _firestore = firestore,
-        _storage = storage;
+        _storage = storage,
+        _auth = auth;
 
   Future<void> addPost(Post post) async {
     try {
@@ -46,7 +48,7 @@ class PostService {
 
   Future<void> addComment(String postId, String text) async {
     try {
-      final User? user = _auth.currentUser;
+      final User? user = _auth?.currentUser;
       final userId = user?.uid;
 
       await _firestore.collection('comments').add(
@@ -184,7 +186,7 @@ class PostService {
 
   Future<bool> likePost(Post post) async {
     try {
-      final User? user = _auth.currentUser;
+      final User? user = _auth?.currentUser;
       final userId = user?.uid;
 
       DocumentReference postRef =
@@ -202,7 +204,7 @@ class PostService {
 
   Future<bool> dislikePost(Post post) async {
     try {
-      final User? user = _auth.currentUser;
+      final User? user = _auth?.currentUser;
       final userId = user?.uid;
 
       DocumentReference postRef =
@@ -220,7 +222,7 @@ class PostService {
 
   Future<bool> isPostLiked(Post post) async {
     // Get the current user's ID
-    String? userId = _auth.currentUser?.uid;
+    String? userId = _auth?.currentUser?.uid;
     if (userId == null) {
       // If the user is not logged in, return false
       return false;

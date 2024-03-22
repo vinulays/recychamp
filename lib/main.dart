@@ -23,7 +23,6 @@ import 'package:recychamp/services/badge_service.dart';
 import 'package:recychamp/services/challenge_service.dart';
 import 'package:recychamp/services/post_service.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -107,7 +106,8 @@ class MyApp extends StatelessWidget {
                   // * adding current firebase instance to the challenge service
                   PostService(
                       firestore: FirebaseFirestore.instance,
-                      storage: FirebaseStorage.instance),
+                      storage: FirebaseStorage.instance,
+                      auth: FirebaseAuth.instance),
             ),
           ),
         ),
@@ -118,7 +118,8 @@ class MyApp extends StatelessWidget {
                   // * adding current firebase instance to the challenge service
                   PostService(
                       firestore: FirebaseFirestore.instance,
-                      storage: FirebaseStorage.instance),
+                      storage: FirebaseStorage.instance,
+                      auth: FirebaseAuth.instance),
             ),
           ),
         ),

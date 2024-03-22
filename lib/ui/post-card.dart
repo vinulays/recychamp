@@ -29,7 +29,9 @@ class _PostCardState extends State<PostCard> {
   String? imageURL;
 
   PostService postService = PostService(
-      firestore: FirebaseFirestore.instance, storage: FirebaseStorage.instance);
+      firestore: FirebaseFirestore.instance,
+      storage: FirebaseStorage.instance,
+      auth: FirebaseAuth.instance);
 
   final TextEditingController _commentController = TextEditingController();
 

@@ -28,7 +28,7 @@ class _SignupState extends State<Signup> {
             .createUserWithEmailAndPassword(email: email, password: password);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
-          "Registeed Successfully",
+          "Registered Successfully",
           style: TextStyle(fontSize: 20.0),
         )));
         Navigator.push(

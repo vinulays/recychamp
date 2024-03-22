@@ -36,9 +36,9 @@ class _CreatePostState extends State<CreatePost> {
     super.initState();
     // Initialize PostService with Firestore and FirebaseStorage instances
     _postService = PostService(
-      firestore: FirebaseFirestore.instance,
-      storage: FirebaseStorage.instance,
-    );
+        firestore: FirebaseFirestore.instance,
+        storage: FirebaseStorage.instance,
+        auth: FirebaseAuth.instance);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (widget.isUpdate) {
@@ -418,72 +418,84 @@ class _CreatePostState extends State<CreatePost> {
                     height: 20,
                   ),
                   Container(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    height: 200,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: const Color(0xFF75A488), width: 2),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.upload),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "Upload a photo",
-                          style: GoogleFonts.poppins(fontSize: 16),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "JPG, PNG, SVG",
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            color: Colors.black.withOpacity(0.6000000238418579),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        FormBuilderField(
-                          name: "imageURL",
-                          builder: (FormFieldState<dynamic> field) {
-                            return TextButton(
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                      margin: const EdgeInsets.only(bottom: 8),
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: const Color(0xFF75A488), width: 2),
+                          borderRadius: BorderRadius.circular(10),
+                          image: _file != null
+                              ? DecorationImage(
+                                  image: MemoryImage(_file!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null),
+                      child: _file == null
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.upload),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "Upload a photo",
+                                  style: GoogleFonts.poppins(fontSize: 16),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "JPG, PNG, SVG",
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 14,
+                                    color: Colors.black
+                                        .withOpacity(0.6000000238418579),
                                   ),
                                 ),
-                                padding: MaterialStateProperty.all(
-                                    const EdgeInsets.symmetric(
-                                        vertical: 10.88, horizontal: 20)),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        const Color(0xFF75A488)
-                                            .withOpacity(0.6000000238418579)),
-                              ),
-                              onPressed: () {
-                                _selectImage();
-                              },
-                              child: Text(
-                                "Choose file",
-                                style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black),
-                              ),
-                            );
-                          },
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                        )
-                      ],
-                    ),
-                  ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                FormBuilderField(
+                                  name: "imageURL",
+                                  builder: (FormFieldState<dynamic> field) {
+                                    return TextButton(
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        padding: MaterialStateProperty.all(
+                                            const EdgeInsets.symmetric(
+                                                vertical: 10.88,
+                                                horizontal: 20)),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                const Color(0xFF75A488)
+                                                    .withOpacity(
+                                                        0.6000000238418579)),
+                                      ),
+                                      onPressed: () {
+                                        _selectImage();
+                                      },
+                                      child: Text(
+                                        "Choose file",
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black),
+                                      ),
+                                    );
+                                  },
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                )
+                              ],
+                            )
+                          : null),
                   // SizedBox(
                   //   height: 350,
                   //   width: 350,

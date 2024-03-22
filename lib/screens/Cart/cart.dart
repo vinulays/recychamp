@@ -14,6 +14,8 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
+  List<CartItem> items = [];
+
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
@@ -22,64 +24,61 @@ class _CartState extends State<Cart> {
       builder: (context, state) {
         return Scaffold(
           body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              const SizedBox(
+                height: 50,
+              ),
               Container(
-                child: Column(
+                margin: EdgeInsets.symmetric(
+                    horizontal: deviceData.size.width * 0.05),
+                child: Row(
                   children: [
-                    Container(
-                      height: 130,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: deviceData.size.width * 0.05),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: SvgPicture.asset(
-                              "assets/icons/go_back.svg",
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.black, BlendMode.srcIn),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Text("Shopping Cart",
-                              style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25)),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: SvgPicture.asset(
+                        "assets/icons/go_back.svg",
+                        colorFilter: const ColorFilter.mode(
+                            Colors.black, BlendMode.srcIn),
                       ),
                     ),
-                    if (state is CartLoadedState)
-                      Column(
-                        children: List.generate(
-                            state.cart.items.length,
-                            (index) => Container(
-                                  margin: const EdgeInsets.only(bottom: 20),
-                                  child: CartItemCard(
-                                      key: ValueKey(
-                                          state.cart.items[index].name),
-                                      cartItem: CartItem(
-                                          name: state.cart.items[index].name,
-                                          imageUrl:
-                                              state.cart.items[index].imageUrl,
-                                          price: state.cart.items[index].price,
-                                          quantity: state
-                                              .cart.items[index].quantity)),
-                                )),
-                      )
+                    const SizedBox(width: 10),
+                    Text("Shopping Cart",
+                        style: GoogleFonts.poppins(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25)),
+                    const SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               ),
+              const SizedBox(
+                height: 40,
+              ),
+              if (state is CartLoadedState)
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: state.cart.items.length,
+                      itemBuilder: (BuildContext context, index) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: CartItemCard(
+                              cartItem: CartItem(
+                                  name: state.cart.items[index].name,
+                                  imageUrl: state.cart.items[index].imageUrl,
+                                  price: state.cart.items[index].price,
+                                  quantity: state.cart.items[index].quantity)),
+                        );
+                      }),
+                ),
               Container(
                 margin: EdgeInsets.only(
-                    right: deviceData.size.width * 0.02,
-                    left: deviceData.size.width * 0.02,
+                    right: deviceData.size.width * 0.05,
+                    left: deviceData.size.width * 0.05,
                     bottom: 10),
                 child: SizedBox(
                   width: double.infinity,

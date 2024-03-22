@@ -17,6 +17,16 @@ class CartRepository {
     cartService.removeItemFromCart(itemName);
   }
 
+  // * Add item quantity in the cart
+  void addItemQuantity(String itemName) {
+    cartService.addItemQuantity(itemName);
+  }
+
+  // * Remove item quantity in the cart
+  void removeItemQuantity(String itemName) {
+    cartService.removeItemQuantity(itemName);
+  }
+
   // * Update the quantity of an item in the cart
   void updateItemQuantity(String itemId, int quantity) {
     cartService.updateItemQuantityInCart(itemId, quantity);

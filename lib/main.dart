@@ -27,8 +27,7 @@ import 'package:recychamp/services/badge_service.dart';
 import 'package:recychamp/services/cart_service.dart';
 import 'package:recychamp/services/challenge_service.dart';
 import 'package:recychamp/services/post_service.dart';
-import 'package:recychamp/screens/Login/signup.dart';
-// import 'package:recychamp/screens/Welcome/welcome.dart';
+import 'package:recychamp/screens/Welcome/welcome.dart';
 import 'package:recychamp/services/shop_service.dart';
 
 void main() async {
@@ -220,8 +219,7 @@ class MyApp extends StatelessWidget {
                 labelStyle: TextStyle(color: ChipLabelColor()))),
         // * Welcome screen (if not logged in)
         // home: const Home(),
-              home: Signup(),
-
+        home: Welcome(),
       ),
     );
   }

@@ -222,12 +222,11 @@ class MyApp extends StatelessWidget {
                 labelStyle: TextStyle(color: ChipLabelColor()))),
         // * Welcome screen (if not logged in)
         // home: const Home(),
-              home: Signup(),
-
+        home: Signup(),
       ),
     );
   }
-  
+
 // class MyHomePage extends StatefulWidget {
 //   const MyHomePage({super.key, required this.title});
 //  final String title;
@@ -273,3 +272,4 @@ class MyApp extends StatelessWidget {
 //       ),
 //   );
 //   }
+}

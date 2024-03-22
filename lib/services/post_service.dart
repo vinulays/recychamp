@@ -9,12 +9,12 @@ import 'package:recychamp/models/post.dart';
 class PostService {
   final FirebaseFirestore _firestore;
   final FirebaseStorage _storage;
-  final FirebaseAuth? _auth;
+  final FirebaseAuth _auth;
 
   PostService({
     required FirebaseFirestore firestore,
     required FirebaseStorage storage,
-    FirebaseAuth? auth,
+    required FirebaseAuth auth,
   })  : _firestore = firestore,
         _storage = storage,
         _auth = auth;

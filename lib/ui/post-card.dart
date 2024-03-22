@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
@@ -64,6 +65,29 @@ class _PostCardState extends State<PostCard> {
     return null;
   }
 
+  Future<String?> getCommenterProfilePhotoUrl(String commenterId) async {
+    try {
+      DocumentSnapshot commenterSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(commenterId)
+          .get();
+
+      if (commenterSnapshot.exists) {
+        Map<String, dynamic> commenterData =
+            commenterSnapshot.data() as Map<String, dynamic>;
+
+        String? commenterProfilePhotoUrl = commenterData['photoUrl'] as String?;
+
+        return commenterProfilePhotoUrl;
+      } else {
+        // Commenter not found
+        return null;
+      }
+    } catch (e) {
+      throw Exception('Failed to get commenter profile photo: $e');
+    }
+  }
+
   Future<String?> getPostUsername() async {
     try {
       CollectionReference usersRef =
@@ -85,6 +109,27 @@ class _PostCardState extends State<PostCard> {
       }
     } catch (e) {}
     return null;
+  }
+
+  Future<String?> getCommenterUsername(String commenterId) async {
+    try {
+      DocumentSnapshot commenterSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(commenterId)
+          .get();
+
+      if (commenterSnapshot.exists) {
+        Map<String, dynamic> commenterData =
+            commenterSnapshot.data() as Map<String, dynamic>;
+        String? commenterUsername = commenterData['username'] as String?;
+        return commenterUsername;
+      } else {
+        // Commenter not found
+        return null;
+      }
+    } catch (e) {
+      throw Exception('Failed to get commenter username: $e');
+    }
   }
 
   Future<void> getUserRole() async {
@@ -438,17 +483,43 @@ class _PostCardState extends State<PostCard> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        const SizedBox(
-                                                          width: 46,
-                                                          height: 46,
-                                                          child: CircleAvatar(
-                                                            backgroundImage:
-                                                                NetworkImage(
-                                                                    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww"),
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                          ),
+                                                        FutureBuilder(
+                                                          future: getCommenterProfilePhotoUrl(
+                                                              comment
+                                                                  .commentUserId),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (snapshot
+                                                                    .connectionState ==
+                                                                ConnectionState
+                                                                    .waiting) {
+                                                              return CircularProgressIndicator();
+                                                            } else if (snapshot
+                                                                    .hasError ||
+                                                                snapshot.data ==
+                                                                    null) {
+                                                              return const CircleAvatar(
+                                                                backgroundImage:
+                                                                    NetworkImage(
+                                                                        "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww"),
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .transparent,
+                                                              );
+                                                            } else {
+                                                              String imageURL =
+                                                                  snapshot
+                                                                      .data!;
+                                                              return CircleAvatar(
+                                                                backgroundImage:
+                                                                    NetworkImage(
+                                                                        imageURL),
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .transparent,
+                                                              );
+                                                            }
+                                                          },
                                                         ),
                                                         const SizedBox(
                                                           width: 10,
@@ -477,15 +548,37 @@ class _PostCardState extends State<PostCard> {
                                                                     CrossAxisAlignment
                                                                         .start,
                                                                 children: [
-                                                                  Text(
-                                                                    "Chamoth Mendis",
-                                                                    style: GoogleFonts.poppins(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.w700),
+                                                                  FutureBuilder(
+                                                                    future: getCommenterUsername(
+                                                                        comment
+                                                                            .commentUserId),
+                                                                    builder:
+                                                                        (context,
+                                                                            snapshot) {
+                                                                      if (snapshot
+                                                                              .connectionState ==
+                                                                          ConnectionState
+                                                                              .waiting) {
+                                                                        return CircularProgressIndicator();
+                                                                      } else if (snapshot
+                                                                              .hasError ||
+                                                                          snapshot.data ==
+                                                                              null) {
+                                                                        return const Text(
+                                                                            'Failed to load commenter username');
+                                                                      } else {
+                                                                        String
+                                                                            commenterUsername =
+                                                                            snapshot.data!;
+                                                                        return Text(
+                                                                          commenterUsername,
+                                                                          style: GoogleFonts.poppins(
+                                                                              color: Colors.black,
+                                                                              fontSize: 14,
+                                                                              fontWeight: FontWeight.w700),
+                                                                        );
+                                                                      }
+                                                                    },
                                                                   ),
                                                                   Text(
                                                                     comment
@@ -586,8 +679,7 @@ class _PostCardState extends State<PostCard> {
                                             hintStyle: GoogleFonts.poppins(
                                                 fontSize: 17,
                                                 color: const Color(0xff75A488)),
-                                            hintText:
-                                                "Comment as Chamoth Mendis"),
+                                            hintText: "Add a comment"),
                                       ),
                                     ),
                                   ],

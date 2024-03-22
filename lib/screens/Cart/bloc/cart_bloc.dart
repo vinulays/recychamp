@@ -40,6 +40,30 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     });
 
+    on<AddItemQuantityEvent>((event, emit) {
+      emit(CartItemQuantityAdding());
+      try {
+        repository.addItemQuantity(event.itemName);
+        emit(CartItemQuantityAdded());
+
+        emit(CartLoadedState(repository.getCart()));
+      } catch (e) {
+        emit(CartItemQuantityAddError("Cart quantity add error: $e"));
+      }
+    });
+
+    on<RemoveItemQuantityEvent>((event, emit) {
+      emit(CartItemQuantityRemoving());
+      try {
+        repository.removeItemQuantity(event.itemName);
+        emit(CartItemQuantityRemoved());
+
+        emit(CartLoadedState(repository.getCart()));
+      } catch (e) {
+        emit(CartItemQuantityRemoveError("Cart quantity remove error: $e"));
+      }
+    });
+
     on<UpdateItemQuantityEvent>((event, emit) {
       repository.updateItemQuantity(event.itemId, event.newQuantity);
 

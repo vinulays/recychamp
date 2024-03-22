@@ -4,6 +4,7 @@ import "package:flutter_svg/flutter_svg.dart";
 import "package:recychamp/screens/Challenges/challenges.dart";
 import "package:recychamp/screens/Community/community.dart";
 import "package:recychamp/screens/Dashboard/dashboard.dart";
+import "package:recychamp/screens/Discover/discover.dart";
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,13 +15,15 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // * Dashboard is selected as home screen
-  int _selectedIndex = 1;
+  int _selectedIndex = 2;
 
   static const List<Widget> _widgetOptions = <Widget>[
     // * Add appropriate screens as commented below
     Challenges(), // * Challenges
+    Discover(), // * Discover
     Dashboard(), // * Dashboard
     Community(), // * Community
+    Community(), // * Notifications
   ];
 
   void _onItemTapped(int index) {
@@ -47,6 +50,15 @@ class _HomeState extends State<Home> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
+              icon: SvgPicture.asset("assets/icons/search-low-opacity.svg"),
+              activeIcon: SvgPicture.asset(
+                "assets/icons/search-low-opacity.svg",
+                colorFilter:
+                    const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+              ),
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
               icon: SvgPicture.asset("assets/icons/home.svg"),
               activeIcon: SvgPicture.asset(
                 "assets/icons/home.svg",
@@ -63,6 +75,15 @@ class _HomeState extends State<Home> {
                     const ColorFilter.mode(Colors.black, BlendMode.srcIn),
               ),
               label: 'Community',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset("assets/icons/notifications.svg"),
+              activeIcon: SvgPicture.asset(
+                "assets/icons/notifications.svg",
+                colorFilter:
+                    const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+              ),
+              label: 'Notifications',
             ),
           ],
           currentIndex: _selectedIndex,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -24,18 +26,51 @@ class _AricleForm extends State<AricleForms> {
   Uint8List? _file;
   final TextEditingController articleDescriptionController =
       TextEditingController();
+  final TextEditingController articleContentController =
+      TextEditingController();
   bool isLoading = false;
   String? selectedType;
   final TextEditingController textController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final picker = ImagePicker();
+  String? _imageUrl;
+
+  Future<String?> _uploadImage(File imageFile) async {
+    try {
+      final Reference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('article_images/${DateTime.now().millisecondsSinceEpoch}.jpg');
+      final UploadTask uploadTask = storageReference.putFile(imageFile);
+      final TaskSnapshot taskSnapshot = await uploadTask;
+      final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      return null;
+    }
+  }
 
   void _selectImage(BuildContext parentContext, ImageSource source) async {
-    final picker = ImagePicker();
-    Uint8List file = (await picker.pickImage(source: source)) as Uint8List;
-    setState(() {
-      _file = file;
-    });
+    final pickedFile = await picker.pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _file = File(pickedFile.path).readAsBytesSync();
+      });
+      final imageUrl = await _uploadImage(File(pickedFile.path));
+      if (imageUrl != null) {
+        setState(() {
+          _imageUrl = imageUrl;
+        });
+      }
+    }
   }
+
+  // void _selectImage(BuildContext parentContext, ImageSource source) async {
+  //   final picker = ImagePicker();
+  //   Uint8List file = (await picker.pickImage(source: source)) as Uint8List;
+  //   setState(() {
+  //     _file = file;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +99,46 @@ class _AricleForm extends State<AricleForms> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context).pop();
+                                    // Navigator.of(context).pop();
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            backgroundColor: Colors.white,
+                                            title: Text(
+                                              "Go back",
+                                              style: GoogleFonts.poppins(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            content: Text(
+                                              "You will lost unsaved data if you go back. Do you really want to go back?",
+                                              style: GoogleFonts.poppins(
+                                                  fontSize: 14),
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(
+                                                    "No",
+                                                    style: GoogleFonts.poppins(
+                                                        fontSize: 14),
+                                                  )),
+                                              TextButton(
+                                                  onPressed: () async {
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(
+                                                    "Yes",
+                                                    style: GoogleFonts.poppins(
+                                                        fontSize: 14),
+                                                  )),
+                                            ],
+                                          );
+                                        });
                                   },
                                   child: SvgPicture.asset(
                                     "assets/icons/go_back.svg",
@@ -145,8 +219,14 @@ class _AricleForm extends State<AricleForms> {
                             ),
                             DropdownButtonFormField<String>(
                               value: selectedType,
-                              items: ["Nature", "Trees", "Plants", "Others"]
-                                  .map((String type) {
+                              items: [
+                                "Nature",
+                                "PlantTrees",
+                                "Recycling",
+                                "Eco-Friendly-Products",
+                                "RecyChallenges",
+                                "Others"
+                              ].map((String type) {
                                 return DropdownMenuItem<String>(
                                   value: type,
                                   child: Text(type),
@@ -199,8 +279,8 @@ class _AricleForm extends State<AricleForms> {
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
                                   return 'Please enter a description';
-                                } else if (val.length < 100) {
-                                  return 'Description must be at least 100 characters long';
+                                } else if (val.length < 120) {
+                                  return 'Description should not be more than 120 characters long';
                                 } else {
                                   return null; // No error, input is valid
                                 }
@@ -228,19 +308,67 @@ class _AricleForm extends State<AricleForms> {
                       ),
 
                       const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 2),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Content",
+                              style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black),
+                            ),
+                            TextFormField(
+                              maxLines: 10,
+                              controller: articleContentController,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Please enter a content';
+                                } else if (val.length < 250) {
+                                  return 'Description must be at least 250 characters long';
+                                } else {
+                                  return null; // No error, input is valid
+                                }
+                              },
+                              decoration: InputDecoration(
+                                hintText: "Enter content...",
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFF75A488),
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xFF75A488),
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
                         height: 20,
                       ),
 
                       Container(
                         margin: const EdgeInsets.only(bottom: 8),
-                        height: 200,
+                        height: 450,
                         width: double.infinity,
                         decoration: BoxDecoration(
                             border: Border.all(
                                 color: const Color(0xFF75A488), width: 2),
                             borderRadius: BorderRadius.circular(10)),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
                               "Image",
@@ -251,25 +379,31 @@ class _AricleForm extends State<AricleForms> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            const Icon(Icons.upload),
+
+                            _imageUrl != null
+                                ? Image.network(_imageUrl!)
+                                : _file != null
+                                    ? Image.memory(_file!)
+                                    : const Icon(Icons.upload),
+                            //   const Icon(Icons.upload),
                             const SizedBox(
                               height: 5,
                             ),
-                            Text(
-                              "Upload a photo",
-                              style: GoogleFonts.poppins(fontSize: 16),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "JPG, PNG, SVG",
-                              style: GoogleFonts.poppins(
-                                fontSize: 14,
-                                color: Colors.black
-                                    .withOpacity(0.6000000238418579),
-                              ),
-                            ),
+                            // Text(
+                            //   "Upload a photo",
+                            //   style: GoogleFonts.poppins(fontSize: 16),
+                            // ),
+                            // const SizedBox(
+                            //   height: 10,
+                            // ),
+                            // Text(
+                            //   "JPG, PNG, SVG",
+                            //   style: GoogleFonts.poppins(
+                            //     fontSize: 14,
+                            //     color: Colors.black
+                            //         .withOpacity(0.6000000238418579),
+                            //   ),
+                            // ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -324,9 +458,11 @@ class _AricleForm extends State<AricleForms> {
                           Map<String, dynamic> formData = {
                             "articleTitle": textController.text,
                             "description": articleDescriptionController.text,
-                            "articleImage":
-                                _file, // You might need to convert it to a String URL or store it differently based on your requirements
+                            "articleImage": _imageUrl ??
+                                '', // Using _imageUrl if available, otherwise empty string
+                            // You might need to convert it to a String URL or store it differently based on your requirements
                             "articleType": selectedType,
+                            "content": articleContentController.text,
                           };
 
                           ArticleService articleService = ArticleService(
@@ -345,6 +481,7 @@ class _AricleForm extends State<AricleForms> {
                             // Clear the selected image
                             setState(() {
                               _file = null;
+                              _imageUrl = null;
                             });
 
                             // Navigate back to the previous screen

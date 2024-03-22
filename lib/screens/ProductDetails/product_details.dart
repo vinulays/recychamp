@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:recychamp/models/cart_item.dart';
 import 'package:recychamp/models/product.dart';
 import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
+import 'package:recychamp/screens/Cart/cart.dart';
+import 'package:badges/badges.dart' as badges;
 
 class ProductDetails extends StatefulWidget {
   final Product product;
@@ -54,12 +56,37 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                       ),
                     ),
-                    const Positioned(
+                    Positioned(
                       top: 54.96,
                       left: 330.58,
-                      child: Icon(
-                        Icons.shopping_cart,
-                        color: Colors.white,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Cart(),
+                            ),
+                          );
+                        },
+                        child: BlocBuilder<CartBloc, CartState>(
+                          builder: (context, state) {
+                            if (state is CartLoadedState) {
+                              return badges.Badge(
+                                showBadge: state.cart.items.isNotEmpty,
+                                badgeContent: Container(),
+                                child: const Icon(
+                                  Icons.shopping_cart,
+                                  color: Colors.white,
+                                ),
+                              );
+                            } else {
+                              return const Icon(
+                                Icons.shopping_cart,
+                                color: Colors.white,
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
                     Align(

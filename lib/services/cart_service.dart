@@ -14,6 +14,14 @@ class CartService {
     cart.removeItem(itemName);
   }
 
+  void addItemQuantity(String itemName) {
+    cart.addItemQuantity(itemName);
+  }
+
+  void removeItemQuantity(String itemName) {
+    cart.removeItemQuantity(itemName);
+  }
+
   // * Update the quantity of an item in the cart
   void updateItemQuantityInCart(String itemId, int quantity) {
     cart.updateItemQuantity(itemId, quantity);

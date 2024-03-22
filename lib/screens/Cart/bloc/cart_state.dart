@@ -40,3 +40,23 @@ class CartItemRemoveError extends CartState {
 
   CartItemRemoveError(this.errorMessage);
 }
+
+class CartItemQuantityAdding extends CartState {}
+
+class CartItemQuantityAdded extends CartState {}
+
+class CartItemQuantityAddError extends CartState {
+  final String errorMessage;
+
+  CartItemQuantityAddError(this.errorMessage);
+}
+
+class CartItemQuantityRemoving extends CartState {}
+
+class CartItemQuantityRemoved extends CartState {}
+
+class CartItemQuantityRemoveError extends CartState {
+  final String errorMessage;
+
+  CartItemQuantityRemoveError(this.errorMessage);
+}

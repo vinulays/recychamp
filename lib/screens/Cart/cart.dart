@@ -79,7 +79,30 @@ class _CartState extends State<Cart> {
                 margin: EdgeInsets.only(
                     right: deviceData.size.width * 0.05,
                     left: deviceData.size.width * 0.05,
-                    bottom: 10),
+                    bottom: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Total",
+                      style: GoogleFonts.poppins(
+                        fontSize: 19,
+                      ),
+                    ),
+                    if (state is CartLoadedState)
+                      Text(
+                        "LKR ${state.cart.total.toStringAsFixed(2)}",
+                        style: GoogleFonts.poppins(
+                            fontSize: 19, fontWeight: FontWeight.w700),
+                      ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    right: deviceData.size.width * 0.05,
+                    left: deviceData.size.width * 0.05,
+                    bottom: 20),
                 child: SizedBox(
                   width: double.infinity,
                   child: TextButton(

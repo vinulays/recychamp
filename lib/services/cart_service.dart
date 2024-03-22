@@ -4,8 +4,6 @@ import 'package:recychamp/models/cart_item.dart';
 class CartService {
   Cart cart = Cart(items: [], subTotal: 0, total: 0);
 
-  List<CartItem> cartItems = [];
-
   // * Add an item to the cart
   void addItemToCart(CartItem item) {
     cart.addItem(item);

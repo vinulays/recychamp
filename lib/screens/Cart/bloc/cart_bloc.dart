@@ -14,16 +14,30 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       : repository = cartRepository,
         super(CartLoadedState(Cart(items: [], subTotal: 0, total: 0))) {
     on<AddItemEvent>((event, emit) {
-      repository.addItemToCart(event.item);
+      emit(CartItemAdding());
 
-      // * refreshing the cart
-      emit(CartLoadedState(repository.getCart()));
+      try {
+        repository.addItemToCart(event.item);
+        emit(CartItemAdded());
+
+        // * refreshing the cart
+        emit(CartLoadedState(repository.getCart()));
+      } catch (e) {
+        emit(CartItemAddError("Cart item add error: $e"));
+      }
     });
 
     on<RemoveItemEvent>((event, emit) {
-      repository.removeItemFromCart(event.itemName);
+      emit(CartItemRemoving());
 
-      emit(CartLoadedState(repository.getCart()));
+      try {
+        repository.removeItemFromCart(event.itemName);
+        emit(CartItemRemoved());
+
+        emit(CartLoadedState(repository.getCart()));
+      } catch (e) {
+        emit(CartItemRemoveError("Cart item remove error: $e"));
+      }
     });
 
     on<UpdateItemQuantityEvent>((event, emit) {

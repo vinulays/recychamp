@@ -24,6 +24,7 @@ class EducationalResource extends StatefulWidget {
 
 class _EducationalResourceState extends State<EducationalResource> {
   late List<Article> allArticles = [];
+  bool isExpanded = false;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _EducationalResourceState extends State<EducationalResource> {
       ).getArticles();
       print('Fetched Articles: $articles');
       setState(() {
+        // Filter articles where articleType is "Nature" and articleType is not null
         allArticles = articles;
       });
     } catch (e) {
@@ -158,7 +160,7 @@ class _EducationalResourceState extends State<EducationalResource> {
               ),
             ),
             Container(
-              height: 70,
+              height: 50,
               margin: EdgeInsets.symmetric(
                   horizontal: deviceData.size.width * 0.05),
               child: Row(
@@ -173,7 +175,7 @@ class _EducationalResourceState extends State<EducationalResource> {
               ),
             ),
             Container(
-              height: 250,
+              height: 280,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: allArticles.length,
@@ -206,15 +208,21 @@ class _EducationalResourceState extends State<EducationalResource> {
               ),
             ),
             Container(
-              height: 250,
+              height: 280,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                separatorBuilder: (context, _) => const SizedBox(
-                  width: 12,
-                ),
-                itemBuilder: (context, index) =>
-                    articleCard(articleData: articlePlants[index]),
+                itemCount: allArticles.length,
+                separatorBuilder: (context, _) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  Article article = allArticles[index];
+                  print(
+                      'Article: ${article.articleTitle}'); // Check if articles are being printed
+                  if (article.articleType == "Plants") {
+                    return articleCard(articleData: article);
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
             Container(
@@ -233,15 +241,21 @@ class _EducationalResourceState extends State<EducationalResource> {
               ),
             ),
             Container(
-              height: 250,
+              height: 280,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: articlelNature.length,
-                separatorBuilder: (context, _) => const SizedBox(
-                  width: 12,
-                ),
-                itemBuilder: (context, index) =>
-                    articleCard(articleData: articleTrees[index]),
+                itemCount: allArticles.length,
+                separatorBuilder: (context, _) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  Article article = allArticles[index];
+                  print(
+                      'Article: ${article.articleTitle}'); // Check if articles are being printed
+                  if (article.articleType == "Trees") {
+                    return articleCard(articleData: article);
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
           ],
@@ -280,29 +294,38 @@ class _EducationalResourceState extends State<EducationalResource> {
               width: 12,
               height: 10,
             ),
-            Text(articleData.articleTitle,
-                style: kFontFamily(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-                textAlign: TextAlign.left),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 9.0),
+                child: Text(
+                  articleData.articleTitle,
+                  style: kFontFamily(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  textAlign: TextAlign.left,
+                  softWrap: true,
+                )),
             const SizedBox(
+              width: 12,
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 9.0),
-              child: Text(
-                articleData.description,
-                style: GoogleFonts.poppins(
-                  color: Colors.black,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w400,
+            Container(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 9.0),
+                child: Text(
+                  articleData.description,
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  textAlign: TextAlign.left,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 10,
                 ),
-                textAlign: TextAlign.left,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 20,
               ),
             )
           ],

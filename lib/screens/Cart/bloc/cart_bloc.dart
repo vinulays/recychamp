@@ -14,16 +14,54 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       : repository = cartRepository,
         super(CartLoadedState(Cart(items: [], subTotal: 0, total: 0))) {
     on<AddItemEvent>((event, emit) {
-      repository.addItemToCart(event.item);
+      emit(CartItemAdding());
 
-      // * refreshing the cart
-      emit(CartLoadedState(repository.getCart()));
+      try {
+        repository.addItemToCart(event.item);
+        emit(CartItemAdded());
+
+        // * refreshing the cart
+        emit(CartLoadedState(repository.getCart()));
+      } catch (e) {
+        emit(CartItemAddError("Cart item add error: $e"));
+      }
     });
 
     on<RemoveItemEvent>((event, emit) {
-      repository.removeItemFromCart(event.itemName);
+      emit(CartItemRemoving());
 
-      emit(CartLoadedState(repository.getCart()));
+      try {
+        repository.removeItemFromCart(event.itemName);
+        emit(CartItemRemoved());
+
+        emit(CartLoadedState(repository.getCart()));
+      } catch (e) {
+        emit(CartItemRemoveError("Cart item remove error: $e"));
+      }
+    });
+
+    on<AddItemQuantityEvent>((event, emit) {
+      emit(CartItemQuantityAdding());
+      try {
+        repository.addItemQuantity(event.itemName);
+        emit(CartItemQuantityAdded());
+
+        emit(CartLoadedState(repository.getCart()));
+      } catch (e) {
+        emit(CartItemQuantityAddError("Cart quantity add error: $e"));
+      }
+    });
+
+    on<RemoveItemQuantityEvent>((event, emit) {
+      emit(CartItemQuantityRemoving());
+      try {
+        repository.removeItemQuantity(event.itemName);
+        emit(CartItemQuantityRemoved());
+
+        emit(CartLoadedState(repository.getCart()));
+      } catch (e) {
+        emit(CartItemQuantityRemoveError("Cart quantity remove error: $e"));
+      }
     });
 
     on<UpdateItemQuantityEvent>((event, emit) {

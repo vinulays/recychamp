@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import "package:google_fonts/google_fonts.dart";
+import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
 import 'package:recychamp/screens/Cart/cart.dart';
 import 'package:recychamp/screens/ProductDetails/product_details.dart';
 import 'package:recychamp/screens/Shop/bloc/shop_bloc.dart';
 import 'package:recychamp/models/product.dart';
 import 'package:recychamp/ui/shop_filter.dart';
+import 'package:badges/badges.dart' as badges;
 
 class Shop extends StatefulWidget {
   const Shop({super.key});
@@ -63,7 +66,20 @@ class _ShopState extends State<Shop> {
                           ),
                         );
                       },
-                      child: const Icon(Icons.shopping_cart),
+                      // child: const Icon(Icons.shopping_cart),
+                      child: BlocBuilder<CartBloc, CartState>(
+                        builder: (context, state) {
+                          if (state is CartLoadedState) {
+                            return badges.Badge(
+                              showBadge: state.cart.items.isNotEmpty,
+                              badgeContent: Container(),
+                              child: const Icon(Icons.shopping_cart),
+                            );
+                          } else {
+                            return const Icon(Icons.shopping_cart);
+                          }
+                        },
+                      ),
                     )
                   ],
                 ),

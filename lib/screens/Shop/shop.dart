@@ -9,6 +9,7 @@ import 'package:recychamp/screens/ProductDetails/product_details.dart';
 import 'package:recychamp/screens/Shop/bloc/shop_bloc.dart';
 import 'package:recychamp/models/product.dart';
 import 'package:recychamp/ui/shop_filter.dart';
+
 import 'package:badges/badges.dart' as badges;
 
 class Shop extends StatefulWidget {

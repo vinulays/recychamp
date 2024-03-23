@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
@@ -204,25 +205,23 @@ class _EducationalResourceState extends State<EducationalResource> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Container(
-                height: 280,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: allArticles.length,
-                  separatorBuilder: (context, _) => const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    Article article = allArticles[index];
-                    print(
-                        'Article: ${article.articleTitle}'); // Check if articles are being printed
-                    if (article.articleType == "Nature") {
-                      return articleCard(articleData: article);
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
+            Container(
+              height: 280,
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: allArticles.length,
+                separatorBuilder: (context, _) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  Article article = allArticles[index];
+                  // Check if articles are being printed
+                  if (article.articleType == "Nature") {
+                    return articleCard(articleData: article);
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
             Container(
@@ -240,25 +239,24 @@ class _EducationalResourceState extends State<EducationalResource> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: SizedBox(
-                height: 280,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: allArticles.length,
-                  separatorBuilder: (context, _) => const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    Article article = allArticles[index];
-                    print(
-                        'Article: ${article.articleTitle}'); // Check if articles are being printed
-                    if (article.articleType == "PlantTrees") {
-                      return articleCard(articleData: article);
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
+            Container(
+              height: 280,
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: allArticles.length,
+                separatorBuilder: (context, _) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  Article article = allArticles[index];
+                  print(
+                      'Article: ${article.articleTitle}'); // Check if articles are being printed
+                  if (article.articleType == "PlantTrees") {
+                    return articleCard(articleData: article);
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
             Container(
@@ -276,27 +274,24 @@ class _EducationalResourceState extends State<EducationalResource> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Container(
-                height: 280,
-                // margin: EdgeInsets.symmetric(
-                //     horizontal: deviceData.size.width * 0.05),
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: allArticles.length,
-                  separatorBuilder: (context, _) => const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    Article article = allArticles[index];
-                    print(
-                        'Article: ${article.articleTitle}'); // Check if articles are being printed
-                    if (article.articleType == "Recycling") {
-                      return articleCard(articleData: article);
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
+            Container(
+              height: 280,
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: allArticles.length,
+                separatorBuilder: (context, _) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  Article article = allArticles[index];
+                  print(
+                      'Article: ${article.articleTitle}'); // Check if articles are being printed
+                  if (article.articleType == "Recycling") {
+                    return articleCard(articleData: article);
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
             Container(
@@ -314,27 +309,24 @@ class _EducationalResourceState extends State<EducationalResource> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Container(
-                height: 280,
-                margin: EdgeInsets.symmetric(
-                    horizontal: deviceData.size.width * 0.05),
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: allArticles.length,
-                  separatorBuilder: (context, _) => const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    Article article = allArticles[index];
-                    print(
-                        'Article: ${article.articleTitle}'); // Check if articles are being printed
-                    if (article.articleType == "Eco-Friendly-Products") {
-                      return articleCard(articleData: article);
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
+            Container(
+              height: 280,
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: allArticles.length,
+                separatorBuilder: (context, _) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  Article article = allArticles[index];
+                  print(
+                      'Article: ${article.articleTitle}'); // Check if articles are being printed
+                  if (article.articleType == "Eco-Friendly-Products") {
+                    return articleCard(articleData: article);
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
             Container(
@@ -352,25 +344,24 @@ class _EducationalResourceState extends State<EducationalResource> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Container(
-                height: 280,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: allArticles.length,
-                  separatorBuilder: (context, _) => const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    Article article = allArticles[index];
-                    print(
-                        'Article: ${article.articleTitle}'); // Check if articles are being printed
-                    if (article.articleType == "RecyChallenges") {
-                      return articleCard(articleData: article);
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
+            Container(
+              height: 280,
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: allArticles.length,
+                separatorBuilder: (context, _) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  Article article = allArticles[index];
+                  print(
+                      'Article: ${article.articleTitle}'); // Check if articles are being printed
+                  if (article.articleType == "RecyChallenges") {
+                    return articleCard(articleData: article);
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
             Container(
@@ -388,25 +379,24 @@ class _EducationalResourceState extends State<EducationalResource> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Container(
-                height: 280,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: allArticles.length,
-                  separatorBuilder: (context, _) => const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    Article article = allArticles[index];
-                    print(
-                        'Article: ${article.articleTitle}'); // Check if articles are being printed
-                    if (article.articleType == "Others") {
-                      return articleCard(articleData: article);
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
+            Container(
+              height: 280,
+              margin: EdgeInsets.symmetric(
+                  horizontal: deviceData.size.width * 0.05),
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: allArticles.length,
+                separatorBuilder: (context, _) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  Article article = allArticles[index];
+                  print(
+                      'Article: ${article.articleTitle}'); // Check if articles are being printed
+                  if (article.articleType == "Others") {
+                    return articleCard(articleData: article);
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
           ],
@@ -427,6 +417,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                     image: NetworkImage(articleData.articleImage),
                     width: 230,
                     height: 140,
+                    padding: const EdgeInsetsDirectional.only(start: 9.0),
                     fit: BoxFit.cover,
                     child: InkWell(
                       onTap: () => Navigator.push(

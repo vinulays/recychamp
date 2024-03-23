@@ -8,6 +8,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:recychamp/models/article_model.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import 'dart:typed_data';
 import 'package:flutter_svg/svg.dart';
@@ -16,7 +17,9 @@ import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc
 import 'package:recychamp/services/article_service.dart';
 
 class AricleForms extends StatefulWidget {
-  const AricleForms({super.key});
+ 
+  const AricleForms({Key? key, }) : super(key: key);
+  // const AricleForms({super.key});
 
   @override
   State<AricleForms> createState() => _AricleForm();
@@ -465,32 +468,38 @@ class _AricleForm extends State<AricleForms> {
                             "content": articleContentController.text,
                           };
 
-                          ArticleService articleService = ArticleService(
-                            firestore: FirebaseFirestore.instance,
-                            storage: FirebaseStorage.instance,
-                          );
+                          context
+                              .read<ArticleDetailsBloc>()
+                              .add(AddArticleEvent(formData));
 
-                          try {
-                            await articleService.addArticle(formData);
-                            // Data added successfully
-                            // You can perform additional actions or show a success message
+                          Navigator.of(context).pop();
 
-                            // Clear the form
-                            textController.clear();
-                            articleDescriptionController.clear();
-                            // Clear the selected image
-                            setState(() {
-                              _file = null;
-                              _imageUrl = null;
-                            });
+                          // ArticleService articleService = ArticleService(
+                          //   firestore: FirebaseFirestore.instance,
+                          //   storage: FirebaseStorage.instance,
+                          // );
 
-                            // Navigate back to the previous screen
-                            Navigator.pop(context, true);
-                          } catch (e) {
-                            rethrow;
-                            // Handle errors
-                            // You can show an error message to the user
-                          }
+                          //   try {
+                          //  //   await articleService.addArticle(formData);
+                          //     // Data added successfully
+                          //     // You can perform additional actions or show a success message
+                          //     // widget.onArticleAdded(Article.fromJson(formData));
+                          //     // Clear the form
+                          //     textController.clear();
+                          //     articleDescriptionController.clear();
+                          //     // Clear the selected image
+                          //     setState(() {
+                          //       _file = null;
+                          //       _imageUrl = null;
+                          //     });
+
+                          //     // Navigate back to the previous screen
+                          //     Navigator.pop(context, true);
+                          //   } catch (e) {
+                          //     rethrow;
+                          //     // Handle errors
+                          //     // You can show an error message to the user
+                          //   }
                         }
                       },
                       style: ButtonStyle(

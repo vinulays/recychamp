@@ -142,7 +142,8 @@ class MyApp extends StatelessWidget {
                   // * adding current firebase instance to the challenge service
                   PostService(
                       firestore: FirebaseFirestore.instance,
-                      storage: FirebaseStorage.instance),
+                      storage: FirebaseStorage.instance,
+                      auth: FirebaseAuth.instance),
             ),
           ),
         ),
@@ -153,7 +154,8 @@ class MyApp extends StatelessWidget {
                   // * adding current firebase instance to the challenge service
                   PostService(
                       firestore: FirebaseFirestore.instance,
-                      storage: FirebaseStorage.instance),
+                      storage: FirebaseStorage.instance,
+                      auth: FirebaseAuth.instance),
             ),
           ),
         ),
@@ -223,8 +225,7 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-}
-  
+
 // class MyHomePage extends StatefulWidget {
 //   const MyHomePage({super.key, required this.title});
 //  final String title;
@@ -270,3 +271,4 @@ class MyApp extends StatelessWidget {
 //       ),
 //   );
 //   }
+}

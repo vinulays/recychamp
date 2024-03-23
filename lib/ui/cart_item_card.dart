@@ -1,13 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recychamp/models/cart.dart';
 import 'package:recychamp/models/cart_item.dart';
 import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
 
 class CartItemCard extends StatefulWidget {
-  CartItem cartItem;
-  CartItemCard({super.key, required this.cartItem});
+  final CartItem cartItem;
+  const CartItemCard({super.key, required this.cartItem});
 
   @override
   State<CartItemCard> createState() => _CartItemCardState();
@@ -65,6 +65,11 @@ class _CartItemCardState extends State<CartItemCard> {
                         child: Row(
                           children: [
                             GestureDetector(
+                              onTap: () {
+                                context.read<CartBloc>().add(
+                                    RemoveItemQuantityEvent(
+                                        widget.cartItem.name));
+                              },
                               child: const Icon(Icons.remove_circle_outline),
                             ),
                             const SizedBox(
@@ -81,6 +86,10 @@ class _CartItemCardState extends State<CartItemCard> {
                               width: 10,
                             ),
                             GestureDetector(
+                              onTap: () {
+                                context.read<CartBloc>().add(
+                                    AddItemQuantityEvent(widget.cartItem.name));
+                              },
                               child: const Icon(Icons.add_circle_outline),
                             ),
                           ],

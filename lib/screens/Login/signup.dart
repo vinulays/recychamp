@@ -22,9 +22,9 @@ class _SignupState extends State<Signup> {
   TextEditingController confirmPasswordcontroller = TextEditingController();
   TextEditingController mailcontroller = TextEditingController();
   
-  PickedFile? _imageFile;
+  // PickedFile? _imageFile;
 
-  final ImagePicker _picker = ImagePicker();
+  // final ImagePicker _picker = ImagePicker();
   final _formkey = GlobalKey<FormState>();
 
 

@@ -91,7 +91,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                     Align(
                         alignment: Alignment.center,
-                        child: Image.network(widget.product.imageUrl))
+                        child: Image.network(
+                          widget.product.imageUrl,
+                          height: 300,
+                          width: 300,
+                          fit: BoxFit.contain,
+                        ))
                   ],
                 ),
               ),

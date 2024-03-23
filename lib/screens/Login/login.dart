@@ -13,7 +13,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-String email = "", password = "";
+  String email = "", password = "";
 
   TextEditingController mailcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
@@ -48,12 +48,14 @@ String email = "", password = "";
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
+      body: SingleChildScrollView(
+      child: Container(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 30.0, bottom: 20.0),
+              padding: const EdgeInsets.only(top: 90.0, bottom: 20.0, left: 25.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "Let’s Sign you in.",
@@ -62,21 +64,28 @@ String email = "", password = "";
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    "Welcome back\nYou’ve been missed!",
-                    textAlign: TextAlign.center,
+                  SizedBox(height: 20),
+                Align(alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Welcome back",
                     style: TextStyle(
                       fontSize: 20,
-                      color: Colors.grey,
+                      color: Color.fromARGB(255, 0, 0, 0),)
+                    ),
+                  ),
+                  Align(alignment: Alignment.centerLeft,
+                  child: Text(
+                    "You’ve been missed!",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 0, 0, 0),)
                     ),
                   ),
                 ],
               ),
             ),
-
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 35.0),
               child: Form(
                 key: _formkey,
                 child: Column(
@@ -86,7 +95,7 @@ String email = "", password = "";
                           EdgeInsets.symmetric(vertical: 2.0, horizontal: 30.0),
                       decoration: BoxDecoration(
                           color: Color(0xFFedf0f8),
-                          borderRadius: BorderRadius.circular(30)),
+                          borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -110,7 +119,7 @@ String email = "", password = "";
                           EdgeInsets.symmetric(vertical: 2.0, horizontal: 30.0),
                       decoration: BoxDecoration(
                           color: Color(0xFFedf0f8),
-                          borderRadius: BorderRadius.circular(30)),
+                          borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
                         controller: passwordcontroller,
                         validator: (value) {
@@ -124,17 +133,35 @@ String email = "", password = "";
                             hintText: "Password",
                             hintStyle: TextStyle(
                                 color: Color(0xFFb2b7bf), fontSize: 18.0)),
-                   obscureText: true,   ),
+                        obscureText: true,
+                      ),
                     ),
                     SizedBox(
-                      height: 30.0,
+              height: 20.0,
+            ),
+             Align(
+              alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ForgotPassword()));
+              },
+              child: Text("Forgot your password?",
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 0, 0, 0),
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w500)),
+            ),
+             ),
+                    SizedBox(
+                      height: 50.0,
                     ),
                     GestureDetector(
-                      onTap: (){
-                        if(_formkey.currentState!.validate()){
+                      onTap: () {
+                        if (_formkey.currentState!.validate()) {
                           setState(() {
-                            email= mailcontroller.text;
-                            password=passwordcontroller.text;
+                            email = mailcontroller.text;
+                            password = passwordcontroller.text;
                           });
                         }
                         userLogin();
@@ -144,11 +171,11 @@ String email = "", password = "";
                           padding: EdgeInsets.symmetric(
                               vertical: 13.0, horizontal: 30.0),
                           decoration: BoxDecoration(
-                              color: Color(0xFF273671),
-                              borderRadius: BorderRadius.circular(30)),
+                              color: Color(0x9B037532),
+                              borderRadius: BorderRadius.circular(10)),
                           child: Center(
                               child: Text(
-                            "Sign In",
+                            "Sign in",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 22.0,
@@ -160,72 +187,16 @@ String email = "", password = "";
               ),
             ),
             SizedBox(
-              height: 20.0,
-            ),
-            GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> ForgotPassword()));
-              },
-              child: Text("Forgot Password?",
-                  style: TextStyle(
-                      color: Color(0xFF8c8e98),
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w500)),
-            ),
-            SizedBox(
-              height: 40.0,
-            ),
-            Text(
-              "or LogIn with",
-              style: TextStyle(
-                  color: Color(0xFF273671),
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.w500),
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: (){
-                    AuthMethods().signInWithGoogle(context);
-                  },
-                  child: Image.asset(
-                    "assets/images/google.png",
-                    height: 45,
-                    width: 45,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(
-                  width: 30.0,
-                ),
-                // GestureDetector(
-                //   onTap: (){
-                //     AuthMethods().signInWithApple();
-                //   },
-                //   child: Image.asset(
-                //     "images/apple1.png",
-                //     height: 50,
-                //     width: 50,
-                //     fit: BoxFit.cover,
-                //   ),
-                // )
-              ],
-            ),
-            SizedBox(
-              height: 40.0,
+              height: 10.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Don't have an account?",
                     style: TextStyle(
-                        color: Color(0xFF8c8e98),
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500)),
+                        color: Color.fromARGB(219, 0, 0, 0),
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w400)),
                 SizedBox(
                   width: 5.0,
                 ),
@@ -235,17 +206,66 @@ String email = "", password = "";
                         MaterialPageRoute(builder: (context) => Signup()));
                   },
                   child: Text(
-                    "SignUp",
+                    "Sign up",
                     style: TextStyle(
-                        color: Color(0xFF273671),
-                        fontSize: 20.0,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontSize: 18.0,
                         fontWeight: FontWeight.w500),
                   ),
                 ),
               ],
-            )
+            ),
+            SizedBox(
+              height: 40.0,
+            ),
+            Text(
+              "Or continue with",
+              style: TextStyle(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w500),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    AuthMethods().signInWithGoogle(context);
+                  },
+                  child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    "assets/images/google.png",
+                    height: 45,
+                    width: 45,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                ),
+                
+                SizedBox(
+                  width: 30.0,
+                ),
+                // GestureDetector(
+                //   onTap: (){
+                //     AuthMethods().signInWithFacebook();
+                //   },
+                //   child: Image.asset(
+                //     "assets/images/facebook.png",
+                //     height: 50,
+                //     width: 50,
+                //     fit: BoxFit.cover,
+                //   ),
+                // )
+              ],
+            ),
+              
           ],
         ),
+      ),
       ),
     );
   }

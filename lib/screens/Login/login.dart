@@ -48,7 +48,8 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
+      body: SingleChildScrollView(
+      child: Container(
         child: Column(
           children: [
             Padding(
@@ -245,12 +246,12 @@ class _LoginState extends State<Login> {
                 ),
                 ),
                 
-                // SizedBox(
-                //   width: 30.0,
-                // ),
+                SizedBox(
+                  width: 30.0,
+                ),
                 // GestureDetector(
                 //   onTap: (){
-                //     // AuthMethods().signInWithFacebook();
+                //     AuthMethods().signInWithFacebook();
                 //   },
                 //   child: Image.asset(
                 //     "assets/images/facebook.png",
@@ -261,9 +262,10 @@ class _LoginState extends State<Login> {
                 // )
               ],
             ),
-            
+              
           ],
         ),
+      ),
       ),
     );
   }

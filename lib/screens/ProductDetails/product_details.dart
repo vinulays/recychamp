@@ -6,6 +6,7 @@ import 'package:recychamp/models/cart_item.dart';
 import 'package:recychamp/models/product.dart';
 import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
 import 'package:recychamp/screens/Cart/cart.dart';
+import 'package:badges/badges.dart' as badges;
 
 class ProductDetails extends StatefulWidget {
   final Product product;

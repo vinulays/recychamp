@@ -2,6 +2,8 @@ import "package:carousel_slider/carousel_slider.dart";
 import "package:dots_indicator/dots_indicator.dart";
 import "package:flutter/material.dart";
 import "package:google_fonts/google_fonts.dart";
+import 'package:recychamp/screens/Login/signup.dart';
+import 'package:recychamp/screens/Login/login.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({super.key});
@@ -65,7 +67,12 @@ class _WelcomeState extends State<Welcome> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Login()),
+                  );
+                },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
@@ -95,7 +102,12 @@ class _WelcomeState extends State<Welcome> {
                 width: 20,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Signup()),
+                  );
+                },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(

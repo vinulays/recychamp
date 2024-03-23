@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recychamp/models/cart_item.dart';
 import 'package:recychamp/models/product.dart';
+import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
+import 'package:recychamp/screens/Cart/cart.dart';
+import 'package:badges/badges.dart' as badges;
 
 class ProductDetails extends StatefulWidget {
   final Product product;
@@ -51,17 +56,47 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                       ),
                     ),
-                    const Positioned(
+                    Positioned(
                       top: 54.96,
                       left: 330.58,
-                      child: Icon(
-                        Icons.shopping_cart,
-                        color: Colors.white,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Cart(),
+                            ),
+                          );
+                        },
+                        child: BlocBuilder<CartBloc, CartState>(
+                          builder: (context, state) {
+                            if (state is CartLoadedState) {
+                              return badges.Badge(
+                                showBadge: state.cart.items.isNotEmpty,
+                                badgeContent: Container(),
+                                child: const Icon(
+                                  Icons.shopping_cart,
+                                  color: Colors.white,
+                                ),
+                              );
+                            } else {
+                              return const Icon(
+                                Icons.shopping_cart,
+                                color: Colors.white,
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
                     Align(
                         alignment: Alignment.center,
-                        child: Image.network(widget.product.imageUrl))
+                        child: Image.network(
+                          widget.product.imageUrl,
+                          height: 300,
+                          width: 300,
+                          fit: BoxFit.contain,
+                        ))
                   ],
                 ),
               ),
@@ -107,7 +142,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                     child: SizedBox(
                       width: double.infinity,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<CartBloc>().add(
+                                AddItemEvent(
+                                  CartItem(
+                                      name: widget.product.name,
+                                      price: widget.product.price,
+                                      imageUrl: widget.product.imageUrl,
+                                      quantity: 1),
+                                ),
+                              );
+                        },
                         style: ButtonStyle(
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(

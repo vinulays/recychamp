@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +29,8 @@ class _CommunityState extends State<Community> {
     super.initState();
     _postService = PostService(
         firestore: FirebaseFirestore.instance,
-        storage: FirebaseStorage.instance);
+        storage: FirebaseStorage.instance,
+        auth: FirebaseAuth.instance);
     context.read<PostBloc>().add(FetchPostsEvent());
   }
 

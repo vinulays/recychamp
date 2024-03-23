@@ -144,6 +144,8 @@ class MyApp extends StatelessWidget {
                       firestore: FirebaseFirestore.instance,
                       storage: FirebaseStorage.instance,
                       auth: FirebaseAuth.instance),
+                      // storage: FirebaseStorage.instance,
+                      // auth: FirebaseAuth.instance),
             ),
           ),
         ),
@@ -156,6 +158,8 @@ class MyApp extends StatelessWidget {
                       firestore: FirebaseFirestore.instance,
                       storage: FirebaseStorage.instance,
                       auth: FirebaseAuth.instance),
+                      // storage: FirebaseStorage.instance,
+                      // auth: FirebaseAuth.instance),
             ),
           ),
         ),
@@ -221,13 +225,11 @@ class MyApp extends StatelessWidget {
                 labelStyle: TextStyle(color: ChipLabelColor()))),
         // * Welcome screen (if not logged in)
         // home: const Home(),
-<<<<<<< HEAD
         home: Welcome(),
-=======
-        home: Signup(),
->>>>>>> 4c9b8542f3056d7260a69da657fa83602cb1600e
       ),
     );
+  }
+
   }
 
 // class MyHomePage extends StatefulWidget {
@@ -275,4 +277,6 @@ class MyApp extends StatelessWidget {
 //       ),
 //   );
 //   }
-}
+
+
+

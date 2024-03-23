@@ -699,7 +699,7 @@ class _PostCardState extends State<PostCard> {
                         width: 5,
                       ),
                       Text(
-                        "Comments (${widget.post.commentCount})",
+                        "Comments (${widget.post.commentCount ?? 0})",
                         style: GoogleFonts.poppins(fontSize: 14),
                       )
                     ],

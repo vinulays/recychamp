@@ -165,6 +165,7 @@ flutter:
     - assets/images/recychamp_logo_with_name.png
     - assets/images/image.jpg
     - assets/images/google.png
+    - assets/images/facebook.png
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see

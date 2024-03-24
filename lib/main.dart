@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,10 +49,7 @@ void main() async {
   // signInManually();
 
   // logout();
-  runApp(const MyApp());
-}
-
-// Future<void> signInManually() async {
+  // Future<void> signInManually() async {
 //   try {
 //     // * admin = ubetatta@gmail.com
 //     // * organizer = vinula@gmail.com
@@ -103,6 +102,8 @@ void main() async {
 //     );
 //   }
 // }
+  runApp(const MyApp());
+}
 
 Future<void> logout() async {
   FirebaseAuth.instance.signOut();

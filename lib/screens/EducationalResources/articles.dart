@@ -13,6 +13,7 @@ import "package:google_fonts/google_fonts.dart";
 import 'package:recychamp/screens/EducationalResources/article_content.dart';
 import 'package:recychamp/models/article_model.dart';
 import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
+import 'package:recychamp/screens/Settings/settings.dart';
 import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/ui/article_filter.dart';
 import 'package:recychamp/ui/article_form.dart';
@@ -153,8 +154,20 @@ class _EducationalResourceState extends State<EducationalResource> {
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 25)),
-                      const SizedBox(width: 180),
-                      const Icon(Icons.settings)
+                      const SizedBox(width: 165),
+                      IconButton(
+                        icon: Icon(Icons.settings),
+                        onPressed: () {
+                          // Navigate to the settings screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  SettingsPage(), // Replace SettingsPage with your settings screen widget
+                            ),
+                          );
+                        },
+                      )
                     ],
                   ),
                 ),
@@ -228,13 +241,19 @@ class _EducationalResourceState extends State<EducationalResource> {
                   height: 20,
                 ),
                 if (state is ArticleDetailsLoading)
+
+
                   const Center(
+
                     child: CircularProgressIndicator(
                       strokeCap: StrokeCap.round,
                       strokeWidth: 5,
                       color: Color(0xff75A488),
                     ),
                   ),
+
+
+
                 if (state is ArticlesSearching)
                   const Center(
                     child: CircularProgressIndicator(
@@ -243,6 +262,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                       color: Color(0xff75A488),
                     ),
                   ),
+
                 if (state is ArticleDetailsLoaded)
                   (state.articles.isNotEmpty)
                       ? Padding(

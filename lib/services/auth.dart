@@ -1,6 +1,6 @@
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:recychamp/screens/Home/home.dart';
-import 'package:recychamp/services/database.dart';
+import 'package:recychamp/resources/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';

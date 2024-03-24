@@ -22,6 +22,7 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
   List<CartItem> items = [];
   Map<String, dynamic>? paymentIntent;
+  int cartTotal = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,9 @@ class _CartState extends State<Cart> {
 
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
+        if (state is CartLoadedState) {
+          cartTotal = (state.cart.total * 100).truncate();
+        }
         return Scaffold(
           body: Column(
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -147,8 +151,8 @@ class _CartState extends State<Cart> {
   void payment() async {
     try {
       Map<String, dynamic> body = {
-        "amount": "10000",
-        "Currency": "USD",
+        "amount": cartTotal.toString(),
+        "currency": "LKR",
       };
       var response = await http.post(
         Uri.parse("https://api.stripe.com/v1/payment_intents"),
@@ -161,6 +165,7 @@ class _CartState extends State<Cart> {
         body: body,
       );
       paymentIntent = json.decode(response.body);
+      print(paymentIntent);
     } catch (error) {
       throw Exception(error);
     }

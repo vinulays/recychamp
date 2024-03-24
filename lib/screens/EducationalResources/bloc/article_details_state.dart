@@ -46,3 +46,8 @@ class ArticleUpdatingError extends ArticleDetailsState {
 
   ArticleUpdatingError(this.errorMessage);
 }
+
+class ArticlesSearching extends ArticleDetailsState {
+  @override
+  List<Object> get props => [];
+}

@@ -124,6 +124,7 @@ class ChallengesBloc extends Bloc<ChallengesEvent, ChallengesState> {
       }).toList();
 
       emit(ChallengesLoaded(searchResult));
-    });
+    }
+    );
   }
 }

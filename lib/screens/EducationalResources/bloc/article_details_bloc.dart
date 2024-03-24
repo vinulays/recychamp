@@ -51,8 +51,29 @@ class ArticleDetailsBloc
         // * getting updated challenges
         add(FetchArticleEvent());
       } catch (e) {
-        emit(ArticleUpdatingError("Challenge updating failed"));
+        emit(ArticleUpdatingError("Article updating failed"));
       }
+    });
+
+    // * search challenges (title, location)
+    on<SearchArticlesEvent>((event, emit) async {
+      emit(ArticlesSearching());
+
+      List<Article> articles = await _articleRepo.getArticles();
+
+      final List<Article> searchResult = articles.where((article) {
+        return article.articleTitle
+            .toLowerCase()
+            .contains(event.query.toLowerCase());
+      }).toList();
+
+      emit(ArticleDetailsLoaded(searchResult));
+    });
+
+    // * reset challenges
+    on<ArticlesResetsEvent>((event, emit) async {
+      List<Article> challenges = await _articleRepo.getArticles();
+      emit(ArticleDetailsLoaded(challenges));
     });
   }
 }

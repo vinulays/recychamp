@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter/widgets.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import "package:google_fonts/google_fonts.dart";
@@ -16,6 +16,7 @@ import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc
 import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/ui/article_filter.dart';
 import 'package:recychamp/ui/article_form.dart';
+import 'package:test/test.dart';
 
 class EducationalResource extends StatefulWidget {
   const EducationalResource({super.key});
@@ -28,23 +29,31 @@ class _EducationalResourceState extends State<EducationalResource> {
   // late List<Article> allArticles = [];
   bool isExpanded = false;
   String? userRole;
+  final TextEditingController _searchController = TextEditingController();
+  late ArticleDetailsBloc _articleDetailsBloc;
 
   @override
   void initState() {
     super.initState();
-    
+
     //  fetchArticles();
     if (mounted) {
       getUserRole();
     }
   }
 
-  // // Define a function to add new articles
-  // void addArticle(Article newArticle) {
-  //   setState(() {
-  //     allArticles.add(newArticle);
-  //   });
-  // }
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _articleDetailsBloc.add(ArticlesResetsEvent());
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _articleDetailsBloc = BlocProvider.of<ArticleDetailsBloc>(context);
+    super.didChangeDependencies();
+  }
 
   Future<void> getUserRole() async {
     try {
@@ -88,6 +97,7 @@ class _EducationalResourceState extends State<EducationalResource> {
     var deviceData = MediaQuery.of(context);
     return BlocBuilder<ArticleDetailsBloc, ArticleDetailsState>(
       builder: (context, state) {
+        final articleBloc = BlocProvider.of<ArticleDetailsBloc>(context);
         return Scaffold(
           backgroundColor: Colors.white,
           floatingActionButton: (userRole == "admin" || userRole == "organizer")
@@ -153,6 +163,11 @@ class _EducationalResourceState extends State<EducationalResource> {
                   margin: EdgeInsets.symmetric(
                       horizontal: deviceData.size.width * 0.05),
                   child: TextField(
+                    onSubmitted: (query) {
+                      articleBloc
+                          .add(SearchArticlesEvent(_searchController.text));
+                    },
+                    controller: _searchController,
                     style: GoogleFonts.poppins(
                       fontSize: 17,
                     ),
@@ -162,8 +177,15 @@ class _EducationalResourceState extends State<EducationalResource> {
                             const BoxConstraints(maxHeight: 26, minWidth: 26),
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(left: 13, right: 10),
-                          child: SvgPicture.asset(
-                            "assets/icons/search.svg",
+                          child: InkWell(
+                            // * search challenges when tapped search icon
+                            onTap: () {
+                              articleBloc.add(
+                                  SearchArticlesEvent(_searchController.text));
+                            },
+                            child: SvgPicture.asset(
+                              "assets/icons/search.svg",
+                            ),
                           ),
                         ),
                         suffixIconConstraints:
@@ -202,240 +224,183 @@ class _EducationalResourceState extends State<EducationalResource> {
                         hintText: "Search Articles"),
                   ),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 if (state is ArticleDetailsLoading)
-                 
-                   Center(
-                      child: CircularProgressIndicator(
-                        strokeCap: StrokeCap.round,
-                        strokeWidth: 5,
-                        color: Color(0xff75A488),
-                      ),
+                  const Center(
+                    child: CircularProgressIndicator(
+                      strokeCap: StrokeCap.round,
+                      strokeWidth: 5,
+                      color: Color(0xff75A488),
                     ),
-                  
+                  ),
+                if (state is ArticlesSearching)
+                  const Center(
+                    child: CircularProgressIndicator(
+                      strokeCap: StrokeCap.round,
+                      strokeWidth: 5,
+                      color: Color(0xff75A488),
+                    ),
+                  ),
                 if (state is ArticleDetailsLoaded)
-                  Column(
-                    children: [
-                      Container(
-                        height: 50,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: deviceData.size.width * 0.05),
-                        child: Row(
+                  (state.articles.isNotEmpty)
+                      ? Padding(
+                          padding: const EdgeInsets.all(9.0),
+                          child: Column(
+                            children: [
+                              if (state.articles.any(
+                                  (article) => article.articleType == "Nature"))
+                                Container(
+                                  height: 350,
+                                  child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: state.articles.length,
+                                    separatorBuilder: (context, _) =>
+                                        const SizedBox(width: 0),
+                                    itemBuilder: (context, index) {
+                                      Article article = state.articles[index];
+                                      if (article.articleType == "Nature") {
+                                        return articleCard(
+                                          articleData: article,
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              if (state.articles.any((article) =>
+                                  article.articleType == "PlantTrees"))
+                                Container(
+                                  height: 350,
+                                  child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: state.articles.length,
+                                    separatorBuilder: (context, _) =>
+                                        const SizedBox(width: 0),
+                                    itemBuilder: (context, index) {
+                                      Article article = state.articles[index];
+                                      // Check if articles are being printed
+                                      if (article.articleType == "PlantTrees") {
+                                        return articleCard(
+                                          articleData: article,
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              if (state.articles.any((article) =>
+                                  article.articleType == "Eco-Friendly"))
+                                Container(
+                                  height: 350,
+                                  child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: state.articles.length,
+                                    separatorBuilder: (context, _) =>
+                                        const SizedBox(width: 0),
+                                    itemBuilder: (context, index) {
+                                      Article article = state.articles[index];
+                                      // Check if articles are being printed
+                                      if (article.articleType ==
+                                          "Eco-Friendly") {
+                                        return articleCard(
+                                          articleData: article,
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              if (state.articles.any((article) =>
+                                  article.articleType == "Recy-Challenges"))
+                                Container(
+                                  height: 350,
+                                  child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: state.articles.length,
+                                    separatorBuilder: (context, _) =>
+                                        const SizedBox(width: 0),
+                                    itemBuilder: (context, index) {
+                                      Article article = state.articles[index];
+                                      // Check if articles are being printed
+                                      if (article.articleType ==
+                                          "Recy-Challenges") {
+                                        return articleCard(
+                                          articleData: article,
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              if (state.articles.any((article) =>
+                                  article.articleType == "Recy-Guide"))
+                                Container(
+                                  height: 350,
+                                  child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: state.articles.length,
+                                    separatorBuilder: (context, _) =>
+                                        const SizedBox(width: 0),
+                                    itemBuilder: (context, index) {
+                                      Article article = state.articles[index];
+                                      // Check if articles are being printed
+                                      if (article.articleType ==
+                                          "Recy-Guides") {
+                                        return articleCard(
+                                          articleData: article,
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              if (state.articles.any(
+                                  (article) => article.articleType == "Other"))
+                                Container(
+                                  height: 350,
+                                  child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: state.articles.length,
+                                    separatorBuilder: (context, _) =>
+                                        const SizedBox(width: 0),
+                                    itemBuilder: (context, index) {
+                                      Article article = state.articles[index];
+                                      // Check if articles are being printed
+                                      if (article.articleType == "Other") {
+                                        return articleCard(
+                                          articleData: article,
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ),
+                            ],
+                          ),
+                        )
+                      : Column(
                           children: [
-                            Text("Nature",
-                                style: kFontFamily(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                )),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 35),
+                              child: Center(
+                                child: Text(
+                                  "No Aricles found under that Search:(",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                      Container(
-                        height: 280,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: deviceData.size.width * 0.05),
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: state.articles.length,
-                          separatorBuilder: (context, _) =>
-                              const SizedBox(width: 0),
-                          itemBuilder: (context, index) {
-                            Article article = state.articles[index];
-                            // Check if articles are being printed
-                            if (article.articleType == "Nature") {
-                              return articleCard(articleData: article);
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
-                      ),
-                      Container(
-                        height: 50,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: deviceData.size.width * 0.05),
-                        child: Row(
-                          children: [
-                            Text("Plants and Trees",
-                                style: kFontFamily(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                )),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 280,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: deviceData.size.width * 0.05),
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: state.articles.length,
-                          separatorBuilder: (context, _) =>
-                              const SizedBox(width: 0),
-                          itemBuilder: (context, index) {
-                            Article article = state.articles[index];
-                            // Check if articles are being printed
-                            if (article.articleType == "PlantTrees") {
-                              return articleCard(articleData: article);
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
-                      ),
-                      Container(
-                        height: 50,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: deviceData.size.width * 0.05),
-                        child: Row(
-                          children: [
-                            Text("Recycling methods",
-                                style: kFontFamily(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                )),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 280,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: deviceData.size.width * 0.05),
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: state.articles.length,
-                          separatorBuilder: (context, _) =>
-                              const SizedBox(width: 0),
-                          itemBuilder: (context, index) {
-                            Article article = state.articles[index];
-                            // Check if articles are being printed
-                            if (article.articleType == "Recycling") {
-                              return articleCard(articleData: article);
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  )
-
-                //------
-
-                //---------
-
-                //-------------
-
-                // Container(
-                //   height: 50,
-                //   margin: EdgeInsets.symmetric(
-                //       horizontal: deviceData.size.width * 0.05),
-                //   child: Row(
-                //     children: [
-                //       Text("Eco-Friendly Products",
-                //           style: kFontFamily(
-                //             color: Colors.black,
-                //             fontSize: 18,
-                //             fontWeight: FontWeight.w700,
-                //           )),
-                //     ],
-                //   ),
-                // ),
-                // Container(
-                //   height: 280,
-                //   margin: EdgeInsets.symmetric(
-                //       horizontal: deviceData.size.width * 0.05),
-                //   child: ListView.separated(
-                //     scrollDirection: Axis.horizontal,
-                //     itemCount: allArticles.length,
-                //     separatorBuilder: (context, _) => const SizedBox(width: 12),
-                //     itemBuilder: (context, index) {
-                //       Article article = allArticles[index];
-                //       // Check if articles are being printed
-                //       if (article.articleType == "Eco-Friendly-Products") {
-                //         return articleCard(articleData: article);
-                //       } else {
-                //         return Container();
-                //       }
-                //     },
-                //   ),
-                // ),
-
-                //---
-
-                // Container(
-                //   height: 50,
-                //   margin: EdgeInsets.symmetric(
-                //       horizontal: deviceData.size.width * 0.05),
-                //   child: Row(
-                //     children: [
-                //       Text("Recycling Challenges",
-                //           style: kFontFamily(
-                //             color: Colors.black,
-                //             fontSize: 18,
-                //             fontWeight: FontWeight.w700,
-                //           )),
-                //     ],
-                //   ),
-                // ),
-                // Container(
-                //   height: 280,
-                //   margin: EdgeInsets.symmetric(
-                //       horizontal: deviceData.size.width * 0.05),
-                //   child: ListView.separated(
-                //     scrollDirection: Axis.horizontal,
-                //     itemCount: allArticles.length,
-                //     separatorBuilder: (context, _) => const SizedBox(width: 12),
-                //     itemBuilder: (context, index) {
-                //       Article article = allArticles[index];
-                //       // Check if articles are being printed
-                //       if (article.articleType == "RecyChallenges") {
-                //         return articleCard(articleData: article);
-                //       } else {
-                //         return Container();
-                //       }
-                //     },
-                //   ),
-                // ),
-
-                // //----
-                // Container(
-                //   height: 50,
-                //   margin: EdgeInsets.symmetric(
-                //       horizontal: deviceData.size.width * 0.05),
-                //   child: Row(
-                //     children: [
-                //       Text("Others",
-                //           style: kFontFamily(
-                //             color: Colors.black,
-                //             fontSize: 18,
-                //             fontWeight: FontWeight.w700,
-                //           )),
-                //     ],
-                //   ),
-                // ),
-                // Container(
-                //   height: 280,
-                //   margin: EdgeInsets.symmetric(
-                //       horizontal: deviceData.size.width * 0.05),
-                //   child: ListView.separated(
-                //     scrollDirection: Axis.horizontal,
-                //     itemCount: allArticles.length,
-                //     separatorBuilder: (context, _) => const SizedBox(width: 0),
-                //     itemBuilder: (context, index) {
-                //       Article article = allArticles[index];
-                //       // Check if articles are being printed
-                //       if (article.articleType == "Others") {
-                //         return articleCard(articleData: article);
-                //       } else {
-                //         return Container();
-                //       }
-                //     },
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -445,10 +410,60 @@ class _EducationalResourceState extends State<EducationalResource> {
   }
 
   Widget articleCard({required Article articleData}) => Container(
-        //  margin: const EdgeInsets.only(horizontal: 15),
         width: 250,
         child: Column(
           children: [
+            if (articleData.articleType == "Nature")
+              Text(
+                "Nature",
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            if (articleData.articleType == "PlantTrees")
+              Text(
+                "Plant Trees",
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            if (articleData.articleType == "Eco-Friendly")
+              Text(
+                "Eco-Friendly Products",
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            if (articleData.articleType == "Recy-Challenges")
+              Text(
+                "Recycling Challenges",
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            if (articleData.articleType == "Recy-Guides")
+              Text(
+                "Recycling Guides",
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            if (articleData.articleType == "Other")
+              Text(
+                "Other",
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            const SizedBox(
+              height: 10,
+            ),
             ClipRRect(
               borderRadius: BorderRadius.circular(16.83),
               child: Material(
@@ -500,7 +515,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                 articleData.description,
                 style: GoogleFonts.poppins(
                   color: Colors.black,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w400,
                 ),
               ),

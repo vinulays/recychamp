@@ -20,3 +20,14 @@ class UpdateArticleEvent extends ArticleDetailsEvent {
 
   UpdateArticleEvent(this.formData);
 }
+
+class ArticlesResetsEvent extends ArticleDetailsEvent {}
+
+class SearchArticlesEvent extends ArticleDetailsEvent {
+  final String query;
+
+  SearchArticlesEvent(this.query);
+
+  @override
+  List<Object> get props => [query];
+}

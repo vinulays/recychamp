@@ -144,6 +144,8 @@ class MyApp extends StatelessWidget {
                       firestore: FirebaseFirestore.instance,
                       storage: FirebaseStorage.instance,
                       auth: FirebaseAuth.instance),
+                      // storage: FirebaseStorage.instance,
+                      // auth: FirebaseAuth.instance),
             ),
           ),
         ),
@@ -156,6 +158,8 @@ class MyApp extends StatelessWidget {
                       firestore: FirebaseFirestore.instance,
                       storage: FirebaseStorage.instance,
                       auth: FirebaseAuth.instance),
+                      // storage: FirebaseStorage.instance,
+                      // auth: FirebaseAuth.instance),
             ),
           ),
         ),
@@ -226,6 +230,8 @@ class MyApp extends StatelessWidget {
     );
   }
 
+  }
+
 // class MyHomePage extends StatefulWidget {
 //   const MyHomePage({super.key, required this.title});
 //  final String title;
@@ -271,4 +277,6 @@ class MyApp extends StatelessWidget {
 //       ),
 //   );
 //   }
-}
+
+
+

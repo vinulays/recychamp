@@ -17,8 +17,9 @@ import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc
 import 'package:recychamp/services/article_service.dart';
 
 class AricleForms extends StatefulWidget {
- 
-  const AricleForms({Key? key, }) : super(key: key);
+  const AricleForms({
+    Key? key,
+  }) : super(key: key);
   // const AricleForms({super.key});
 
   @override
@@ -181,7 +182,7 @@ class _AricleForm extends State<AricleForms> {
                                 if (val == null || val.isEmpty) {
                                   return 'Please enter a title';
                                 } else if (val.length < 25) {
-                                  return 'Title must be at least 25 characters long';
+                                  return 'Title must be maximum 50 characters long';
                                 } else {
                                   return null; // No error, input is valid
                                 }
@@ -225,9 +226,9 @@ class _AricleForm extends State<AricleForms> {
                               items: [
                                 "Nature",
                                 "PlantTrees",
-                                "Recycling",
-                                "Eco-Friendly-Products",
-                                "RecyChallenges",
+                                "Eco-Friendly",
+                                "Recy-Challenges",
+                                "Recy-Guides",
                                 "Others"
                               ].map((String type) {
                                 return DropdownMenuItem<String>(
@@ -282,7 +283,7 @@ class _AricleForm extends State<AricleForms> {
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
                                   return 'Please enter a description';
-                                } else if (val.length < 120) {
+                                } else if (val.length > 120) {
                                   return 'Description should not be more than 120 characters long';
                                 } else {
                                   return null; // No error, input is valid
@@ -332,7 +333,7 @@ class _AricleForm extends State<AricleForms> {
                                 if (val == null || val.isEmpty) {
                                   return 'Please enter a content';
                                 } else if (val.length < 250) {
-                                  return 'Description must be at least 250 characters long';
+                                  return 'Content must be at least 250 characters long';
                                 } else {
                                   return null; // No error, input is valid
                                 }

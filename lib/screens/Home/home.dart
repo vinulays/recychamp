@@ -5,6 +5,7 @@ import "package:recychamp/screens/Challenges/challenges.dart";
 import "package:recychamp/screens/Community/community.dart";
 import "package:recychamp/screens/Dashboard/dashboard.dart";
 import "package:recychamp/screens/Discover/discover.dart";
+import "package:recychamp/screens/EducationalResources/articles.dart";
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -23,7 +24,10 @@ class _HomeState extends State<Home> {
     Discover(), // * Discover
     Dashboard(), // * Dashboard
     Community(), // * Community
-    Community(), // * Notifications
+    Community(),
+   
+
+    // * Notifications
   ];
 
   void _onItemTapped(int index) {

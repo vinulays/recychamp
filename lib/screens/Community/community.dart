@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recychamp/screens/Settings/settings.dart';
 
 import 'package:recychamp/screens/Community/bloc/posts_bloc.dart';
 import 'package:recychamp/screens/Community/bloc/posts_event.dart';
@@ -71,13 +72,23 @@ class _CommunityState extends State<Community> {
                       ],
                     ),
                     // todo Settings button (must link to settings page)
-                    SvgPicture.asset(
-                      "assets/icons/Settings.svg",
-                      height: 24,
-                      width: 24,
-                      colorFilter:
-                          const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-                    )
+                    IconButton(
+                      icon: SvgPicture.asset(
+                        "assets/icons/Settings.svg",
+                        height: 24,
+                        width: 24,
+                        colorFilter: const ColorFilter.mode(
+                            Colors.black, BlendMode.srcIn),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SettingsPage(),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

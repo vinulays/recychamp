@@ -9,6 +9,7 @@ import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/EducationalResources/article_content.dart';
 import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
 import 'package:recychamp/ui/challenge_trending_card.dart';
+import 'package:recychamp/screens/Settings/settings.dart';
 
 class Discover extends StatefulWidget {
   const Discover({super.key});
@@ -55,12 +56,28 @@ class _DiscoverState extends State<Discover> {
                 const SizedBox(
                   height: 30,
                 ),
+                IconButton(
+  icon: SvgPicture.asset(
+    "assets/icons/Settings.svg",
+    height: 24,
+    width: 24,
+  ),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SettingsPage(),
+      ),
+    );
+  },
+),
                 SizedBox(
                   height: 50,
                   child: TextField(
                     style: GoogleFonts.poppins(
                       fontSize: 17,
                     ),
+                    
                     decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(14),
                         prefixIconConstraints:

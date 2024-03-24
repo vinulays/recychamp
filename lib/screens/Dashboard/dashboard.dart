@@ -12,6 +12,7 @@ import 'package:recychamp/screens/Calendar/calendar_event.dart';
 import 'package:recychamp/screens/EducationalResources/articles.dart';
 import 'package:recychamp/ui/home_three_row_button.dart';
 import 'package:recychamp/ui/latest_challenges_card.dart';
+import 'package:recychamp/screens/Settings/settings.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -86,12 +87,22 @@ class _DashboardState extends State<Dashboard> {
                         )
                       ],
                     ),
-                    // todo Settings button (must link to settings page)
-                    SvgPicture.asset(
-                      "assets/icons/Settings.svg",
-                      height: 24,
-                      width: 24,
-                    )
+
+                    IconButton(
+                      icon: SvgPicture.asset(
+                        "assets/icons/Settings.svg",
+                        height: 24,
+                        width: 24,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SettingsPage(),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

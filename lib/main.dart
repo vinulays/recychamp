@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -43,60 +45,6 @@ void main() async {
   // logout();
   runApp(const MyApp());
 }
-
-// Future<void> signInManually() async {
-//   try {
-//     // * admin = ubetatta@gmail.com
-//     // * organizer = vinula@gmail.com
-//     // * parent = parent@gmail.com
-//     String email = 'ubetatta@gmail.com';
-//     String password = '12345678';
-// Future<void> signInManually() async {
-//   try {
-//     // * admin = ubetatta@gmail.com
-//     // * organizer = vinula@gmail.com
-//     // * parent = parent@gmail.com
-//     String email = 'parent@gmail.com';
-//     String password = '12345678';
-
-//     UserCredential userCredential =
-//         await FirebaseAuth.instance.signInWithEmailAndPassword(
-//       email: email,
-//       password: password,
-//     );
-//     UserCredential userCredential =
-//         await FirebaseAuth.instance.signInWithEmailAndPassword(
-//       email: email,
-//       password: password,
-//     );
-
-//     // Access the signed-in user
-//     User user = userCredential.user!;
-
-//     // Print user information
-//     debugPrint('User signed in: ${user.uid}');
-//   } catch (e) {
-//     // Handle sign-in errors
-//     throw Exception("Sign in error: $e");
-//   }
-// }
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Demo',
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(
-//          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-//         useMaterial3: true,
-//       ),
-//       home: Login()
-//     );
-//   }
-// }
 
 Future<void> logout() async {
   FirebaseAuth.instance.signOut();
@@ -229,8 +177,7 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-
-  }
+}
 
 // class MyHomePage extends StatefulWidget {
 //   const MyHomePage({super.key, required this.title});

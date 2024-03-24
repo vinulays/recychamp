@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -90,13 +91,37 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                     ),
                     Align(
-                        alignment: Alignment.center,
-                        child: Image.network(
-                          widget.product.imageUrl,
+                      alignment: Alignment.center,
+                      // child: Image.network(
+                      //   widget.product.imageUrl,
+                      //   height: 300,
+                      //   width: 300,
+                      //   fit: BoxFit.contain,
+                      // ),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.product.imageUrl,
+                        imageBuilder: (context, imageProvider) => Container(
                           height: 300,
                           width: 300,
-                          fit: BoxFit.contain,
-                        ))
+                          decoration: ShapeDecoration(
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.83))),
+                        ),
+                        placeholder: (context, url) => const SizedBox(
+                          height: 300,
+                          width: 300,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [CircularProgressIndicator()],
+                          ),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
+                    )
                   ],
                 ),
               ),

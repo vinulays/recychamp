@@ -1,12 +1,9 @@
 part of 'shop_bloc.dart';
 
 sealed class ShopEvent extends Equatable {
-
   @override
   List<Object> get props => [];
 }
-
-
 
 class FetchShopEvent extends ShopEvent {}
 
@@ -35,8 +32,6 @@ class DeleteShopEvent extends ShopEvent {
 //   ApplyFiltersEvent(this.filters, this.isCompleted);
 // }
 
-//class ResetChallengesEvent extends ShopEvent {}
-
 class SearchShopEvent extends ShopEvent {
   final String query;
 
@@ -45,3 +40,5 @@ class SearchShopEvent extends ShopEvent {
   @override
   List<Object> get props => [query];
 }
+
+class ResetShopEvent extends ShopEvent {}

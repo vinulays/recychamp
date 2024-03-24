@@ -30,6 +30,7 @@ import 'package:recychamp/services/challenge_service.dart';
 import 'package:recychamp/services/post_service.dart';
 import 'package:recychamp/screens/Welcome/welcome.dart';
 import 'package:recychamp/services/shop_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +39,8 @@ void main() async {
   );
   Stripe.publishableKey =
       "pk_test_51OxXnMEf9JrvdLmiMP1HV9Wk3X4jFaYGSOn4rcUOiC30djKuRtOBpBg8wUc6vGWcuWyZXF3jYTCsufusIyeC9L8S00iMlssUpm";
+
+  await dotenv.load(fileName: "assets/.env");
 
   // * Manually sign in to implement challenge submission (roles: admin, organizer, parent)
   // * remove this when implementing authentication

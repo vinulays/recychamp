@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -146,17 +147,18 @@ class _CartState extends State<Cart> {
   void payment() async {
     try {
       Map<String, dynamic> body = {
-        "amount": 10000,
-        "Currency": "LKR",
+        "amount": "10000",
+        "Currency": "USD",
       };
       var response = await http.post(
         Uri.parse("https://api.stripe.com/v1/payment_intents"),
         headers: {
-          "Authorization": "Bearer",
+          "Authorization": 'Bearer ${dotenv.env['STRIPE_SECRET']}',
           //pk
           //sk
           "Content-type": "application/x-www-form-urlencoded"
         },
+        body: body,
       );
       paymentIntent = json.decode(response.body);
     } catch (error) {
@@ -167,7 +169,7 @@ class _CartState extends State<Cart> {
         .initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
                 paymentIntentClientSecret: paymentIntent!['client_secret'],
-                style: ThemeMode.light,
+                // style: ThemeMode.light,
                 merchantDisplayName: 'RecyChamp'))
         .then((value) => {});
 

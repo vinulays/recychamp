@@ -1,10 +1,16 @@
+import 'dart:convert';
+//import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recychamp/models/cart_item.dart';
 import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
 import 'package:recychamp/ui/cart_item_card.dart';
+import 'package:http/http.dart' as http;
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -15,6 +21,7 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   List<CartItem> items = [];
+  Map<String, dynamic>? paymentIntent;
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +113,9 @@ class _CartState extends State<Cart> {
                 child: SizedBox(
                   width: double.infinity,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      payment();
+                    },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -133,5 +142,41 @@ class _CartState extends State<Cart> {
         );
       },
     );
+  }
+
+  void payment() async {
+    try {
+      Map<String, dynamic> body = {
+        "amount": "10000",
+        "Currency": "USD",
+      };
+      var response = await http.post(
+        Uri.parse("https://api.stripe.com/v1/payment_intents"),
+        headers: {
+          "Authorization": 'Bearer ${dotenv.env['STRIPE_SECRET']}',
+          //pk
+          //sk
+          "Content-type": "application/x-www-form-urlencoded"
+        },
+        body: body,
+      );
+      paymentIntent = json.decode(response.body);
+    } catch (error) {
+      throw Exception(error);
+    }
+
+    await Stripe.instance
+        .initPaymentSheet(
+            paymentSheetParameters: SetupPaymentSheetParameters(
+                paymentIntentClientSecret: paymentIntent!['client_secret'],
+                // style: ThemeMode.light,
+                merchantDisplayName: 'RecyChamp'))
+        .then((value) => {});
+
+    try {
+      await Stripe.instance
+          .presentPaymentSheet()
+          .then((value) => {print("done")});
+    } catch (error) {}
   }
 }

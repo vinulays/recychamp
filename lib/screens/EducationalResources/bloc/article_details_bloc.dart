@@ -52,6 +52,8 @@ class ArticleDetailsBloc
         add(FetchArticleEvent());
       } catch (e) {
         emit(ArticleUpdatingError("Article updating failed"));
+
+    
       }
     });
 

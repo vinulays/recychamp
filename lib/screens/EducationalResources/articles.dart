@@ -245,13 +245,13 @@ class _EducationalResourceState extends State<EducationalResource> {
 
                   const Center(
 
+
                     child: CircularProgressIndicator(
                       strokeCap: StrokeCap.round,
                       strokeWidth: 5,
                       color: Color(0xff75A488),
                     ),
                   ),
-
 
 
                 if (state is ArticlesSearching)

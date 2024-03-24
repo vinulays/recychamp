@@ -25,7 +25,8 @@ class ArticleService {
           description: data['description'],
           articleImage: data['articleImage'],
           articleType: data['articleType'],
-          content: data['content']
+          content: data['content'],
+          id: doc.id,
         );
 
         articles.add(article);
@@ -63,9 +64,26 @@ class ArticleService {
         "articleImage": formData["articleImage"],
         "articleType": formData["articleType"],
          "content": formData["content"]
+         
       });
     } catch (e) {
       rethrow;
+    }
+  }
+
+   // * delete challenge from firebase
+  Future<void> deleteArticle(String articleID) async {
+    try {
+      DocumentReference articleReference =
+          _firestore.collection("articles").doc(articleID);
+
+      DocumentSnapshot articleSnapshot = await articleReference.get();
+      String imageURL = await articleSnapshot.get("imageURL");
+
+      await articleReference.delete();
+
+    } catch (e) {
+      throw Exception('Failed to delete the challenge: $e');
     }
   }
 }

@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:recychamp/models/product.dart';
@@ -38,6 +37,22 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
       } catch (e) {
         emit(ShopAddingError("Challenge adding failed..."));
       }
+    });
+
+    on<SearchShopEvent>((event, emit) async {
+      emit(ShopSearching());
+      final products = await _shopRepository.getProducts();
+
+      final List<Product> searchResult = products.where((product) {
+        return product.name.toLowerCase().contains(event.query.toLowerCase());
+      }).toList();
+
+      emit(ShopLoaded(searchResult));
+    });
+
+    on<ResetShopEvent>((event, emit) async {
+      final products = await _shopRepository.getProducts();
+      emit(ShopLoaded(products));
     });
   }
 }

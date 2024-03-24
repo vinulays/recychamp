@@ -1,5 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import "package:google_fonts/google_fonts.dart";
@@ -7,7 +7,6 @@ import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
 import 'package:recychamp/screens/Cart/cart.dart';
 import 'package:recychamp/screens/ProductDetails/product_details.dart';
 import 'package:recychamp/screens/Shop/bloc/shop_bloc.dart';
-import 'package:recychamp/models/product.dart';
 import 'package:recychamp/ui/shop_filter.dart';
 
 import 'package:badges/badges.dart' as badges;
@@ -20,10 +19,27 @@ class Shop extends StatefulWidget {
 }
 
 class _ShopState extends State<Shop> {
+  final TextEditingController _searchController = TextEditingController();
+  late ShopBloc shopBloc;
+
   @override
   void initState() {
     super.initState();
-    context.read<ShopBloc>().add(FetchShopEvent());
+  }
+
+  // * using this method since dispose method is not allowing to use "context"
+  @override
+  void didChangeDependencies() {
+    shopBloc = BlocProvider.of<ShopBloc>(context);
+    super.didChangeDependencies();
+  }
+
+  // * reset challenges when exit from the challenges screen
+  @override
+  void dispose() {
+    _searchController.dispose();
+    shopBloc.add(ResetShopEvent());
+    super.dispose();
   }
 
   @override
@@ -90,6 +106,11 @@ class _ShopState extends State<Shop> {
                 margin: EdgeInsets.symmetric(
                     horizontal: deviceData.size.width * 0.05),
                 child: TextField(
+                  controller: _searchController,
+                  onSubmitted: (query) {
+                    BlocProvider.of<ShopBloc>(context)
+                        .add(SearchShopEvent(_searchController.text));
+                  },
                   style: GoogleFonts.poppins(
                     fontSize: 17,
                   ),
@@ -99,8 +120,18 @@ class _ShopState extends State<Shop> {
                           const BoxConstraints(maxHeight: 26, minWidth: 26),
                       prefixIcon: Padding(
                         padding: const EdgeInsets.only(left: 13, right: 10),
-                        child: SvgPicture.asset(
-                          "assets/icons/search.svg",
+                        // child: SvgPicture.asset(
+                        //   "assets/icons/search.svg",
+                        // ),
+                        child: InkWell(
+                          // * search challenges when tapped search icon
+                          onTap: () {
+                            shopBloc
+                                .add(SearchShopEvent(_searchController.text));
+                          },
+                          child: SvgPicture.asset(
+                            "assets/icons/search.svg",
+                          ),
                         ),
                       ),
                       suffixIconConstraints:
@@ -142,6 +173,16 @@ class _ShopState extends State<Shop> {
               const SizedBox(
                 height: 50,
               ),
+              if (state is ShopSearching)
+                const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      strokeCap: StrokeCap.round,
+                      strokeWidth: 5,
+                      color: Color(0xff75A488),
+                    ),
+                  ),
+                ),
               if (state is ShopLoading)
                 const Expanded(
                   child: Center(
@@ -183,11 +224,40 @@ class _ShopState extends State<Shop> {
                                     1), // Set your desired background color here
                                 child: Padding(
                                   padding: const EdgeInsets.all(5.0),
-                                  child: Image.network(
-                                    state.products[index].imageUrl,
-                                    width: 143,
-                                    height: 143.258,
-                                    fit: BoxFit.cover,
+                                  // child: Image.network(
+                                  //   state.products[index].imageUrl,
+                                  //   width: 143,
+                                  //   height: 143.258,
+                                  //   fit: BoxFit.cover,
+                                  // ),
+                                  child: CachedNetworkImage(
+                                    imageUrl: state.products[index].imageUrl,
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      height: 143.258,
+                                      width: 143,
+                                      decoration: ShapeDecoration(
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(0))),
+                                    ),
+                                    placeholder: (context, url) =>
+                                        const SizedBox(
+                                      height: 143.258,
+                                      width: 143,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [CircularProgressIndicator()],
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
                                   ),
                                 ),
                               ),

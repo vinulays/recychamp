@@ -210,7 +210,7 @@ class MyApp extends StatelessWidget {
                   firestore: FirebaseFirestore.instance,
                   storage: FirebaseStorage.instance),
             ),
-          ),
+          )..add(FetchShopEvent()),
         ),
         BlocProvider<CartBloc>(
           create: (context) => CartBloc(

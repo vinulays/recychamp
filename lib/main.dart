@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:recychamp/firebase_options.dart';
 import 'package:recychamp/models/chip_label_color.dart';
 import 'package:recychamp/repositories/article_repository.dart';
@@ -35,6 +36,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Stripe.publishableKey =
+      "pk_test_51OxXnMEf9JrvdLmiMP1HV9Wk3X4jFaYGSOn4rcUOiC30djKuRtOBpBg8wUc6vGWcuWyZXF3jYTCsufusIyeC9L8S00iMlssUpm";
 
   // * Manually sign in to implement challenge submission (roles: admin, organizer, parent)
   // * remove this when implementing authentication

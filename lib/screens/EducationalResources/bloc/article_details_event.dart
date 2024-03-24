@@ -31,3 +31,5 @@ class SearchArticlesEvent extends ArticleDetailsEvent {
   @override
   List<Object> get props => [query];
 }
+
+

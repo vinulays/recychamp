@@ -6,6 +6,7 @@ import "package:recychamp/screens/Challenges/challenges.dart";
 import "package:recychamp/screens/Community/community.dart";
 import "package:recychamp/screens/Dashboard/dashboard.dart";
 import "package:recychamp/screens/Discover/discover.dart";
+import "package:recychamp/screens/EducationalResources/articles.dart";
 
 // import 'package:recychamp/screens/Login/login.dart';
 import "package:recychamp/screens/EducationalResources/articles.dart";

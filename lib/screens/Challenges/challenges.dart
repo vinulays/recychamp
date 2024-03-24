@@ -10,6 +10,7 @@ import "package:recychamp/screens/ChallengeForm/challenge_form.dart";
 import "package:recychamp/screens/Challenges/bloc/challenges_bloc.dart";
 import "package:recychamp/ui/challenge_card.dart";
 import "package:recychamp/ui/challenge_filters_bottom_sheet.dart";
+import 'package:recychamp/screens/Settings/settings.dart';
 
 class Challenges extends StatefulWidget {
   const Challenges({super.key});
@@ -162,13 +163,23 @@ class _ChallengesState extends State<Challenges> {
                         ],
                       ),
                       // todo Settings button (must link to settings page)
-                      SvgPicture.asset(
-                        "assets/icons/Settings.svg",
-                        height: 24,
-                        width: 24,
-                        colorFilter: const ColorFilter.mode(
-                            Colors.black, BlendMode.srcIn),
-                      )
+                      IconButton(
+                        icon: SvgPicture.asset(
+                          "assets/icons/Settings.svg",
+                          height: 24,
+                          width: 24,
+                          colorFilter: const ColorFilter.mode(
+                              Colors.black, BlendMode.srcIn),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SettingsPage(),
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),

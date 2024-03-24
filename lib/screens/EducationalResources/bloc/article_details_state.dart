@@ -52,12 +52,3 @@ class ArticlesSearching extends ArticleDetailsState {
   List<Object> get props => [];
 }
 
-class ArticleDeleting extends ArticleDetailsState {}
-
-class ArticleDeleted extends ArticleDetailsState {}
-
-class ArticleDeletingError extends ArticleDetailsState {
-  final String errorMessageArticle;
-
-  ArticleDeletingError(this.errorMessageArticle);
-}

@@ -33,8 +33,3 @@ class SearchArticlesEvent extends ArticleDetailsEvent {
 }
 
 
-class DeleteArticleEvent extends ArticleDetailsEvent {
-  final String aricleID;
-
-  DeleteArticleEvent(this.aricleID);
-}

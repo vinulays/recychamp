@@ -8,6 +8,7 @@ import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.d
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import 'package:recychamp/screens/Challenges/challenges.dart';
+import 'package:recychamp/screens/Settings/settings.dart';
 import 'package:recychamp/services/challenge_service.dart';
 import 'package:recychamp/utils/event_data.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -92,7 +93,7 @@ class _MyWidgetState extends State<CalendarEvent> {
               Column(
             children: [
               Container(
-                height: 80,
+                height: 85,
                 color: const Color(0XFF75A488),
                 child: Padding(
                   padding:
@@ -110,9 +111,18 @@ class _MyWidgetState extends State<CalendarEvent> {
                         ),
                       ),
                       const SizedBox(width: 270),
-                      const Icon(
-                        Icons.settings,
-                        color: Colors.white,
+                      IconButton(
+                        icon: Icon(Icons.settings),
+                        onPressed: () {
+                          // Navigate to the settings screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  SettingsPage(), // Replace SettingsPage with your settings screen widget
+                            ),
+                          );
+                        },
                       )
                     ],
                   ),
@@ -352,8 +362,6 @@ class _MyWidgetState extends State<CalendarEvent> {
               width: double.infinity,
               child: TextButton(
                 onPressed: () {
-                 
-
                   // Handle join button click
                 },
                 style: ButtonStyle(

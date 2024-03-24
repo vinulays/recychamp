@@ -5,9 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:recychamp/models/challenge.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
+import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import 'package:recychamp/screens/Challenges/challenges.dart';
+import 'package:recychamp/screens/Settings/settings.dart';
 import 'package:recychamp/services/challenge_service.dart';
 import 'package:recychamp/utils/event_data.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -55,15 +57,13 @@ class _MyWidgetState extends State<CalendarEvent> {
           startDateTime: data['startDateTime'].toDate(),
           endDateTime: data['endDateTime'].toDate(),
           maximumParticipants: data['maximumParticipants'],
-          acceptedParticipants: List<String>.from(data[
-              "acceptedParticipants"]), // * converting dynamic array to string array
-          submittedParticipants: List<String>.from(data[
-              "submittedParticipants"]), // * converting dynamic array to string array
+          acceptedParticipants: List<String>.from(data["acceptedParticipants"]),
+          submittedParticipants:
+              List<String>.from(data["submittedParticipants"]),
           difficulty: data['difficulty'],
           imageURL: data['imageURL'],
           type: data['type'],
-          rating: double.parse(data['rating']
-              .toString()), // * converting firebase number format to double format
+          rating: double.parse(data['rating'].toString()),
           categoryId: data["categoryId"],
         );
 
@@ -80,19 +80,14 @@ class _MyWidgetState extends State<CalendarEvent> {
 
   @override
   Widget build(BuildContext context) {
-    //var deviceSize = MediaQuery.of(context).size;
-
     return BlocBuilder<ChallengesBloc, ChallengesState>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor: const Color(0XFF75A488),
-          body:
-
-              // padding: EdgeInsets.symmetric(horizontal: deviceSize.width * 0.05),
-              Column(
+          body: Column(
             children: [
               Container(
-                height: 80,
+                height: 85,
                 color: const Color(0XFF75A488),
                 child: Padding(
                   padding:
@@ -110,14 +105,26 @@ class _MyWidgetState extends State<CalendarEvent> {
                         ),
                       ),
                       const SizedBox(width: 270),
-                      const Icon(
-                        Icons.settings,
-                        color: Colors.white,
+                      IconButton(
+                        icon: const Icon(
+                          Icons.settings,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          // Navigate to the settings screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  SettingsPage(), // Replace SettingsPage with your settings screen widget
+                            ),
+                          );
+                        },
                       )
                     ],
                   ),
                 ),
-              ), //amuthu color
+              ), //greeny part
 
               Container(
                 height: 50,
@@ -164,15 +171,10 @@ class _MyWidgetState extends State<CalendarEvent> {
                           onFormatChanged: (format) {},
                           onDaySelected: (selectedDay, focusedDay) {
                             setState(() {
-                              // Check if selectedDay is not null
-                              if (selectedDay != null) {
-                                // Check if selectedDay is equal to firstDay or lastDay
-
-                                // assigning the selected date
+                             
+                              if (selectedDay != null) {  //check selectedday is null
                                 _selectedDay = selectedDay;
-
-                                // assigning selected challenge to the selected challenges array
-                                _selectedEvents = challenges
+                                _selectedEvents = challenges    // selected challenge assign to selected challege arry
                                     .where((challenge) =>
                                         challenge.startDateTime != null &&
                                         challenge.endDateTime != null &&
@@ -200,7 +202,7 @@ class _MyWidgetState extends State<CalendarEvent> {
                             leftChevronVisible: false,
                             rightChevronVisible: false,
                             leftChevronIcon: const Icon(Icons
-                                .chevron_left), // You can customize the icons if needed
+                                .chevron_left), 
                             rightChevronIcon: const Icon(Icons.chevron_right),
                           ),
                           daysOfWeekStyle: const DaysOfWeekStyle(
@@ -253,12 +255,12 @@ class _MyWidgetState extends State<CalendarEvent> {
               ),
 
               Expanded(
-                child: FractionallySizedBox(
-                  //rounded corner box
+                child: FractionallySizedBox(   // rounded corner box
+                
 
                   child: Container(
                     width: double.infinity,
-                    // height: double.infinity,
+               
                     decoration: const ShapeDecoration(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -268,7 +270,7 @@ class _MyWidgetState extends State<CalendarEvent> {
                         ),
                       ),
                     ),
-                    child: _buildChallengeDetails(_selectedEvents),
+                    child: _buildChallengeDetails(_selectedEvents),  //challenge card
                   ),
                 ),
               )
@@ -352,9 +354,18 @@ class _MyWidgetState extends State<CalendarEvent> {
               width: double.infinity,
               child: TextButton(
                 onPressed: () {
-                 
+                  final challengeId = eventDetails_.id;
+                  context
+                      .read<ChallengeDetailsBloc>()
+                      .add(FetchChallengeDetailsEvent(challengeId!));
 
-                  // Handle join button click
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ChallengeDetails(),
+                    ),
+                  );
+                  
                 },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(

@@ -12,8 +12,8 @@ class ArticleDetailsBloc
   ArticleDetailsBloc({required ArticleRepo repository})
       : _articleRepo = repository,
         super(ArticleDetailsInitial()) {
-    // * get article event from firebase
     on<FetchArticleEvent>((event, emit) async {
+      // article get from firebase
       emit(ArticleDetailsLoading());
 
       try {
@@ -25,23 +25,22 @@ class ArticleDetailsBloc
       }
     });
 
-    // * add challenge to firebase
     on<AddArticleEvent>((event, emit) async {
+      // add new to firebase
       emit(ArticleDetailsAdding());
 
       try {
         await _articleRepo.addArticle(event.formData);
         emit(ArticleDetailsAdded());
 
-        // * getting updated challenges
         add(FetchArticleEvent());
       } catch (e) {
         emit(ArticleDetailsAddingError("article adding failed"));
       }
     });
 
-//update
     on<UpdateArticleEvent>((event, emit) async {
+      // update article
       emit(ArticleUpdating());
 
       try {
@@ -55,23 +54,26 @@ class ArticleDetailsBloc
       }
     });
 
-    // * search challenges (title, location)
     on<SearchArticlesEvent>((event, emit) async {
+      // search using type and title
       emit(ArticlesSearching());
 
       List<Article> articles = await _articleRepo.getArticles();
 
       final List<Article> searchResult = articles.where((article) {
         return article.articleTitle
-            .toLowerCase()
-            .contains(event.query.toLowerCase());
+                .toLowerCase()
+                .contains(event.query.toLowerCase()) ||
+            article.articleType
+                .toLowerCase()
+                .contains(event.query.toLowerCase());
       }).toList();
 
       emit(ArticleDetailsLoaded(searchResult));
     });
 
-    // * reset challenges
     on<ArticlesResetsEvent>((event, emit) async {
+      // reset articles
       List<Article> challenges = await _articleRepo.getArticles();
       emit(ArticleDetailsLoaded(challenges));
     });

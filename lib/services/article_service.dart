@@ -11,6 +11,8 @@ class ArticleService {
       : _firestore = firestore,
         _storage = storage;
 
+
+// fetch article from fire
   Future<List<Article>> getArticles() async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
@@ -25,7 +27,8 @@ class ArticleService {
           description: data['description'],
           articleImage: data['articleImage'],
           articleType: data['articleType'],
-          content: data['content']
+          content: data['content'],
+          id: doc.id,
         );
 
         articles.add(article);
@@ -36,6 +39,8 @@ class ArticleService {
       throw Exception('Failed to fetch articles: $e');
     }
   }
+
+  // add article to firebase
 
   Future<void> addArticle(Map<String, dynamic> formData) async {
     try {
@@ -51,7 +56,7 @@ class ArticleService {
     }
   }
 
-  // * update challenge in firebsae
+  // * update article in firebsae
   Future<void> updateArticle(Map<String, dynamic> formData) async {
     try {
       DocumentReference articleRef =
@@ -63,9 +68,26 @@ class ArticleService {
         "articleImage": formData["articleImage"],
         "articleType": formData["articleType"],
          "content": formData["content"]
+         
       });
     } catch (e) {
       rethrow;
+    }
+  }
+
+   // * delete article from firebase
+  Future<void> deleteArticle(String articleID) async {
+    try {
+      DocumentReference articleReference =
+          _firestore.collection("articles").doc(articleID);
+
+      DocumentSnapshot articleSnapshot = await articleReference.get();
+      String imageURL = await articleSnapshot.get("imageURL");
+
+      await articleReference.delete();
+
+    } catch (e) {
+      throw Exception('Failed to delete the challenge: $e');
     }
   }
 }

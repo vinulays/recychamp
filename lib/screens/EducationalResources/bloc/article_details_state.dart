@@ -51,3 +51,4 @@ class ArticlesSearching extends ArticleDetailsState {
   @override
   List<Object> get props => [];
 }
+

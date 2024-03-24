@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,6 +14,7 @@ import 'package:recychamp/screens/Calendar/calendar_event.dart';
 import 'package:recychamp/screens/EducationalResources/articles.dart';
 import 'package:recychamp/ui/home_three_row_button.dart';
 import 'package:recychamp/ui/latest_challenges_card.dart';
+import 'package:recychamp/screens/Settings/settings.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -24,6 +27,32 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+    getUserRole();
+  }
+  String imageUrl = "https://pngset.com/images/default-profile-picture-circle-symbol-logo-trademark-number-transparent-png-890174.png";
+  String username ="";
+
+Future<void> getUserRole() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        String imageLink = await userSnapshot.get("photoUrl");
+        String name = await userSnapshot.get('username');
+
+        setState(() {
+          imageUrl = imageLink;
+          username = name;
+        });
+      }
+    } catch (error) {
+      throw Exception("Error getting image: $error");
+    }
   }
 
   @override
@@ -77,7 +106,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         Text(
-                          "Susan Clay",
+                          username,
                           style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontSize: 16,
@@ -86,12 +115,22 @@ class _DashboardState extends State<Dashboard> {
                         )
                       ],
                     ),
-                    // todo Settings button (must link to settings page)
-                    SvgPicture.asset(
-                      "assets/icons/Settings.svg",
-                      height: 24,
-                      width: 24,
-                    )
+
+                    IconButton(
+                      icon: SvgPicture.asset(
+                        "assets/icons/Settings.svg",
+                        height: 24,
+                        width: 24,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SettingsPage(),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -124,8 +163,7 @@ class _DashboardState extends State<Dashboard> {
                           height: 84.15,
                           top: -84.15 / 2,
                           child: CachedNetworkImage(
-                            imageUrl:
-                                "https://images.unsplash.com/photo-1582887122254-f271875d0594?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzB8fGtpZHxlbnwwfHwwfHx8MA%3D%3D",
+                            imageUrl: imageUrl,
                             imageBuilder: (context, imageProvider) => Container(
                               height: 84.15,
                               width: 84.15,

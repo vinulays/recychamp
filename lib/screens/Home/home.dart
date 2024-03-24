@@ -1,10 +1,14 @@
 import "package:flutter/material.dart";
+// import "package:flutter/services.dart";
 import "package:flutter_svg/flutter_svg.dart";
 
 import "package:recychamp/screens/Challenges/challenges.dart";
 import "package:recychamp/screens/Community/community.dart";
 import "package:recychamp/screens/Dashboard/dashboard.dart";
 import "package:recychamp/screens/Discover/discover.dart";
+import "package:recychamp/screens/EducationalResources/articles.dart";
+
+// import 'package:recychamp/screens/Login/login.dart';
 import "package:recychamp/screens/EducationalResources/articles.dart";
 
 class Home extends StatefulWidget {
@@ -38,7 +42,15 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  //   return WillPopScope(
+  //     onWillPop: () async {
+  //     Navigator.pushReplacement(
+  //       context, 
+  //       MaterialPageRoute(builder: (context) => login()),
+  //     );
+  //   return false;
+  // },
+   return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           showSelectedLabels: false,
           showUnselectedLabels: false,

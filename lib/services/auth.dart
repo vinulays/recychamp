@@ -1,6 +1,6 @@
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:recychamp/screens/Home/home.dart';
-import 'package:recychamp/services/database.dart';
+import 'package:recychamp/resources/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -9,7 +9,7 @@ class AuthMethods {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   getCurrentUser() async {
-    return await auth.currentUser;
+    return auth.currentUser;
   }
 
   signInWithGoogle(BuildContext context) async {
@@ -30,24 +30,20 @@ class AuthMethods {
 
     User? userDetails = result.user;
 
-    if (result != null) {
-      Map<String, dynamic> userInfoMap = {
-        "email": userDetails!.email,
-        "name": userDetails.displayName,
-        "imgUrl": userDetails.photoURL,
-        "id": userDetails.uid
-      };
-      await DatabaseMethods()
-          .addUser(userDetails.uid, userInfoMap)
-          .then((value) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home()));
-      });
+    Map<String, dynamic> userInfoMap = {
+      "email": userDetails!.email,
+      "name": userDetails.displayName,
+      "imgUrl": userDetails.photoURL,
+      "id": userDetails.uid
+    };
+    await DatabaseMethods()
+        .addUser(userDetails.uid, userInfoMap)
+        .then((value) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Home()));
+    });
     }
-  }
-}
-
-signInWithFacebook(BuildContext context) async{
+  signInWithFacebook(BuildContext context) async{
   try{
     final LoginResult result = await FacebookAuth.instance.login();
           if (result.status == LoginStatus.success) {
@@ -68,14 +64,20 @@ signInWithFacebook(BuildContext context) async{
           };
                 await DatabaseMethods().addUser(user.uid, userInfoMap);
                 Navigator.push(
+            // ignore: use_build_context_synchronously
             context,
-            MaterialPageRoute(builder: (context) => Home()),
+            MaterialPageRoute(builder: (context) => const Home()),
           );
         }
       } else {
+                // ignore: avoid_print
                 print("Facebook sign-in failed or canceled");
 }
     } catch (e) {
+      // ignore: avoid_print
       print("Error signing in with Facebook: $e");
     }
   }
+
+}
+

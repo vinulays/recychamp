@@ -31,3 +31,10 @@ class SearchArticlesEvent extends ArticleDetailsEvent {
   @override
   List<Object> get props => [query];
 }
+
+
+class DeleteArticleEvent extends ArticleDetailsEvent {
+  final String aricleID;
+
+  DeleteArticleEvent(this.aricleID);
+}

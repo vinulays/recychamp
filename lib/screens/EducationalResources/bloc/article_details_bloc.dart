@@ -75,5 +75,20 @@ class ArticleDetailsBloc
       List<Article> challenges = await _articleRepo.getArticles();
       emit(ArticleDetailsLoaded(challenges));
     });
+
+    // * delete challenge from firebase
+    on<DeleteArticleEvent>((event, emit) async {
+      emit(ArticleDeleting());
+
+      try {
+        await _articleRepo.deleteArticle(event.aricleID);
+        emit(ArticleDeleted());
+
+        // * refreshing challenges after deletion
+        add(FetchArticleEvent());
+      } catch (e) {
+        ArticleDeletingError("Article deleting failed");
+      }
+    });
   }
 }

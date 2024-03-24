@@ -18,4 +18,9 @@ class ArticleRepo {
   Future<void> updateArticle(Map<String, dynamic> formData) async {
     await _articleServise.updateArticle(formData);
   }
+
+  Future<void> deleteArticle(String articleID) async {
+    await _articleServise.deleteArticle(articleID);
+  }
+
 }

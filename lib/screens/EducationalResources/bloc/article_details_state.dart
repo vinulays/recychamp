@@ -1,11 +1,8 @@
 part of 'article_details_bloc.dart';
 
 sealed class ArticleDetailsState extends Equatable {
-  const ArticleDetailsState();
-
   @override
   List<Object> get props => [];
-  
 }
 
 final class ArticleDetailsInitial extends ArticleDetailsState {}
@@ -39,6 +36,7 @@ class ArticleDetailsAddingError extends ArticleDetailsState {
 
   ArticleDetailsAddingError(this.errorMessage);
 }
+
 class ArticleUpdating extends ArticleDetailsState {}
 
 class ArticleUpdated extends ArticleDetailsState {}
@@ -48,3 +46,9 @@ class ArticleUpdatingError extends ArticleDetailsState {
 
   ArticleUpdatingError(this.errorMessage);
 }
+
+class ArticlesSearching extends ArticleDetailsState {
+  @override
+  List<Object> get props => [];
+}
+

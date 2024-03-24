@@ -20,7 +20,6 @@ class AricleForms extends StatefulWidget {
   const AricleForms({
     Key? key,
   }) : super(key: key);
-  // const AricleForms({super.key});
 
   @override
   State<AricleForms> createState() => _AricleForm();
@@ -67,14 +66,6 @@ class _AricleForm extends State<AricleForms> {
       }
     }
   }
-
-  // void _selectImage(BuildContext parentContext, ImageSource source) async {
-  //   final picker = ImagePicker();
-  //   Uint8List file = (await picker.pickImage(source: source)) as Uint8List;
-  //   setState(() {
-  //     _file = file;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -161,8 +152,6 @@ class _AricleForm extends State<AricleForms> {
                           ],
                         ),
                       ),
-
-                      // Title Textfield
                       Container(
                         margin: const EdgeInsets.only(bottom: 2),
                         child: Column(
@@ -181,10 +170,10 @@ class _AricleForm extends State<AricleForms> {
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
                                   return 'Please enter a title';
-                                } else if (val.length < 25) {
-                                  return 'Title must be maximum 50 characters long';
+                                } else if (val.length > 30) {
+                                  return 'Title must be maximum 30 characters long';
                                 } else {
-                                  return null; // No error, input is valid
+                                  return null;
                                 }
                               },
                               decoration: InputDecoration(
@@ -261,7 +250,6 @@ class _AricleForm extends State<AricleForms> {
                           ],
                         ),
                       ),
-
                       const SizedBox(
                         height: 10,
                       ),
@@ -283,10 +271,10 @@ class _AricleForm extends State<AricleForms> {
                               validator: (val) {
                                 if (val == null || val.isEmpty) {
                                   return 'Please enter a description';
-                                } else if (val.length > 120) {
+                                } else if (val.length > 150) {
                                   return 'Description should not be more than 120 characters long';
                                 } else {
-                                  return null; // No error, input is valid
+                                  return null;
                                 }
                               },
                               decoration: InputDecoration(
@@ -310,7 +298,6 @@ class _AricleForm extends State<AricleForms> {
                           ],
                         ),
                       ),
-
                       const SizedBox(
                         height: 10,
                       ),
@@ -335,7 +322,7 @@ class _AricleForm extends State<AricleForms> {
                                 } else if (val.length < 250) {
                                   return 'Content must be at least 250 characters long';
                                 } else {
-                                  return null; // No error, input is valid
+                                  return null;
                                 }
                               },
                               decoration: InputDecoration(
@@ -362,7 +349,6 @@ class _AricleForm extends State<AricleForms> {
                       const SizedBox(
                         height: 20,
                       ),
-
                       Container(
                         margin: const EdgeInsets.only(bottom: 8),
                         height: 450,
@@ -383,31 +369,14 @@ class _AricleForm extends State<AricleForms> {
                               ),
                             ),
                             const SizedBox(height: 10),
-
                             _imageUrl != null
                                 ? Image.network(_imageUrl!)
                                 : _file != null
                                     ? Image.memory(_file!)
                                     : const Icon(Icons.upload),
-                            //   const Icon(Icons.upload),
                             const SizedBox(
                               height: 5,
                             ),
-                            // Text(
-                            //   "Upload a photo",
-                            //   style: GoogleFonts.poppins(fontSize: 16),
-                            // ),
-                            // const SizedBox(
-                            //   height: 10,
-                            // ),
-                            // Text(
-                            //   "JPG, PNG, SVG",
-                            //   style: GoogleFonts.poppins(
-                            //     fontSize: 14,
-                            //     color: Colors.black
-                            //         .withOpacity(0.6000000238418579),
-                            //   ),
-                            // ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -450,7 +419,6 @@ class _AricleForm extends State<AricleForms> {
                     ],
                   ),
                 ),
-                // submit button
                 Container(
                   margin: const EdgeInsets.only(bottom: 15, top: 10),
                   child: SizedBox(
@@ -462,9 +430,7 @@ class _AricleForm extends State<AricleForms> {
                           Map<String, dynamic> formData = {
                             "articleTitle": textController.text,
                             "description": articleDescriptionController.text,
-                            "articleImage": _imageUrl ??
-                                '', // Using _imageUrl if available, otherwise empty string
-                            // You might need to convert it to a String URL or store it differently based on your requirements
+                            "articleImage": _imageUrl ?? '',
                             "articleType": selectedType,
                             "content": articleContentController.text,
                           };
@@ -474,33 +440,6 @@ class _AricleForm extends State<AricleForms> {
                               .add(AddArticleEvent(formData));
 
                           Navigator.of(context).pop();
-
-                          // ArticleService articleService = ArticleService(
-                          //   firestore: FirebaseFirestore.instance,
-                          //   storage: FirebaseStorage.instance,
-                          // );
-
-                          //   try {
-                          //  //   await articleService.addArticle(formData);
-                          //     // Data added successfully
-                          //     // You can perform additional actions or show a success message
-                          //     // widget.onArticleAdded(Article.fromJson(formData));
-                          //     // Clear the form
-                          //     textController.clear();
-                          //     articleDescriptionController.clear();
-                          //     // Clear the selected image
-                          //     setState(() {
-                          //       _file = null;
-                          //       _imageUrl = null;
-                          //     });
-
-                          //     // Navigate back to the previous screen
-                          //     Navigator.pop(context, true);
-                          //   } catch (e) {
-                          //     rethrow;
-                          //     // Handle errors
-                          //     // You can show an error message to the user
-                          //   }
                         }
                       },
                       style: ButtonStyle(

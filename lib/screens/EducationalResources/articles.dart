@@ -27,7 +27,6 @@ class EducationalResource extends StatefulWidget {
 }
 
 class _EducationalResourceState extends State<EducationalResource> {
-  // late List<Article> allArticles = [];
   bool isExpanded = false;
   String? userRole;
   final TextEditingController _searchController = TextEditingController();
@@ -36,8 +35,6 @@ class _EducationalResourceState extends State<EducationalResource> {
   @override
   void initState() {
     super.initState();
-
-    //  fetchArticles();
     if (mounted) {
       getUserRole();
     }
@@ -77,22 +74,6 @@ class _EducationalResourceState extends State<EducationalResource> {
     }
   }
 
-  // void fetchArticles() async {
-  //   try {
-  //     List<Article> articles = await ArticleService(
-  //       firestore: FirebaseFirestore.instance,
-  //       storage: FirebaseStorage.instance,
-  //     ).getArticles();
-  //     print('Fetched Articles: $articles');
-  //     setState(() {
-  //       // Filter articles where articleType is "Nature" and articleType is not null
-  //       allArticles = articles;
-  //     });
-  //   } catch (e) {
-  //     print('Error fetching articles: $e');
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
@@ -106,12 +87,11 @@ class _EducationalResourceState extends State<EducationalResource> {
                   padding: const EdgeInsets.all(8.0),
                   child: FloatingActionButton(
                     onPressed: () {
-                      // Navigate to the new page where users can add articles
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              const AricleForms(), // Replace with your new page widget
+                              const AricleForms(), // add article
                         ),
                       );
                     },
@@ -156,14 +136,12 @@ class _EducationalResourceState extends State<EducationalResource> {
                               fontSize: 25)),
                       const SizedBox(width: 165),
                       IconButton(
-                        icon: Icon(Icons.settings),
+                        icon: const Icon(Icons.settings),
                         onPressed: () {
-                          // Navigate to the settings screen
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  SettingsPage(), // Replace SettingsPage with your settings screen widget
+                              builder: (context) => SettingsPage(),
                             ),
                           );
                         },
@@ -177,8 +155,8 @@ class _EducationalResourceState extends State<EducationalResource> {
                       horizontal: deviceData.size.width * 0.05),
                   child: TextField(
                     onSubmitted: (query) {
-                      articleBloc
-                          .add(SearchArticlesEvent(_searchController.text));
+                      articleBloc.add(SearchArticlesEvent(
+                          _searchController.text)); // search
                     },
                     controller: _searchController,
                     style: GoogleFonts.poppins(
@@ -191,7 +169,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(left: 13, right: 10),
                           child: InkWell(
-                            // * search challenges when tapped search icon
+                            // search when clicked search
                             onTap: () {
                               articleBloc.add(
                                   SearchArticlesEvent(_searchController.text));
@@ -203,13 +181,12 @@ class _EducationalResourceState extends State<EducationalResource> {
                         ),
                         suffixIconConstraints:
                             const BoxConstraints(maxHeight: 26, minWidth: 26),
-                        // todo filter icon must open filter menu
                         suffixIcon: Padding(
                           padding: const EdgeInsets.only(right: 20),
                           child: InkWell(
                             onTap: () {
-                              // * filter bottom drawer
                               showModalBottomSheet(
+                                  // fillter bottom showed
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.vertical(
                                       top: Radius.circular(20),
@@ -240,21 +217,9 @@ class _EducationalResourceState extends State<EducationalResource> {
                 const SizedBox(
                   height: 20,
                 ),
-                if (state is ArticleDetailsLoading)
+                if (state
+                    is ArticleDetailsLoading) // loading when articles laoding
 
-
-                  const Center(
-
-
-                    child: CircularProgressIndicator(
-                      strokeCap: StrokeCap.round,
-                      strokeWidth: 5,
-                      color: Color(0xff75A488),
-                    ),
-                  ),
-
-
-                if (state is ArticlesSearching)
                   const Center(
                     child: CircularProgressIndicator(
                       strokeCap: StrokeCap.round,
@@ -262,8 +227,16 @@ class _EducationalResourceState extends State<EducationalResource> {
                       color: Color(0xff75A488),
                     ),
                   ),
-
-                if (state is ArticleDetailsLoaded)
+                if (state
+                    is ArticlesSearching) // loading when article searching
+                  const Center(
+                    child: CircularProgressIndicator(
+                      strokeCap: StrokeCap.round,
+                      strokeWidth: 5,
+                      color: Color(0xff75A488),
+                    ),
+                  ),
+                if (state is ArticleDetailsLoaded) // article loaded
                   (state.articles.isNotEmpty)
                       ? Padding(
                           padding: const EdgeInsets.all(9.0),
@@ -272,6 +245,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                               if (state.articles.any(
                                   (article) => article.articleType == "Nature"))
                                 Container(
+                                  margin: EdgeInsets.only(right: 9),
                                   height: 350,
                                   child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
@@ -293,6 +267,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                               if (state.articles.any((article) =>
                                   article.articleType == "PlantTrees"))
                                 Container(
+                                  margin: EdgeInsets.only(right: 9),
                                   height: 350,
                                   child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
@@ -315,6 +290,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                               if (state.articles.any((article) =>
                                   article.articleType == "Eco-Friendly"))
                                 Container(
+                                  margin: EdgeInsets.only(right: 9),
                                   height: 350,
                                   child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
@@ -338,6 +314,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                               if (state.articles.any((article) =>
                                   article.articleType == "Recy-Challenges"))
                                 Container(
+                                  margin: EdgeInsets.only(right: 9),
                                   height: 350,
                                   child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
@@ -361,6 +338,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                               if (state.articles.any((article) =>
                                   article.articleType == "Recy-Guide"))
                                 Container(
+                                  margin: EdgeInsets.only(right: 9),
                                   height: 350,
                                   child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
@@ -384,6 +362,7 @@ class _EducationalResourceState extends State<EducationalResource> {
                               if (state.articles.any(
                                   (article) => article.articleType == "Other"))
                                 Container(
+                                  margin: EdgeInsets.only(right: 9),
                                   height: 350,
                                   child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
@@ -487,22 +466,39 @@ class _EducationalResourceState extends State<EducationalResource> {
             ClipRRect(
               borderRadius: BorderRadius.circular(16.83),
               child: Material(
-                child: Ink.image(
-                  image: NetworkImage(articleData.articleImage),
+                child: CachedNetworkImage(
+                  imageUrl: articleData.articleImage,
                   width: 230,
                   height: 140,
-                  padding: const EdgeInsetsDirectional.only(start: 9.0),
+                  placeholder: (context, url) => const SizedBox(
+                    height: 170,
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [CircularProgressIndicator()],
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  // padding: const EdgeInsetsDirectional.only(start: 9.0),
                   fit: BoxFit.cover,
-                  child: InkWell(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ArticleContent(
-                          articlels: articleData,
+                  imageBuilder: (context, imageProvider) => Ink.image(
+                    image: imageProvider,
+                    width: 230,
+                    height: 140,
+                    padding: const EdgeInsetsDirectional.only(start: 9.0),
+                    fit: BoxFit.cover,
+                    child: InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ArticleContent(
+                            articlels: articleData,
+                          ),
                         ),
                       ),
+                      borderRadius: BorderRadius.circular(16.83),
                     ),
-                    borderRadius: BorderRadius.circular(16.83),
                   ),
                 ),
               ),

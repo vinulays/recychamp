@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import 'package:recychamp/models/article_model.dart';
 import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
-import 'package:recychamp/screens/EducationalResources/article_form_update.dart';
+import 'package:recychamp/ui/article_form_update.dart';
 import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
 import 'package:recychamp/ui/article_form.dart';
 
@@ -30,6 +31,7 @@ class _ArticleContentState extends State<ArticleContent> {
   }
 
   Future<void> getUserRole() async {
+    //fetch user from firebase
     try {
       User? user = FirebaseAuth.instance.currentUser;
 
@@ -63,9 +65,8 @@ class _ArticleContentState extends State<ArticleContent> {
                   padding: const EdgeInsets.all(8.0),
                   child: FloatingActionButton(
                     onPressed: () {
-                      // Navigate to the new page where users can add articles
-
                       Navigator.push(
+                        // navigate to update form
                         context,
                         MaterialPageRoute(
                           builder: (context) => UpdateArticleForm(
@@ -90,11 +91,21 @@ class _ArticleContentState extends State<ArticleContent> {
             children: [
               Stack(
                 children: [
-                  Image.network(
-                    widget.articlels.articleImage,
+                  CachedNetworkImage(
+                    imageUrl: widget.articlels.articleImage,
                     width: MediaQuery.of(context).size.width,
                     height: 262,
                     fit: BoxFit.cover,
+                    placeholder: (context, url) => const SizedBox(
+                      height: 170,
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [CircularProgressIndicator()],
+                      ),
+                    ), // Placeholder widget while loading
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                   Positioned(
                     top: 41.9,
@@ -135,8 +146,7 @@ class _ArticleContentState extends State<ArticleContent> {
                         fontSize: 25,
                         fontWeight: FontWeight.w700,
                       ),
-                      overflow: TextOverflow
-                          .ellipsis, // Handle overflow by truncating the text
+                      overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
                   ),

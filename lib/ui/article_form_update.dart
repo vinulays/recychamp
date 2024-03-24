@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recychamp/models/article_model.dart';
@@ -23,7 +24,7 @@ class _UpdateArticleFormState extends State<UpdateArticleForm> {
   late TextEditingController _articleImageController;
   late TextEditingController _articleTypeController;
   late TextEditingController _contentController;
-
+  String? selectedType;
   @override
   void initState() {
     super.initState();
@@ -55,10 +56,24 @@ class _UpdateArticleFormState extends State<UpdateArticleForm> {
               key: _formKey,
               child: ListView(
                 children: <Widget>[
+                  Text(
+                    "Title",
+                    style: kFontFamily(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black),
+                  ),
                   TextFormField(
                     controller: _articleTitleController,
                     decoration: InputDecoration(
-                      labelText: 'Article Title',
+                      hintText: "Enter new title...",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xFF75A488),
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                     style: kFontFamily(fontSize: 14),
                     validator: (value) {
@@ -69,51 +84,131 @@ class _UpdateArticleFormState extends State<UpdateArticleForm> {
                     },
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
+                  ),
+                  Text(
+                    "Description",
+                    style: kFontFamily(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black),
                   ),
                   TextFormField(
                     controller: _descriptionController,
-                    decoration: InputDecoration(labelText: 'Description'),
+                    decoration: InputDecoration(
+                      hintText: "Enter new Description...",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xFF75A488),
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                     validator: (value) {
                       // Add any validation for description if needed
                       return null;
                     },
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
+                  ),
+                  Text(
+                    "Article Image",
+                    style: kFontFamily(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black),
                   ),
                   TextFormField(
                     controller: _articleImageController,
-                    decoration: InputDecoration(labelText: 'Article Image'),
-                    validator: (value) {
-                      // Add any validation for article image if needed
-                      return null;
-                    },
+                    decoration: InputDecoration(
+                      hintText: "Get new Image...",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xFF75A488),
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
-                  TextFormField(
-                    controller: _articleTypeController,
-                    decoration: InputDecoration(labelText: 'Article Type'),
-                    validator: (value) {
-                      // Add any validation for article type if needed
-                      return null;
+                  Text(
+                    "Type",
+                    style: kFontFamily(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black),
+                  ),
+                  DropdownButtonFormField<String>(
+                    value: selectedType,
+                    items: [
+                      "Nature",
+                      "PlantTrees",
+                      "Eco-Friendly",
+                      "Recy-Challenges",
+                      "Recy-Guides",
+                      "Others"
+                    ].map((String type) {
+                      return DropdownMenuItem<String>(
+                        value: type,
+                        child: Text(type),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _articleTypeController.text = selectedType!;
+                      });
                     },
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xFF75A488),
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xFF75A488),
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
+                  ),
+                  Text(
+                    "Content",
+                    style: kFontFamily(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black),
                   ),
                   TextFormField(
                     controller: _contentController,
-                    decoration: InputDecoration(labelText: 'Content'),
+                    decoration: InputDecoration(
+                      hintText: "Enter new Content...",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xFF75A488),
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter article content';
                       }
                       return null;
                     },
-                    maxLines: null, // Allow multiple lines for content
+                    maxLines: 10,
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
@@ -142,8 +237,8 @@ class _UpdateArticleFormState extends State<UpdateArticleForm> {
                               'content': _contentController.text,
                             }),
                           );
-                          Navigator.pop(context); 
-                          Navigator.pop(context); 
+                          Navigator.pop(context);
+                          Navigator.pop(context);
                         }
                       },
                       child: Text(
@@ -163,7 +258,7 @@ class _UpdateArticleFormState extends State<UpdateArticleForm> {
 
   @override
   void dispose() {
-    // Dispose controllers when the widget is disposed
+    // dispose controllers after widget dispose
     _articleTitleController.dispose();
     _descriptionController.dispose();
     _articleImageController.dispose();

@@ -11,6 +11,8 @@ class ArticleService {
       : _firestore = firestore,
         _storage = storage;
 
+
+// fetch article from fire
   Future<List<Article>> getArticles() async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
@@ -38,6 +40,8 @@ class ArticleService {
     }
   }
 
+  // add article to firebase
+
   Future<void> addArticle(Map<String, dynamic> formData) async {
     try {
       await _firestore.collection("articles").add({
@@ -52,7 +56,7 @@ class ArticleService {
     }
   }
 
-  // * update challenge in firebsae
+  // * update article in firebsae
   Future<void> updateArticle(Map<String, dynamic> formData) async {
     try {
       DocumentReference articleRef =
@@ -71,7 +75,7 @@ class ArticleService {
     }
   }
 
-   // * delete challenge from firebase
+   // * delete article from firebase
   Future<void> deleteArticle(String articleID) async {
     try {
       DocumentReference articleReference =

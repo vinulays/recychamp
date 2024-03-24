@@ -7,7 +7,6 @@ import "package:flutter/foundation.dart";
 final FirebaseStorage _storage = FirebaseStorage.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-class StoreData {
   Future<String> uploadImageToStorage(String fullName, Uint8List file) async {
     Reference ref = _storage.ref().child(fullName);
     UploadTask uploadTask = ref.putData(file);
@@ -18,18 +17,20 @@ class StoreData {
   }
 
   Future<String> saveData({
-    required String email,
     required String name,
     required Uint8List file,
+    required String userId,
   }) async {
     String resp = "Some Error Occured";
     try {
-      if (name.isNotEmpty || email.isNotEmpty) {
+      if (name.isNotEmpty) {
         String imgUrl = await uploadImageToStorage("profileimage", file);
-        await _firestore.collection('User').add({
-          'name': name,
-          'email': email,
-          'imageLink': imgUrl,
+        await _firestore.collection('users')
+        .doc(userId)
+        .set({
+          'username': name,
+          'photoUrl': imgUrl,
+          'role': 'parent'
         });
         resp = 'success';
       }
@@ -38,4 +39,4 @@ class StoreData {
     }
     return resp;
   }
-}
+

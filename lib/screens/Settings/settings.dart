@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:recychamp/screens/Login/login.dart';
 
 class SettingsPage extends StatelessWidget {
+  // ignore: use_super_parameters
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
@@ -13,7 +14,7 @@ class SettingsPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios, color: Color.fromARGB(255, 0, 0, 0)),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -32,32 +33,32 @@ class SettingsPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: ListView(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           children: [
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ListTile(
-              title: Text('Logout'),
-              leading: Icon(Icons.logout, color: Colors.red),
+              title: const Text('Logout'),
+              leading: const Icon(Icons.logout, color: Color.fromARGB(255, 244, 54, 54)),
               onTap: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => Login()));
 
-                // Handle logout action
+                FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const Login()));
+
               },
             ),
             ListTile(
-              title: Text('Delete Account'),
-              leading: Icon(Icons.delete, color: Colors.black),
+              title: const Text('Delete Account'),
+              leading: const Icon(Icons.delete, color: Color.fromARGB(255, 0, 0, 0)),
               onTap: () async {
-                // Perform delete account action
                 try {
                   await FirebaseAuth.instance.currentUser!.delete();
-                  // Navigate to login screen after account deletion
+                  // ignore: use_build_context_synchronously
                   Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => Login()));
+                      MaterialPageRoute(builder: (context) => const Login()));
                 } catch (e) {
+                  // ignore: avoid_print
                   print("Error deleting account: $e");
-                  // Handle error
                 }
               },
             ),

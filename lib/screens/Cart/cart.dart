@@ -165,7 +165,6 @@ class _CartState extends State<Cart> {
         body: body,
       );
       paymentIntent = json.decode(response.body);
-      print(paymentIntent);
     } catch (error) {
       throw Exception(error);
     }

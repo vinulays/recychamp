@@ -40,7 +40,7 @@ void main() async {
   Stripe.publishableKey =
       "pk_test_51OxXnMEf9JrvdLmiMP1HV9Wk3X4jFaYGSOn4rcUOiC30djKuRtOBpBg8wUc6vGWcuWyZXF3jYTCsufusIyeC9L8S00iMlssUpm";
 
-  await dotenv.load(fileName: "assets/.env");
+  await dotenv.load(fileName: ".env");
 
   // * Manually sign in to implement challenge submission (roles: admin, organizer, parent)
   // * remove this when implementing authentication
@@ -150,8 +150,8 @@ class MyApp extends StatelessWidget {
                       firestore: FirebaseFirestore.instance,
                       storage: FirebaseStorage.instance,
                       auth: FirebaseAuth.instance),
-                      // storage: FirebaseStorage.instance,
-                      // auth: FirebaseAuth.instance),
+              // storage: FirebaseStorage.instance,
+              // auth: FirebaseAuth.instance),
             ),
           ),
         ),
@@ -164,8 +164,8 @@ class MyApp extends StatelessWidget {
                       firestore: FirebaseFirestore.instance,
                       storage: FirebaseStorage.instance,
                       auth: FirebaseAuth.instance),
-                      // storage: FirebaseStorage.instance,
-                      // auth: FirebaseAuth.instance),
+              // storage: FirebaseStorage.instance,
+              // auth: FirebaseAuth.instance),
             ),
           ),
         ),
@@ -235,8 +235,7 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-
-  }
+}
 
 // class MyHomePage extends StatefulWidget {
 //   const MyHomePage({super.key, required this.title});

@@ -3,7 +3,6 @@ import 'package:recychamp/models/post.dart';
 import 'package:recychamp/repositories/posts%20repository/post_repo.dart';
 import 'package:recychamp/screens/Community/bloc/posts_event.dart';
 import 'package:recychamp/screens/Community/bloc/posts_state.dart';
-import 'package:recychamp/services/post_service.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   final PostRepository _postRepository;

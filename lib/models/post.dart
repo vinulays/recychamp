@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:recychamp/models/comment.dart';
 import 'package:recychamp/models/user.dart';
 
 @immutable

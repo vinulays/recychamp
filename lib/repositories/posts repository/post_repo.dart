@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recychamp/models/comment.dart';
 import 'package:recychamp/models/post.dart';
 import 'package:recychamp/services/post_service.dart';

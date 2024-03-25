@@ -1,10 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_svg/svg.dart';
@@ -14,10 +11,8 @@ import 'package:recychamp/screens/EducationalResources/article_content.dart';
 import 'package:recychamp/models/article_model.dart';
 import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
 import 'package:recychamp/screens/Settings/settings.dart';
-import 'package:recychamp/services/article_service.dart';
 import 'package:recychamp/ui/article_filter.dart';
 import 'package:recychamp/ui/article_form.dart';
-import 'package:test/test.dart';
 
 class EducationalResource extends StatefulWidget {
   const EducationalResource({super.key});

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,13 +7,11 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:recychamp/models/article_model.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
 import 'dart:typed_data';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
-import 'package:recychamp/services/article_service.dart';
 
 class AricleForms extends StatefulWidget {
   const AricleForms({

@@ -69,5 +69,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
       emit(CartLoadedState(repository.getCart()));
     });
+
+    on<ResetCartEvent>((event, emit) {
+      emit(CartResetting());
+      repository.clearCart();
+
+      emit(CartLoadedState(repository.getCart()));
+    });
   }
 }

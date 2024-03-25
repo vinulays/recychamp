@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:recychamp/models/cart_item.dart';
 
 class Cart {

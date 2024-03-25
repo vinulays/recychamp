@@ -7,6 +7,8 @@ sealed class CartEvent extends Equatable {
 
 class FetchCartEvent extends CartEvent {}
 
+class ResetCartEvent extends CartEvent {}
+
 class AddItemEvent extends CartEvent {
   final CartItem item;
 

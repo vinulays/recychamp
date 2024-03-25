@@ -60,3 +60,5 @@ class CartItemQuantityRemoveError extends CartState {
 
   CartItemQuantityRemoveError(this.errorMessage);
 }
+
+class CartResetting extends CartState {}

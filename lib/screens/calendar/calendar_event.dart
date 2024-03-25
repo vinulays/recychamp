@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:recychamp/models/challenge.dart';
@@ -8,10 +7,7 @@ import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.d
 import 'package:recychamp/screens/ChallengeDetails/challenge_details.dart';
 import 'package:recychamp/screens/Challenges/bloc/challenges_bloc.dart';
 import 'package:recychamp/screens/Calendar/constants.dart';
-import 'package:recychamp/screens/Challenges/challenges.dart';
 import 'package:recychamp/screens/Settings/settings.dart';
-import 'package:recychamp/services/challenge_service.dart';
-import 'package:recychamp/utils/event_data.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'dart:async';
@@ -171,23 +167,25 @@ class _MyWidgetState extends State<CalendarEvent> {
                           onFormatChanged: (format) {},
                           onDaySelected: (selectedDay, focusedDay) {
                             setState(() {
-                             
-                              if (selectedDay != null) {  //check selectedday is null
+                              if (selectedDay != null) {
+                                //check selectedday is null
                                 _selectedDay = selectedDay;
-                                _selectedEvents = challenges    // selected challenge assign to selected challege arry
-                                    .where((challenge) =>
-                                        challenge.startDateTime != null &&
-                                        challenge.endDateTime != null &&
-                                        (challenge.startDateTime
-                                                .isBefore(selectedDay) ||
-                                            challenge.startDateTime
-                                                .isAtSameMomentAs(
-                                                    selectedDay)) &&
-                                        (challenge.endDateTime
-                                                .isAfter(selectedDay) ||
-                                            challenge.endDateTime
-                                                .isAtSameMomentAs(selectedDay)))
-                                    .toList();
+                                _selectedEvents =
+                                    challenges // selected challenge assign to selected challege arry
+                                        .where((challenge) =>
+                                            challenge.startDateTime != null &&
+                                            challenge.endDateTime != null &&
+                                            (challenge.startDateTime
+                                                    .isBefore(selectedDay) ||
+                                                challenge.startDateTime
+                                                    .isAtSameMomentAs(
+                                                        selectedDay)) &&
+                                            (challenge.endDateTime
+                                                    .isAfter(selectedDay) ||
+                                                challenge.endDateTime
+                                                    .isAtSameMomentAs(
+                                                        selectedDay)))
+                                        .toList();
                               }
                             });
                           },
@@ -201,8 +199,7 @@ class _MyWidgetState extends State<CalendarEvent> {
                             formatButtonVisible: false,
                             leftChevronVisible: false,
                             rightChevronVisible: false,
-                            leftChevronIcon: const Icon(Icons
-                                .chevron_left), 
+                            leftChevronIcon: const Icon(Icons.chevron_left),
                             rightChevronIcon: const Icon(Icons.chevron_right),
                           ),
                           daysOfWeekStyle: const DaysOfWeekStyle(
@@ -255,12 +252,12 @@ class _MyWidgetState extends State<CalendarEvent> {
               ),
 
               Expanded(
-                child: FractionallySizedBox(   // rounded corner box
-                
+                child: FractionallySizedBox(
+                  // rounded corner box
 
                   child: Container(
                     width: double.infinity,
-               
+
                     decoration: const ShapeDecoration(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -270,7 +267,8 @@ class _MyWidgetState extends State<CalendarEvent> {
                         ),
                       ),
                     ),
-                    child: _buildChallengeDetails(_selectedEvents),  //challenge card
+                    child: _buildChallengeDetails(
+                        _selectedEvents), //challenge card
                   ),
                 ),
               )
@@ -365,7 +363,6 @@ class _MyWidgetState extends State<CalendarEvent> {
                       builder: (context) => const ChallengeDetails(),
                     ),
                   );
-                  
                 },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(

@@ -1,7 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:recychamp/models/cart.dart';
 import 'package:recychamp/models/cart_item.dart';
 import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
 
@@ -31,9 +31,29 @@ class _CartItemCardState extends State<CartItemCard> {
                 SizedBox(
                   width: 100, // Specify the width you want
                   height: 100, // Specify the height you want
-                  child: Image.network(
-                    widget.cartItem.imageUrl,
-                    fit: BoxFit.cover, // Adjust the fit as per your requirement
+
+                  child: CachedNetworkImage(
+                    imageUrl: widget.cartItem.imageUrl,
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: 100,
+                      width: 100,
+                      decoration: ShapeDecoration(
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0))),
+                    ),
+                    placeholder: (context, url) => const SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [CircularProgressIndicator()],
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
                 ),
                 const SizedBox(

@@ -1,8 +1,6 @@
 import 'dart:convert';
-//import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -10,7 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recychamp/models/cart_item.dart';
 import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
-import 'package:recychamp/screens/Shop/shop.dart';
+import 'package:recychamp/screens/Home/home.dart';
 import 'package:recychamp/ui/cart_item_card.dart';
 import 'package:http/http.dart' as http;
 
@@ -249,7 +247,7 @@ class _CartState extends State<Cart> {
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                  builder: (context) => const Shop()));
+                                  builder: (context) => const Home()));
                         },
                         style: ButtonStyle(
                           shape:
@@ -264,7 +262,7 @@ class _CartState extends State<Cart> {
                               MaterialStateProperty.all<Color>(Colors.black),
                         ),
                         child: Text(
-                          "Go back to Shop",
+                          "Go back to Home",
                           style: GoogleFonts.poppins(
                               fontSize: 19,
                               fontWeight: FontWeight.w700,

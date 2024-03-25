@@ -7,10 +7,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:recychamp/screens/Calendar/constants.dart';
 import 'package:recychamp/models/article_model.dart';
-import 'package:recychamp/screens/ChallengeDetails/bloc/challenge_details_bloc.dart';
 import 'package:recychamp/ui/article_form_update.dart';
 import 'package:recychamp/screens/EducationalResources/bloc/article_details_bloc.dart';
-import 'package:recychamp/ui/article_form.dart';
 
 class ArticleContent extends StatefulWidget {
   final Article articlels;

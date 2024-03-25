@@ -35,5 +35,7 @@ class CartService {
   // * Clear all items from the cart
   void clearCart() {
     cart.items = [];
+    cart.subTotal = 0;
+    cart.total = 0;
   }
 }

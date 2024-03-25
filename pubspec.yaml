@@ -151,6 +151,7 @@ flutter:
     - assets/icons/challenge_details_location.svg
     - assets/icons/challenge_details_users.svg
     - assets/icons/close.svg
+    - assets/icons/payment-success.png
     - assets/icons/go_back.svg
     - assets/icons/add.svg
     - assets/images/challenge_details_thumbnail_dummy.png

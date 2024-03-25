@@ -2,6 +2,7 @@ import 'dart:convert';
 //import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recychamp/models/cart_item.dart';
 import 'package:recychamp/screens/Cart/bloc/cart_bloc.dart';
+import 'package:recychamp/screens/Shop/shop.dart';
 import 'package:recychamp/ui/cart_item_card.dart';
 import 'package:http/http.dart' as http;
 
@@ -178,9 +180,103 @@ class _CartState extends State<Cart> {
         .then((value) => {});
 
     try {
-      await Stripe.instance
-          .presentPaymentSheet()
-          .then((value) => {print("done")});
-    } catch (error) {}
+      await Stripe.instance.presentPaymentSheet().then((value) => {
+            BlocProvider.of<CartBloc>(context).add(
+              ResetCartEvent(),
+            )
+          });
+    } catch (error) {
+      throw Exception(error);
+    }
+
+    if (mounted) {
+      showModalBottomSheet(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(20),
+            ),
+          ),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          context: context,
+          builder: (BuildContext context) {
+            var deviceData = MediaQuery.of(context);
+
+            return Container(
+              width: double.infinity,
+              color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      SizedBox(
+                        height: 130,
+                        width: 130,
+                        child: Image.asset("assets/icons/payment-success.png"),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Payment Successful!",
+                        style: GoogleFonts.poppins(
+                            fontSize: 20, fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Order will received within 2 - 3 business days.",
+                        style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black.withOpacity(0.5)),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        right: deviceData.size.width * 0.05,
+                        left: deviceData.size.width * 0.05,
+                        bottom: 20),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const Shop()));
+                        },
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.8),
+                            ),
+                          ),
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(vertical: 17.88)),
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.black),
+                        ),
+                        child: Text(
+                          "Go back to Shop",
+                          style: GoogleFonts.poppins(
+                              fontSize: 19,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          });
+    }
   }
 }
